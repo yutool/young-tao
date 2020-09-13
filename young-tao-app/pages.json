@@ -1,0 +1,71 @@
+{
+	"easycom": {
+		// 下载安装的方式需要前面的"@/"，npm安装的方式无需"@/"
+		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
+	},
+	"pages": [
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "樱淘 | 年轻人的购物平台"
+			}
+		},
+		{
+			"path" : "pages/category/category",
+			"style" : {}
+		},
+		{
+			"path" : "pages/live/live",
+			"style" : {}
+		},
+		{
+			"path" : "pages/cart/cart",
+			"style" : {}
+		},
+		{
+			"path" : "pages/user/user",
+			"style" : {}
+		}
+  ],
+	"globalStyle": {
+		"navigationBarBackgroundColor": "#FF4040",
+		"navigationBarTextStyle": "white",
+		"navigationBarTitleText": "uni-app",
+		"backgroundColor": "#FFFFFF"
+	},
+	"tabBar": {
+		"color": "#707070",
+		"selectedColor": "#FF4040",
+		"backgroundColor": "black",
+		"list": [
+			{
+				"pagePath": "pages/index/index",
+				"text": "首页",
+				"iconPath": "static/tabbar/tab_home.png",
+				"selectedIconPath": "static/tabbar/tab_home_sel.png"
+			}, {
+				"pagePath": "pages/category/category",
+				"text": "分类",
+				"iconPath": "static/tabbar/tab_category.png",
+				"selectedIconPath": "static/tabbar/tab_category_sel.png"
+			}, {
+				"pagePath": "pages/live/live",
+				"text": "直播",
+				"iconPath": "static/tabbar/tab_live.png",
+				"selectedIconPath": "static/tabbar/tab_live_sel.png"
+			},
+			{
+				"pagePath": "pages/cart/cart",
+				"text": "购物车",
+				"iconPath": "static/tabbar/tab_cart.png",
+				"selectedIconPath": "static/tabbar/tab_cart_sel.png"
+			},
+			{
+				"pagePath": "pages/user/user",
+				"text": "我的",
+				"iconPath": "static/tabbar/tab_user.png",
+				"selectedIconPath": "static/tabbar/tab_user_sel.png"
+			}
+		]
+	}
+}
