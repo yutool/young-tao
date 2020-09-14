@@ -1,10 +1,17 @@
 <template>
 	<view class="container">
+		<!-- 适配小程序和app端的搜索框和轮播图 -->
+		<!-- #ifndef MP -->
+		<u-swiper :list="list"></u-swiper>
+		<!-- #endif -->
+		<!-- #ifdef MP -->
 		<view class="p-2">
-			<!-- 搜索框 -->
 			<u-search bg-color="#fff" :show-action="false" height="70" margin="20rpx 0" v-model="searchValue"></u-search>
-			<!-- 轮播图 -->
 			<u-swiper :list="list"></u-swiper>
+		</view>
+		<!-- #endif -->
+		
+		<view class="p-2">
 			<!-- 九宫格 -->
 			<swiper class="swiper" @change="change">
 				<swiper-item>
@@ -35,6 +42,7 @@
 		data() {
 			return {
 				searchValue: '',
+				carouselBackground: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
 				list: [{
 						image: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
 						title: '昨夜星辰昨夜风，画楼西畔桂堂东'
@@ -56,11 +64,13 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
+	
+
 	.grid-text {
 		font-size: 28rpx;
 		margin-top: 4rpx;
-		color: $u-type-info;
+		// color: $u-type-info;
 	}
 	
 	.indicator-dots {
@@ -71,7 +81,7 @@
 	}
 	
 	.indicator-dots-item {
-		background-color: $u-tips-color;
+		// background-color: $u-tips-color;
 		height: 6px;
 		width: 6px;
 		border-radius: 10px;
@@ -79,6 +89,6 @@
 	}
 	
 	.indicator-dots-active {
-		background-color: $u-type-primary;
+		// background-color: $u-type-primary;
 	}
 </style>

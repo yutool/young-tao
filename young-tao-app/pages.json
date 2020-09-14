@@ -7,7 +7,40 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "樱淘 | 年轻人的购物平台"
+				// #ifdef MP
+				"navigationBarTitleText": "樱桃 | 年轻人的购物商城",
+				// #endif 
+				"app-plus": {
+					"titleNView": {
+						"type": "transparent",
+						"searchInput": {
+							"backgroundColor": "rgba(235, 235, 235, .5)",
+							"borderRadius": "16px",
+							"align": "left",
+							"placeholder": "搜一搜",
+							"disabled": true,
+							"placeholderColor": "#606266"
+						},
+						"buttons": [
+							{
+								"float": "left",
+								"fontSrc": "/static/yticon.ttf",
+								"text": "\ue60d",
+								"fontSize": "26",
+								"color": "#303133",
+								"background": "rgba(0,0,0,0)"
+							}, {
+								"float": "right",
+								"fontSrc": "/static/yticon.ttf",
+								"text": "\ue744",
+								"fontSize": "27",
+								"color": "#303133",
+								"background": "rgba(0,0,0,0)",
+								"redDot": true
+							}
+						]
+					}
+				}
 			}
 		},
 		{
@@ -24,19 +57,47 @@
 		},
 		{
 			"path" : "pages/user/user",
-			"style" : {}
+			"style": {
+				"navigationBarTitleText": "我的",
+				// #ifdef MP
+				"navigationStyle": "custom",
+				// #endif
+				"app-plus": {
+					"bounce": "none",
+					"titleNView": {
+						"type": "transparent",
+						"buttons": [{
+								"fontSrc": "/static/yticon.ttf",
+								"text": "\ue60f",
+								"fontSize": "24",
+								"color": "#303133",
+								"width": "46px",
+								"background": "rgba(0,0,0,0)"
+							},
+							{
+								"fontSrc": "/static/yticon.ttf",
+								"text": "\ue744",
+								"fontSize": "28",
+								"color": "#303133",
+								"background": "rgba(0,0,0,0)",
+								"redDot": true
+							}
+						]
+					}
+				}
+			}
 		}
   ],
 	"globalStyle": {
-		"navigationBarBackgroundColor": "#FF4040",
-		"navigationBarTextStyle": "white",
+		"navigationBarBackgroundColor": "#FFF",
+		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
-		"backgroundColor": "#FFFFFF"
+		"backgroundColor": "#FAFAFA"
 	},
 	"tabBar": {
 		"color": "#707070",
 		"selectedColor": "#FF4040",
-		"backgroundColor": "black",
+		"backgroundColor": "#FFFFFF",
 		"list": [
 			{
 				"pagePath": "pages/index/index",
