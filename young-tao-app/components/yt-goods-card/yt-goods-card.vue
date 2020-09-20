@@ -1,15 +1,17 @@
 <template>
-	<view class="yt-goods">
+	<view class="yt-goods-card">
 		<view class="yt-goods-image">
-			<image :src="item.image"></image>
+			<image class="image" :src="item.image"></image>
 		</view>
-		<view class="yt-goods-title">
-			<text class="yt-goods-tip">{{item.tip}}</text>
-			<text class="yt-goods-text">{{item.title}}</text>
-		</view>
-		<view class="yt-goods-price">
-			<text class="yt-goods-price-original">￥{{item.favourPrice}}</text>
-			<text class="yt-goods-price-favour">￥{{item.originalPrice}}</text>
+		<view class="yt-goods-content">
+			<view class="yt-goods-title">
+				<text class="yt-goods-title-tip">{{item.tip}}</text>
+				<text class="yt-goods-title-text">{{item.title}}</text>
+			</view>
+			<view class="yt-goods-price">
+				<text class="yt-goods-price-original">￥{{item.favourPrice}}</text>
+				<text class="yt-goods-price-favour">￥{{item.originalPrice}}</text>
+			</view>
 		</view>
 	</view>
 </template>
@@ -31,36 +33,37 @@
 </script>
 
 <style lang="scss" scoped>
-.yt-goods {
+.yt-goods-card {
 	background-color: #FFF;
 	border-radius: 20rpx;
-	margin: 10rpx;
+	margin: 0 auto 20rpx;
 	width: 325rpx;
 	.yt-goods-image {
 		text-align: center;
-		image {
+		.image {
 			border-top-right-radius: 20rpx;
 			border-top-left-radius: 20rpx;
 			height: 325rpx;
 		}
 	}
+	.yt-goods-content {
+		padding: 10rpx 20rpx;
+	}
 	.yt-goods-title {
-		display: flex;
-		.yt-goods-tip {
-			flex: 1;
-			background-color: #ff3333;
+		display: -webkit-box;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+		.yt-goods-title-tip {
+			font-size: 26rpx;
 			color: #ffffff;
-			padding: 0 10rpx;
-			border-radius: 5rpx;
+			background-color: #ff3333;
+			padding: 2rpx 10rpx;
+			margin-right: 10rpx;
+			border-radius: 10rpx;
 		}
-		.yt-goods-text {
-			word-break: break-all;
-			display: -webkit-box;
-			overflow: hidden;
-			line-height: 1.5;
-			text-overflow: ellipsis;
-			-webkit-box-orient: vertical;
-			-webkit-line-clamp: 2;
+		.yt-goods-title-text {
 		}
 	}
 	.yt-goods-price {
@@ -71,7 +74,6 @@
 		.yt-goods-price-original {
 			color: #e80080;
 		}
-		
 		.yt-goods-price-favour {
 			color: #888888;
 			text-decoration: line-through;

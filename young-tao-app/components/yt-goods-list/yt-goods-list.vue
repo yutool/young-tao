@@ -1,5 +1,5 @@
 <template>
-	<view class="wrap">
+	<view class="yt-goods-list">
 		<u-waterfall v-model="list">
 			<template v-slot:left="{leftList}">
 				<view v-for="(item, index) in leftList" :key="index">
@@ -71,4 +71,7 @@
 </script>
 
 <style lang="scss" scoped>
+.yt-goods-list {
+	padding: 10rpx 20rpx;
+}
 </style>
