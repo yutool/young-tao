@@ -1,5 +1,5 @@
 <template>
-	<view class="yt-goods-card">
+	<view class="yt-goods-card" :style="{margin}">
 		<view class="yt-goods-image">
 			<image class="image" :src="item.image"></image>
 		</view>
@@ -18,6 +18,7 @@
 
 <script>
 	export default {
+		props: ['margin'],
 		data() {
 			return {
 				item:	{
@@ -33,16 +34,17 @@
 </script>
 
 <style lang="scss" scoped>
+@import "common/css/constant.scss";
+
 .yt-goods-card {
 	background-color: #FFF;
-	border-radius: 20rpx;
-	margin: 0 auto 20rpx;
-	width: 325rpx;
+	border-radius: $border-radius;
+	width: $card-widht;
 	.yt-goods-image {
 		text-align: center;
 		.image {
-			border-top-right-radius: 20rpx;
-			border-top-left-radius: 20rpx;
+			border-top-right-radius: $border-radius;
+			border-top-left-radius: $border-radius;
 			height: 325rpx;
 		}
 	}
@@ -58,7 +60,7 @@
 		.yt-goods-title-tip {
 			font-size: 26rpx;
 			color: #ffffff;
-			background-color: #ff3333;
+			background-color: $primary-color;
 			padding: 2rpx 10rpx;
 			margin-right: 10rpx;
 			border-radius: 10rpx;
@@ -72,10 +74,10 @@
 		line-height: 1.5;
 		position: relative;
 		.yt-goods-price-original {
-			color: #e80080;
+			color: $primary-color;
 		}
 		.yt-goods-price-favour {
-			color: #888888;
+			color: #969696;
 			text-decoration: line-through;
 			margin-left: 10rpx;
 		}

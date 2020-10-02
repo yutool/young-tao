@@ -1,12 +1,82 @@
-.p-2 {
-	padding: 20rpx;
+// 两边距离
+.yt-container {
+	margin-left: $container-margin;
+	margin-right: $container-margin;
+}
+// 模块距离
+.main-margin {
+	margin-bottom: $module-bottom;
 }
 
-.yt-container {
-	margin: 20rpx;
+.items-center {
+	display: flex;
+	align-items: center;
+} 
+
+// 自定义padding
+.p-1 {padding: 6rpx;}
+.p-2 {padding: 12rpx;}
+.p-3 {padding: 18rpx;}
+.p-4 {padding: 24rpx;}
+.p-5 {padding: 30rpx;}
+.pt-1 {padding-top: 6rpx;}
+.pt-2 {padding-top: 12rpx;}
+.pt-3 {padding-top: 18rpx;}
+.pt-4 {padding-top: 24rpx;}
+.pt-5 {padding-top: 30rpx;}
+.pb-1 {padding-bottom: 6rpx;}
+.pb-2 {padding-bottom: 12rpx;}
+.pb-3 {padding-bottom: 18rpx;}
+.pb-4 {padding-bottom: 24rpx;}
+.pb-5 {padding-bottom: 30rpx;}
+.pl-1 {padding-left: 6rpx;}
+.pl-2 {padding-left: 12rpx;}
+.pl-3 {padding-left: 18rpx;}
+.pl-4 {padding-left: 24rpx;}
+.pl-5 {padding-left: 30rpx;}
+.pr-1 {padding-right: 6rpx;}
+.pr-2 {padding-right: 12rpx;}
+.pr-3 {padding-right: 18rpx;}
+.pr-4 {padding-right: 24rpx;}
+.pr-5 {padding-right: 30rpx;}
+
+// 自定义margin
+.m-1 {margin: 6rpx;}
+.m-2 {margin: 12rpx;}
+.m-3 {margin: 18rpx;}
+.m-4 {margin: 24rpx;}
+.m-5 {margin: 30rpx;}
+.mt-1 {margin-top: 6rpx;}
+.mt-2 {margin-top: 12rpx;}
+.mt-3 {margin-top: 18rpx;}
+.mt-4 {margin-top: 24rpx;}
+.mt-5 {margin-top: 30rpx;}
+.mb-1 {margin-bottom: 6rpx;}
+.mb-2 {margin-bottom: 12rpx;}
+.mb-3 {margin-bottom: 18rpx;}
+.mb-4 {margin-bottom: 24rpx;}
+.mb-5 {margin-bottom: 30rpx;}
+.ml-1 {margin-left: 6rpx;}
+.ml-2 {margin-left: 12rpx;}
+.ml-3 {margin-left: 18rpx;}
+.ml-4 {margin-left: 24rpx;}
+.ml-5 {margin-left: 30rpx;}
+.mr-1 {margin-right: 6rpx;}
+.mr-2 {margin-right: 12rpx;}
+.mr-3 {margin-right: 18rpx;}
+.mr-4 {margin-right: 24rpx;}
+.mr-5 {margin-right: 30rpx;}
+
+
+.yt-flex-between {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
+
 .yt-card {
 	background-color: #FFFFFF;
 	border-radius: 10rpx;
 	margin: 20rpx;
 }
+

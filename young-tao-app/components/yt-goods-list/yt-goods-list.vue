@@ -3,12 +3,12 @@
 		<u-waterfall v-model="list">
 			<template v-slot:left="{leftList}">
 				<view v-for="(item, index) in leftList" :key="index">
-					<yt-goods-card></yt-goods-card>
+					<yt-goods-card margin="0 20rpx 20rpx 0"></yt-goods-card>
 				</view>
 			</template>
 			<template  v-slot:right="{rightList}">
 				<view v-for="(item, index) in rightList" :key="index">
-					<yt-goods-card></yt-goods-card>
+					<yt-goods-card margin="0 0 20rpx 0"></yt-goods-card>
 				</view>
 			</template>
 		</u-waterfall>
@@ -72,6 +72,5 @@
 
 <style lang="scss" scoped>
 .yt-goods-list {
-	padding: 10rpx 20rpx;
 }
 </style>

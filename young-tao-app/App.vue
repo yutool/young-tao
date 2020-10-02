@@ -16,9 +16,9 @@ export default {
 @import "colorui/main.css";
 @import "colorui/icon.css";
 
-@import "uview-ui/index.scss";
+@import "@/common/css/icon.css";
 
-@import "common/css/global.scss";
+@import "uview-ui/index.scss";
 
 page {
 	height: 100%;

@@ -1,20 +1,28 @@
 <template>
 	<view class="container">
-		<!-- 适配小程序和app端的搜索框和轮播图 -->
-		<view>
-			<!-- #ifndef MP -->
-			<u-swiper :list="list"></u-swiper>
-			<!-- #endif -->
-			<!-- #ifdef MP -->
-			<view class="p-2">
-				<u-search bg-color="#fff" :show-action="false" height="70" margin="0 0 16rpx" v-model="searchValue"></u-search>
-				<u-swiper :list="list"></u-swiper>
+		<!-- 导航栏 -->
+		<u-navbar class="search-bar" :is-back="false" :border-bottom="false">
+			<view class="items-center">
+				<text class="iconfont icon-qiandao1"></text>
+				<u-search placeholder="search" v-model="searchValue" :show-action="false"
+					bg-color="none" search-icon-color="#dd5d7b" border-color="#dd5d7b" >
+				</u-search>
 			</view>
-			<!-- #endif -->
-		</view>
+			<view slot="right" class="items-center">
+				<!-- #ifndef MP -->
+				<text class="iconfont icon-saoyisao"></text>
+				<!-- #endif -->
+				<text class="iconfont icon-huaban"></text>
+			</view>
+		</u-navbar>
 		
 		<!-- 快捷导航 -->
-		<scroll-view scroll-x="true" class="quick-nav-box">
+		<u-sticky offset-top="0">
+			<u-tabs :list="tabs" :current="0" height="60" gutter="20" active-color="#dd5d7b"></u-tabs>
+		</u-sticky>
+		<u-swiper :list="list" height="300" border-radius="0"></u-swiper>
+		
+		<scroll-view scroll-x="true" class="quick-nav-wrap">
 			<view class="quick-nav-row" v-for="i in 2">
 				<view v-for="i in 6" class="quick-nav-item">
 					<image class="quick-nav-item-img" src="http://m.360buyimg.com/mobilecms/s120x120_jfs/t1/142596/7/1864/4759/5efbf5a9E60c62b8a/49cdd24cb2bfecf5.png.webp"></image>
@@ -24,7 +32,7 @@
 		</scroll-view>
 		
 		<!-- 限时秒杀 -->
-		<view class="seckill-box">
+		<view class="seckill-wrap">
 			<view class="seckill-title-box">
 				<view class="seckill-title">
 					<image class="seckill-title-img" src="../../static/images/secskill-img.jpg"></image>
@@ -42,23 +50,51 @@
 			</scroll-view>
 		</view>
 		
-		<!-- 推荐 -->
-		<view class="recommended-box">
-			<!-- 推荐菜单 -->
-			<u-sticky @fixed="isSticky = true" @unfixed="isSticky = false">
-				<view class="recommended-menu" :class="isSticky ? 'recommended-menu-sticky' : ''">
+		<view class="yt-container">
+			<!-- 抢购 -->
+			<view class="snapup-wrap">
+				<view class="snapup-box">
+					<u-swiper :list="list" height="466" border-radius="12"></u-swiper>
+				</view>
+				<view class="snapup-box">
+					<view class="snapup-right-card" style="margin-bottom: 18rpx;">
+						<view class="snapup-right-title">
+							<view class="title-text">直播</view>
+							<u-tag text="直播中" type="warning" size="mini" mode="dark"></u-tag>
+						</view>
+						<view class="snapup-right-img">
+							<image src="http://img14.360buyimg.com/mobilecms/s372x372_jfs/t1/119069/23/14795/154967/5f34aebdE98cc1eac/a22d93a5fe5ddd66.jpg!q70.dpg.webp"></image>
+							<image src="http://img14.360buyimg.com/mobilecms/s372x372_jfs/t1/119069/23/14795/154967/5f34aebdE98cc1eac/a22d93a5fe5ddd66.jpg!q70.dpg.webp"></image>
+						</view>
+					</view>
+					<view class="snapup-right-card">
+						<view class="snapup-right-title">
+							<view class="title-text">有好货</view>
+							<u-tag text="全民口碑" type="warning" size="mini" mode="dark"></u-tag>
+						</view>
+						<view class="snapup-right-img">
+							<image src="http://img14.360buyimg.com/mobilecms/s372x372_jfs/t1/119069/23/14795/154967/5f34aebdE98cc1eac/a22d93a5fe5ddd66.jpg!q70.dpg.webp"></image>
+							<image src="http://img14.360buyimg.com/mobilecms/s372x372_jfs/t1/119069/23/14795/154967/5f34aebdE98cc1eac/a22d93a5fe5ddd66.jpg!q70.dpg.webp"></image>
+						</view>
+					</view>
+				</view>
+			</view>
+			<!-- 推荐 -->
+			<view class="recommended-wrap">
+				<!-- 推荐菜单 -->
+				<view class="recommended-menu">
 					<view class="recommended-menu-item active">
 						<view class="item-name">今日推荐</view>
-						<view class="item-subname" v-if="!isSticky">爆款热卖</view>
+						<view class="item-subname">爆款热卖</view>
 					</view>
 					<view class="recommended-menu-item">
 						<view class="item-name">猜你喜欢</view>
-						<view class="item-subname" v-if="!isSticky">为你推荐</view>
+						<view class="item-subname">为你推荐</view>
 					</view>
 				</view>
-			</u-sticky>
-			<!-- 推荐商品 -->
-			<yt-goods-list></yt-goods-list>
+				<!-- 推荐商品 -->
+				<yt-goods-list></yt-goods-list>
+			</view>
 		</view>
 	</view>
 </template>
@@ -68,8 +104,18 @@
 		data() {
 			return {
 				searchValue: '',
-				isSticky: false,
 				carouselBackground: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
+				tabs: [
+					{ name: '首页' },
+					{ name: '女装' },
+					{ name: '数码' },
+					{ name: '电脑办公' },
+					{ name: '个人清洁' },
+					{ name: '男装' },
+					{ name: '母婴童装' },
+					{ name: '运动' },
+					{ name: '美妆' }
+				],
 				list: [{
 						image: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
 						title: '昨夜星辰昨夜风，画楼西畔桂堂东'
@@ -95,10 +141,29 @@
 .container {
 	margin-bottom: var(--window-bottom);
 }
+// 导航栏
+.search-bar {
+	.icon-qiandao1 {
+		color: $primary-color;
+		margin: 0 20rpx;
+		font-size: 66rpx;
+	}
+	.icon-saoyisao {
+		color: $primary-color;
+		margin-left: 20rpx;
+		font-size: 66rpx;
+	}
+	.icon-huaban {
+		color: $primary-color;
+		margin: 0 20rpx;
+		font-size: 72rpx;
+	}
+}
+
 // 快捷导航
-.quick-nav-box {
+.quick-nav-wrap {
+	margin-bottom: $module-bottom;
 	background-color: #FFF;
-	margin-bottom: 16rpx;
 	.quick-nav-row {
 		display: flex;
 	}
@@ -108,20 +173,20 @@
 	}
 	.quick-nav-item-img {
 		width: 90rpx;
-		height: 96rpx;
+		height: 90rpx;
 	}
 	.quick-nav-item-text {
 		font-size: 28rpx;
-		margin-top: 4rpx;
+		margin-top: 5rpx;
 		color: #666;
 	}
 }
 
 // 秒杀
-.seckill-box {
+.seckill-wrap {
+	margin-bottom: $module-bottom;
 	background-color: #FFF;
 	padding: 20rpx;
-	margin-bottom: 16rpx;
 	.seckill-title-box {
 		display: flex;
 		justify-content: space-between;
@@ -137,17 +202,16 @@
 		margin-right: 10rpx;
 	}
 	.seckill-title-time {
-		border: 2rpx solid #dd5d7b;
+		border: 2rpx solid $primary-color;
 		border-radius: 20rpx;
 		line-height: 32rpx;
 		.time-hour {
+			background-color: $primary-color;
 			position: relative;
 			left: -2rpx;
 			border-radius: 20rpx;
 			padding: 2rpx 6rpx;
-			background-color: #dd5d7b;
 			color: #fff;
-			
 		}
 		.time-countdown {
 			margin: 0 10rpx;
@@ -158,13 +222,48 @@
 	}
 }
 
+// 抢购
+.snapup-wrap {
+	margin-bottom: $module-bottom;
+	border-radius: $border-radius;
+	display: flex;
+	justify-content: space-between;
+	.snapup-box {
+		width: $card-widht;
+		border-radius: 100rpx;
+	}
+	.snapup-right-card {
+		border-radius: $border-radius;
+		background-color: #FFF;
+		padding: 12rpx;
+	}
+	.snapup-right-img {
+		display: flex;
+		justify-content: space-around;
+		image {
+			width: 150rpx;
+			height: 150rpx;
+		}
+	}
+	.snapup-right-title {
+		display: flex;
+		align-items: center;
+		margin-bottom: 10rpx;
+		.title-text {
+			font-weight: bolder;
+			font-size: 30rpx;
+			margin-right: 10rpx;
+		}
+	}
+}
+
 // 推荐商品
-.recommended-box {
+.recommended-wrap {
 	.recommended-menu {
+		margin-bottom: $module-bottom;
 		display: flex;
 		justify-content: space-around;
 		background-color: rgb(241, 241, 241);
-		padding: 10rpx 0;
 	}
 	.recommended-menu-sticky {
 		background-color: #FFF !important;
@@ -181,11 +280,11 @@
 		}
 		&.active {
 			.item-name {
-				color: #FF4142;
+				color: $primary-color;
 			}
 			.item-subname {
+				background-color: $primary-color;
 				color: #FFF;
-				background-color: #FF4142;
 				border-radius: 20rpx;
 			}
 		}
