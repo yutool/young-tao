@@ -13,7 +13,10 @@
 		},
 		{
 			"path" : "pages/category/category",
-			"style" : {}
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "black"
+			}
 		},
 		{
 			"path" : "pages/live/live",

@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<!-- 标题 -->
-		<u-navbar class="cart-head" :is-back="false" :border-bottom="false">
+		<u-navbar class="cart-navbar" :is-back="false" :border-bottom="false">
 			<view class="items-center">
 				<view class="cart-title-text">购物车</view>
 				<u-notice-bar mode="horizontal" :list="list" volume-size="26" font-size="20" padding="6rpx 10rpx" border-radius="6" style="width: 300rpx;">
@@ -58,7 +58,7 @@
 	margin-bottom: calc(var(--window-bottom) + 120rpx);
 }
 // 标题
-.cart-head {
+.cart-navbar {
 	.cart-title-text {
 		margin-left: $container-margin;
 		margin-right: 10rpx;
