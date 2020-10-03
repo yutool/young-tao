@@ -138,6 +138,11 @@
 </script>
 
 <style lang="scss" scoped>
+::-webkit-scrollbar {
+	width: 0;
+	height: 0;
+	background-color: transparent;
+}
 .container {
 	margin-bottom: var(--window-bottom);
 }

@@ -1,13 +1,13 @@
 <template>
 	<view class="yt-cart-pay">
-		<view class="cart-sel-all">
+		<view class="select-all">
 			<u-checkbox v-model="value">全选</u-checkbox>
 		</view>
-		<viwe class="goods-total">
+		<view class="goods-total">
 			<view>合计：</view>
-			<view>￥0</view>
+			<view class="total-price">￥0</view>
 			<button class="pay-btn" size="mini">结算</button>
-		</viwe>
+		</view>
 	</view>
 </template>
 
@@ -16,7 +16,7 @@
 		data() {
 			return {
 				value: false
-			};
+			}
 		}
 	}
 </script>
@@ -24,10 +24,11 @@
 <style lang="scss" scoped>
 .yt-cart-pay {
 	display: flex;
-	padding: 10rpx;
+	align-items: center;
+	padding: 20rpx;
 	width: 750rpx;
 	background-color: #FFF;
-	.cart-sel-all {
+	.select-all {
 		flex: 1;
 	}
 	.goods-total {
@@ -35,11 +36,15 @@
 		justify-content: flex-end;
 		align-items: center;
 	}
+	.total-price {
+		font-size: 40rpx;
+		color: $primary-color;
+		margin-right: 20rpx;
+	}
 	.pay-btn {
 		border-radius: 50rpx;
-		background-color: #F43F3B;
+		background-color: $primary-color;
 		color: #EEE;
-		margin: 0 20rpx;
 	}
 }
 

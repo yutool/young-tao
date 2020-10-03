@@ -1,13 +1,13 @@
 <template>
 	<view class="yt-cart-card">
 		<!-- 店名 -->
-		<view class="yt-shop">
+		<view class="cart-shop">
 			<u-checkbox v-model="value"></u-checkbox>
-			<text class="yt-shop-name">店名 &gt;</text>
-			<text class="yt-shop-ticket">领券</text>
+			<text class="shop-name">店名 &gt;</text>
+			<text class="shop-ticket">领券</text>
 		</view>
 		<!-- 商品列表 -->
-		<view class="yt-goods-list">
+		<view class="cart-goods-list">
 			<view v-for="i in 2" :key="i" class="goods-item">
 				<view class="item-checkbox">
 					<u-checkbox v-model="value"></u-checkbox>
@@ -18,18 +18,20 @@
 				</view>
 				<!-- 商品详情 -->
 				<view class="item-detail">
-					<view class="item-detail-name">name</view>
-					<text class="item-detail-spec" @click="show = true;">
-						<text>规格</text>
-						<text>&gt;</text>
-					</text>
-					<view class="item-detail-price">
-						<view>￥10</view>
-						<u-number-box v-model="value" input-width="70" input-height="40"></u-number-box>
+					<view class="detail-name">名称name</view>
+					<view>
+						<text class="detail-spec" @click="show = true;">
+							<text class="mr-3">规格</text>
+							<text>&gt;</text>
+						</text>
+					</view>
+					<view class="detail-price">
+						<view class="price-text">￥10</view>
+						<u-number-box v-model="number" input-width="70" input-height="40"></u-number-box>
 					</view>
 				</view>
 				<!-- 弹出层 -->
-				<u-popup mode="bottom" v-model="show" closeable="true">
+				<u-popup mode="bottom" v-model="show" :closeable="true">
 					<view class="content">
 						<yt-goods-pupop-content></yt-goods-pupop-content>
 						<view class="confrim-btn">
@@ -46,37 +48,29 @@
 	export default {
 		data() {
 			return {
+				number: 0,
 				value: false,
 				show: false
-			}
-		},
-		methods: {
-			open(){
-				this.$refs.popup.open()
 			}
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
-
 .yt-cart-card {
+	border-radius: $border-radius;
+	margin-bottom: $module-bottom;
+	padding: 10rpx 20rpx;
 	background-color: #FFF;
-	border-radius: 10rpx;
-	padding: 0 20rpx;
-	margin-bottom: 20rpx;
-	.yt-shop {
+	.cart-shop {
 		display: flex;
 		align-items: center;
 		padding: 20rpx 0;
-		.yt-shop-name {
+		.shop-name {
 			flex: 1;
 		}
-		.yt-shop-ticket {
-			
-		}
 	}
-	.yt-goods-list {
+	.cart-goods-list {
 		.goods-item {
 			display: flex;
 			padding: 20rpx 0;
@@ -98,17 +92,19 @@
 			flex-direction: column;
 			justify-content: space-around;
 		}
-		.item-detail-name {
-		}
-		.item-detail-spec {
+		.detail-spec {
 			background-color: #eee;
-			padding: 4rpx 10rpx;
+			padding: 6rpx 20rpx;
 			border-radius: 10rpx;
 		}
-		.item-detail-price {
+		.detail-price {
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
+		}
+		.price-text {
+			font-size: 36rpx;
+			color: $primary-color;
 		}
 	}
 }

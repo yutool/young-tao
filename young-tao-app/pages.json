@@ -22,13 +22,8 @@
 		{
 			"path" : "pages/cart/cart",
 			"style" : {
-				"navigationBarTitleText": "购物车",
-				"app-plus": {
-					"bounce": "none",
-					"titleNView": {
-						"type": "transparent"
-					}
-				}
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "black"
 			}
 		},
 		{
@@ -68,7 +63,10 @@
 		"navigationBarBackgroundColor": "#FFF",
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
-		"backgroundColor": "#FAFAFA"
+		"backgroundColor": "#FAFAFA",
+		"app-plus": {
+			"scrollIndicator":"none"
+		}
 	},
 	"tabBar": {
 		"color": "#707070",

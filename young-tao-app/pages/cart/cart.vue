@@ -1,21 +1,26 @@
 <template>
 	<view class="container">
-		<view class="yt-container">
-			<!-- 标题 -->
-			<view class="cart-head">
-				<view class="yt-flex-between">
-					<view class="cart-head-title">
-						<view class="cart-title-text">购物车</view>
-						<view class="cart-title-notice">这是 NoticeBar 通告栏</view>
-					</view>
-					<view class="cart-title-manage">管理</view>
-				</view>
-				<view class="cart-head-content">
-					<view class="cart-content-title">共7件宝贝</view>
-					<view class="cart-content-address">收货地址：xxxcdsfsdfsdfdsfdsfsdxxx</view>
-				</view>
+		<!-- 标题 -->
+		<u-navbar class="cart-head" :is-back="false" :border-bottom="false">
+			<view class="items-center">
+				<view class="cart-title-text">购物车</view>
+				<u-notice-bar mode="horizontal" :list="list" volume-size="26" font-size="20" padding="6rpx 10rpx" border-radius="6" style="width: 300rpx;">
+				</u-notice-bar>
 			</view>
-			
+			<view slot="right" class="mr-4">
+				<view>管理</view>
+			</view>
+		</u-navbar>
+		
+		<!-- 收货地址 -->
+		<u-sticky>
+			<view class="shipping-address">
+				<text class="address-info">收货地址：xxxcdsfsdfsdfdsfdsfsdxxx</text>
+			</view>
+		</u-sticky>
+		
+		<!-- 内容 -->
+		<view class="yt-container">
 			<!-- 列表 -->
 			<view>
 				<yt-cart-card></yt-cart-card>
@@ -23,7 +28,6 @@
 				<yt-cart-card></yt-cart-card>
 			</view>
 		</view>
-		
 		
 		<!-- 支付栏 -->
 		<view class="cart-pay">
@@ -51,37 +55,25 @@
 
 <style lang="scss" scoped>
 .container {
-	margin-bottom: calc(var(--window-bottom) + 100rpx);
+	margin-bottom: calc(var(--window-bottom) + 120rpx);
 }
+// 标题
 .cart-head {
-	margin-bottom: 20rpx;
-	.cart-head-title {
-		display: flex;
-		align-items: center;
-		margin-bottom: 10rpx;
-	}
 	.cart-title-text {
+		margin-left: $container-margin;
+		margin-right: 10rpx;
 		font-size: 40rpx;
 		font-weight: bolder;
-		margin-right: 10rpx;
 	}
-	.cart-title-notice {
-		background-color: #FCA9A9;
-		font-size: 16rpx;
-		border-radius: 6rpx;
-	}
-	.cart-title-manage {
-	}
-	.cart-head-content {
-		display: flex;
-		align-items: center;
-		color: #666;
-	}
-	.cart-content-title {
-		margin-right: 20rpx;
-	}
-	.cart-content-address {
-		width: 360rpx;
+}
+// 收货地址
+.shipping-address {
+	background-color: #fff;
+	padding-bottom: 10rpx;
+	margin-bottom: $module-bottom;
+	.address-info {
+		margin: 0 $container-margin;
+		width: 560rpx;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
