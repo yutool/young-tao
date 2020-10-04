@@ -167,7 +167,7 @@
 
 // 快捷导航
 .quick-nav-wrap {
-	margin-bottom: $module-bottom;
+	margin-bottom: $module-margin;
 	background-color: #FFF;
 	.quick-nav-row {
 		display: flex;
@@ -189,7 +189,7 @@
 
 // 秒杀
 .seckill-wrap {
-	margin-bottom: $module-bottom;
+	margin-bottom: $module-margin;
 	background-color: #FFF;
 	padding: 20rpx;
 	.seckill-title-box {
@@ -229,7 +229,7 @@
 
 // 抢购
 .snapup-wrap {
-	margin-bottom: $module-bottom;
+	margin-bottom: $module-margin;
 	border-radius: $border-radius;
 	display: flex;
 	justify-content: space-between;
@@ -265,7 +265,7 @@
 // 推荐商品
 .recommended-wrap {
 	.recommended-menu {
-		margin-bottom: $module-bottom;
+		margin-bottom: $module-margin;
 		display: flex;
 		justify-content: space-around;
 		background-color: rgb(241, 241, 241);

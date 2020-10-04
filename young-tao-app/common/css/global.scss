@@ -3,15 +3,23 @@
 	margin-left: $container-margin;
 	margin-right: $container-margin;
 }
+
 // 模块距离
-.main-margin {
-	margin-bottom: $module-bottom;
+.module-bottom {
+	margin-bottom: $module-margin;
 }
 
+// 元素水平居中
 .items-center {
 	display: flex;
 	align-items: center;
-} 
+}
+
+// 自定义卡片
+.yt-card {
+	background-color: #FFFFFF;
+	border-radius: $border-radius;
+}
 
 // 自定义padding
 .p-1 {padding: 6rpx;}
@@ -66,17 +74,3 @@
 .mr-3 {margin-right: 18rpx;}
 .mr-4 {margin-right: 24rpx;}
 .mr-5 {margin-right: 30rpx;}
-
-
-.yt-flex-between {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
-
-.yt-card {
-	background-color: #FFFFFF;
-	border-radius: 10rpx;
-	margin: 20rpx;
-}
-

@@ -70,7 +70,7 @@
 .shipping-address {
 	background-color: #fff;
 	padding-bottom: 10rpx;
-	margin-bottom: $module-bottom;
+	margin-bottom: $module-margin;
 	.address-info {
 		margin: 0 $container-margin;
 		width: 560rpx;

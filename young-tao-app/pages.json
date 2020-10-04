@@ -4,31 +4,10 @@
 		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
 	},
 	"pages": [
-		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationStyle": "custom",
-				"navigationBarTextStyle": "black"
-			}
-		},
-		{
-			"path" : "pages/category/category",
-			"style": {
-				"navigationStyle": "custom",
-				"navigationBarTextStyle": "black"
-			}
-		},
-		{
-			"path" : "pages/live/live",
-			"style" : {}
-		},
-		{
-			"path" : "pages/cart/cart",
-			"style" : {
-				"navigationStyle": "custom",
-				"navigationBarTextStyle": "black"
-			}
-		},
+		{ "path": "pages/index/index" },
+		{ "path" : "pages/category/category" },
+		{ "path" : "pages/live/live" },
+		{ "path" : "pages/cart/cart" },
 		{
 			"path" : "pages/user/user",
 			"style": {
@@ -42,7 +21,7 @@
 						"type": "transparent",
 						"buttons": [{
 								"fontSrc": "/static/yticon.ttf",
-								"text": "\ue60f",
+								"text": "\ue60c",
 								"fontSize": "24",
 								"color": "#303133",
 								"width": "46px",
@@ -50,7 +29,7 @@
 							},
 							{
 								"fontSrc": "/static/yticon.ttf",
-								"text": "\ue744",
+								"text": "\ue60c",
 								"fontSize": "28",
 								"color": "#303133",
 								"background": "rgba(0,0,0,0)",
@@ -64,6 +43,7 @@
   ],
 	"globalStyle": {
 		"navigationBarBackgroundColor": "#FFF",
+		"navigationStyle": "custom",
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
 		"backgroundColor": "#FAFAFA",

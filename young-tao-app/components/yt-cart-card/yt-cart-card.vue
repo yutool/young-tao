@@ -59,7 +59,7 @@
 <style lang="scss" scoped>
 .yt-cart-card {
 	border-radius: $border-radius;
-	margin-bottom: $module-bottom;
+	margin-bottom: $module-margin;
 	padding: 10rpx 20rpx;
 	background-color: #FFF;
 	.cart-shop {

@@ -1,6 +1,7 @@
 <template>
-	<view class="live">
-		<u-empty text="暂未开通直播" mode="search"></u-empty>
+	<view class="container">
+		<u-navbar :is-back="false" title="樱桃直播">
+		</u-navbar>
 	</view>
 </template>
 
@@ -15,10 +16,5 @@
 </script>
 
 <style lang="scss">
-.live {
-	height: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
+	
 </style>

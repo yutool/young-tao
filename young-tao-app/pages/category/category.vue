@@ -158,7 +158,7 @@
 		padding: 20rpx;
 	}
 	.item-title {
-		margin-bottom: $module-bottom;
+		margin-bottom: $module-margin;
 		font-size: 30rpx;
 		font-weight: bolder;
 	}
@@ -170,7 +170,7 @@
 		flex-wrap: wrap;
 	}
 	.item-card {
-		margin-bottom: $module-bottom;
+		margin-bottom: $module-margin;
 		width: 33.333333%;
 		display: flex;
 		align-items: center;
