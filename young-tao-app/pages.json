@@ -40,7 +40,11 @@
 				}
 			}
 		}
-  ],
+      ,{
+            "path" : "pages/goods/goods",
+            "style" : {}
+        }
+    ],
 	"globalStyle": {
 		"navigationBarBackgroundColor": "#FFF",
 		"navigationStyle": "custom",

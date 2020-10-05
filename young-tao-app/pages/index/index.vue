@@ -93,7 +93,22 @@
 					</view>
 				</view>
 				<!-- 推荐商品 -->
-				<yt-goods-list></yt-goods-list>
+				<u-waterfall v-model="goodsList">
+					<template v-slot:left="{leftList}">
+						<view v-for="(item, index) in leftList" :key="index">
+							<yt-goods-card margin="0 20rpx 20rpx 0"></yt-goods-card>
+						</view>
+					</template>
+					<template v-slot:right="{rightList}">
+						<view v-for="(item, index) in rightList" :key="index">
+							<yt-goods-card margin="0 20rpx 20rpx 0"></yt-goods-card>
+						</view>
+					</template>
+				</u-waterfall>
+				<!-- 加载更多 -->
+				<view class="pt-3 pb-3">
+					<u-loadmore  bg-color="rgb(240, 240, 240)" :status="loadStatus" @loadmore="addRandomData"></u-loadmore>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -103,6 +118,7 @@
 	export default {
 		data() {
 			return {
+				loadStatus: 'loadmore',
 				searchValue: '',
 				carouselBackground: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
 				tabs: [
@@ -126,13 +142,24 @@
 						image: 'https://cdn.uviewui.com/uview/swiper/3.jpg',
 						title: '谁念西风独自凉，萧萧黄叶闭疏窗，沉思往事立残阳'
 					}
-				]
+				],
+				goodsList: []
 			}
 		},
+		onLoad() {
+			this.addRandomData();
+		},
 		methods: {
-			change(e) {
-				this.current = e.detail.current;
-			}
+			addRandomData() {
+				this.loadStatus = 'loading';
+				// 模拟数据加载
+				setTimeout(() => {
+					for(let i = 0; i < 10; i++) {
+						this.goodsList.push({})
+					}
+					this.loadStatus = 'loadmore';
+				}, 1000)
+			},
 		}
 	}
 </script>

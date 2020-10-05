@@ -1,5 +1,5 @@
 <template>
-	<view class="yt-goods-card" :style="{margin}">
+	<view class="yt-goods-card" :style="{margin}" @click="onclick">
 		<view class="yt-goods-image">
 			<image class="image" :src="item.image"></image>
 		</view>
@@ -29,6 +29,13 @@
 						tip: '自营'
 					}
 			};
+		},
+		methods: {
+			onclick() {
+				uni.navigateTo({
+				    url: '/pages/goods/goods'
+				});
+			}
 		}
 	}
 </script>
