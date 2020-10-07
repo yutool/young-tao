@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<!-- 导航栏 -->
-		<u-navbar class="goods-navbar" :immersive="true" :background="{backgroundColor: 'rgba(255,255,255,' + navbar.opacity + ')'}">
+		<u-navbar class="goods-navbar" :immersive="true" :border-bottom="false" :background="{backgroundColor: 'rgba(255,255,255,' + navbar.opacity + ')'}">
 			<view class="navbar-content" v-if="navbar.scrollTop > 10" :style="{opacity: navbar.opacity}">
 			  <view class="content-item" :class="{'active': tabIndex === 0}">
 			    <view>商品</view>
@@ -23,11 +23,6 @@
 				<!-- #endif -->
 			</view>
 			<view slot="right" class="navbar-right" :class="{'navbar-show': navbar.scrollTop > navbar.threshold}">
-				<!-- #ifndef MP -->
-				<view class="right-item" :style="'backgroundColor: rgba(0,0,0, '+(0.3-navbar.opacity)+')'">
-					<text class="iconfont icon-huaban"></text>
-				</view>
-				<!-- #endif -->
 				<view class="right-item" :style="'backgroundColor: rgba(0,0,0, '+(0.3-navbar.opacity)+')'">
 					<text class="iconfont icon-huaban"></text>
 				</view>
@@ -40,131 +35,176 @@
 		<!-- 商品信息 -->
 		<view class="goods-info-wrap">
 			<u-swiper :list="list" border-radius="0" height="750" mode="number" indicator-pos="bottomRight"></u-swiper>
-			<view class="goods-info-box">
-				<!-- 商品价格 -->
-				<view class="price-wrap">
-					<view class="price-box">
-						<view class="price">￥200.00</view>
-						<view class="old-price">￥200.00</view>
-					</view>
-					<view class="price-right">
+			<!-- 商品价格 -->
+			<view class="price-box">
+				<view class="price-left">
+					<view class="price">￥200.00</view>
+					<view class="old-price">￥200.00</view>
+				</view>
+				<view class="price-right">
+					<view class="item">
 						<view class="iconfont icon-huaban"></view>
 						<view>降价通知</view>
 					</view>
-					<view class="price-right">
+					<view class="item">
 						<view class="iconfont icon-huaban"></view>
 						<view>收藏</view>
 					</view>
 				</view>
-				<!-- 商品标题 -->
-				<view class="title-box">
-					<u-tag class="title-tag" text="新品" type="success" size="mini" mode="dark" />
-					<text class="title">
-						vivo iQOO Z1x 水漾白 6GB+128GB 骁龙765G 120Hz竞速屏 5000mAh超大电池 双模5G全网通手机 iqooz1x
-					</text>
-				</view>
+			</view>
+			<!-- 商品标题 -->
+			<view class="title-box">
+				<u-tag class="title-tag" text="新品" type="success" size="mini" mode="dark" />
+				<text class="title">
+					vivo iQOO Z1x 水漾白 6GB+128GB 骁龙765G 120Hz竞速屏 5000mAh超大电池 双模5G全网通手机 iqooz1x
+				</text>
 			</view>
 		</view>
 		
 		<!-- 优惠、服务 -->
-		<view class="serve-wrap">
-			<view class="discount-box">
-				<view>优惠</view>
-				<view class="discount-content">
-					<view>樱桃立减70元优惠券</view>
-					<view>满99-19  满49-10</view>
-					<view>goumai 1件既可换购热销商品</view>
+		<view class="serve-wrap wrap">
+			<view class="discount-box box">
+				<view class="title">优惠</view>
+				<view class="content">
+					<view class="item">
+						<u-tag class="item-tag" text="樱桃新人" type="error" size="mini"/>
+						<text>立减70元优惠券</text>
+					</view>
+					<view class="item">
+						<u-tag class="item-tag" text="领券" type="error" size="mini"/>
+						<u-tag class="ticket" text="满99减15" type="error" size="mini"/>
+						<u-tag class="ticket" text="满59减10" type="error" size="mini"/>
+					</view>
+					<view class="item">
+						<u-tag class="item-tag" text="换购" type="error" size="mini"/>
+						<text>购买1件既可换购热销商品</text>
+					</view>
 				</view>
 				<view>...</view>
 			</view>
-			<view class="serve-box">
-				<view>服务</view>
-				<view class="serve-content">
-					<text>假一赔三</text>
-					<text>只换不修</text>
+			<view class="serve-box box border-top">
+				<view class="title">服务</view>
+				<view class="content">
+					<u-tag class="item" text="假一赔三" type="primary" size="mini"/>
+					<u-tag class="item" text="退货运费险" type="primary" size="mini"/>
+					<u-tag class="item" text="意外保修" type="primary" size="mini"/>
 				</view>
 				<view>...</view>
 			</view>
 		</view>
 		
 		<!-- 配送 -->
-		<view class="delivery-wrap">
-			<view class="selected-box">
-				<view>已选</view>
+		<view class="delivery-wrap wrap">
+			<view class="selected-box box">
+				<view class="title">已选</view>
 				<view class="content">
-					xxxx
+					G304 无线游戏鼠标 黑色，0.185kg，1件
 				</view>
 				<view>...</view>
 			</view>
-			<view class="ship-box">
-				<view>发货</view>
+			<view class="ship-box box border-top">
+				<view class="title">发货</view>
 				<view class="content">
-					xxxx
+					<view>
+						<text>浙江杭州</text>
+						<text class="mr-2 ml-2"> | </text>
+						<text>配送：快递包邮</text>
+					</view>
 				</view>
 				<view>...</view>
 			</view>
-			<view class="destination-box">
-				<view>送至</view>
+			<view class="destination-box box border-top">
+				<view class="title">送至</view>
 				<view class="content">
-					xxxx
+					<view>收货地址xxx</view>
+					<view><text>现货</text>，23:00前下单，预计10月09日送达</view>
 				</view>
 				<view>...</view>
 			</view>
 		</view>
 		
 		<!-- 评价 -->
-		<view class="comment-wrap">
+		<view class="comment-wrap wrap">
 			<!-- 评价 -->
-			<view class="comment-box">
-				<u-section title="评价" sub-title="好评度90%"></u-section>
-				<view>标签1、标签2</view>
-				<view>
+			<view class="comment-box box">
+				<view class="title">
+					<u-section title="宝贝评价(999)" sub-title="好评度90%" :show-line="false"></u-section>
+				</view>
+				<view class="tag">
+					<u-tag class="mr-3" text="方便快捷(99)" type="error" shape="circle" size="mini" />
+					<u-tag class="mr-3" text="倍感舒适(99)" type="error" shape="circle" size="mini" />
+					<u-tag class="mr-3" text="放映灵敏(99)" type="error" shape="circle" size="mini" />
+				</view>
+				<view class="content">
 					评价内容
 				</view>
 			</view>
 			<!-- 问大家 -->
-			<view class="answer-box">
-				<u-section title="问大家" sub-title="查看全部"></u-section>
-				<view>list</view>
-				<view>list</view>
+			<view class="answer-box box border-top">
+				<view class="title">
+					<u-section title="问大家" sub-title="查看全部" :show-line="false"></u-section>
+				</view>
+				<view class="content">
+					<view class="item">
+						<u-tag class="mr-3" text="问" type="warning" size="mini" mode="dark" />
+						<view class="text">这个物品最低多少钱</view>
+						<view>10个回答</view>
+					</view>
+					<view class="item">
+						<u-tag class="mr-3" text="问" type="warning" size="mini" mode="dark" />
+						<view class="text">这个物品最低多少钱</view>
+						<view>10个回答</view>
+					</view>
+				</view>
 			</view>
 		</view>
 		
 		<!-- 店铺 -->
-		<view class="shop-wrap">
-			<view class="shop-box">
+		<view class="shop-wrap wrap">
+			<view class="shop-box box">
 				<view class="image">
-					image
+					<image src="http://img11.360buyimg.com/cms/jfs/t19942/13/892321196/28794/11b3ba2d/5b0e425dN7309fe32.jpg"></image>
 				</view>
 				<view class="content">
-					<view>店名</view>
-					<view>
-						<text>樱桃</text>
-						综合体验 ...
+					<view class="name">罗技G官方旗舰店</view>
+					<view class="rate">
+						<u-tag class="mr-3" text="樱桃" type="error" shape="circle" size="mini" mode="dark" />
+						<view>
+							<text>综合体验</text>
+							<u-rate size="20" gutter="2"></u-rate>
+						</view>
 					</view>
 				</view>
 				<view class="evaluate">
-					<view>宝贝描述5.0高</view>
-					<view>卖家服务5.0高</view>
-					<view>物流服务5.0高</view>
+					<view>宝贝描述5.0 <text>高</text></view>
+					<view>卖家服务5.0 <text>高</text></view>
+					<view>物流服务5.0 <text>高</text></view>
 				</view>
 			</view>
-			<view class="recommend-box">
-				<u-section title="店铺推荐" sub-title="查看全部"></u-section>
-				<view>xxx</view>
+			<view class="recommend-box box border-top">
+				<view class="title">
+					<u-section title="店铺推荐" sub-title="查看全部" :show-line="false"></u-section>
+				</view>
+				<view class="content">
+					...
+				</view>
 			</view>
 		</view>
 		
 		<!-- 详情 -->
-		<view class="detail-wrap">
-			<u-divider>宝贝详情</u-divider>
-			<view>...</view>
+		<view class="detail-wrap wrap">
+			<view class="detail-box box">
+				<u-divider>宝贝详情</u-divider>
+				<view>...</view>
+			</view>
 		</view>
 		
 		<!-- 推荐 -->
-		<view class="recommend-wrap">
-			<u-divider>看了又看</u-divider>
-			<view>...</view>
+		<view class="recommend-wrap wrap">
+			<view class="recommend-box box">
+				<u-divider>看了又看</u-divider>
+				<view>...</view>
+			</view>
 		</view>
 		
 		<view class="goods-bar">
@@ -205,8 +245,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$edge-width: 30rpx;
 .container {
-	margin-bottom: calc(var(--window-bottom) + 125rpx);
+	margin-bottom: calc(var(--window-bottom) + 130rpx);
+}
+.wrap {
+	margin-bottom: $module-margin;
+	background-color: #FFF;
+	border-radius: $border-radius;
+}
+.box {
+	margin: 0 $edge-width;
+	padding: $edge-width 0;
+}
+.border-top {
+	border-top: 1px solid rgba(0, 0, 0, 0.03);
 }
 .goods-navbar {
 	.navbar-content {
@@ -256,33 +309,35 @@ export default {
 }
 .goods-info-wrap {
 	margin-bottom: $module-margin;
-	.goods-info-box {
-		background-color: #FFF;
-		padding: 20rpx;
-	}
-	.price-wrap {
-		margin-bottom: $module-margin;
-		display: flex;
-	}
+	background-color: #FFF;
+	border-radius: 0 0 $border-radius $border-radius;
 	.price-box {
-		flex: 1;
+		padding: 20rpx;
 		display: flex;
-		align-items: baseline;
-		.price {
-			font-size: 60rpx;
-			color: $primary-color;
-			margin-right: 10rpx;
+		.price-left {
+			flex: 1;
+			display: flex;
+			align-items: baseline;
+			.price {
+				font-size: 60rpx;
+				color: $primary-color;
+				margin-right: 10rpx;
+			}
+			.old-price {
+				font-size: 26rpx;
+				text-decoration: line-through;
+			}
 		}
-		.old-price {
-			font-size: 26rpx;
-			text-decoration: line-through;
+		.price-right {
+			display: flex;
+			text-align: center;
+			.item {
+				margin-right: 10rpx;
+			}
 		}
-	}
-	.price-right {
-		text-align: center;
-		margin-right: 10rpx;
 	}
 	.title-box {
+		padding: 0 20rpx 20rpx;
 		.title-tag {
 			margin-right: 10rpx;
 		}
@@ -294,26 +349,49 @@ export default {
 	}
 }
 .serve-wrap {
-	margin-bottom: $module-margin;
-	background-color: #fff;
-	padding: 20rpx;
 	.discount-box {
 		display: flex;
-		.discount-content {
+		.title {
+			font-weight: bolder;
+			margin-right: 30rpx;
+		}
+		.content {
 			flex: 1;
+			.item {
+				margin-bottom: 20rpx;
+			}
+			.item-tag {
+				font-size: 22rpx;
+				padding: 0 10rpx;
+				margin-right: 20rpx;
+				border: none;
+			}
+			.ticket {
+				margin-right: 20rpx;
+			}
 		}
 	}
 	.serve-box {
 		display: flex;
-		.serve-content {
+		align-items: center;
+		.title {
+			font-weight: bolder;
+			margin-right: 30rpx;
+		}
+		.content {
 			flex: 1;
+			.item {
+				margin-right: 20rpx;
+				padding: 2rpx 10rpx;
+			}
 		}
 	}
 }
 .delivery-wrap {
-	margin-bottom: $module-margin;
-	background-color: #fff;
-	padding: 20rpx;
+	.title {
+		font-weight: bolder;
+		margin-right: 20rpx;
+	}
 	.selected-box {
 		display: flex;
 		.content {
@@ -334,39 +412,64 @@ export default {
 	}
 }
 .comment-wrap {
-	margin-bottom: $module-margin;
-	background-color: #fff;
-	padding: 20rpx;
 	.comment-box {
+		.title {
+			margin-bottom: 20rpx;
+		}
+		.tag {
+			margin-bottom: 20rpx;
+		}
 	}
 	.answer-box {
-	}
-}
-.shop-wrap {
-	margin-bottom: $module-margin;
-	background-color: #fff;
-	padding: 20rpx;
-	.shop-box {
-		display: flex;
+		.title {
+			margin-bottom: 20rpx;
+		}
 		.content {
-			flex: 1;
+			.item {
+				display: flex;
+				margin-bottom: 10rpx;
+			}
+			.text {
+				flex: 1;
+			}
 		}
 	}
 }
 .shop-wrap {
-	margin-bottom: $module-margin;
-	background-color: #fff;
-	padding: 20rpx;
+	.shop-box {
+		display: flex;
+		.image {
+			margin-right: 30rpx;
+			image {
+				width: 120rpx;
+				height: 120rpx;
+			}
+		}
+		.content {
+			flex: 1;
+			.name {
+				font-size: 36rpx;
+				margin-bottom: 10rpx;
+			}
+			.rate {
+				display: flex;
+				align-items: center;
+			}
+		}
+		.evaluate {
+			font-size: 24rpx;
+			color: #999;
+		}
+	}
+	.recommend-box {
+		.title {
+			margin-bottom: 20rpx;
+		}
+	}
 }
 .detail-wrap {
-	margin-bottom: $module-margin;
-	background-color: #fff;
-	padding: 20rpx;
 }
 .recommend-wrap {
-	margin-bottom: $module-margin;
-	background-color: #fff;
-	padding: 20rpx;
 }
 .goods-bar {
 	position: fixed;
