@@ -207,8 +207,10 @@
 			</view>
 		</view>
 		
+		<yt-sku-popup :visible="show" @close="show = false"></yt-sku-popup>
+		<!-- 工具栏 -->
 		<view class="goods-bar">
-			<yt-goodsbar></yt-goodsbar>
+			<yt-goodsbar @add="show = true"></yt-goodsbar>
 		</view>
 	</view>
 </template>
@@ -219,6 +221,7 @@ import {between} from '@/common/js/utils.js';
 export default {
   data() {
     return {
+			show: false,
 			tabIndex: 0,
 			navbar: {
 				scrollTop: 0,

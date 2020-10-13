@@ -31,14 +31,7 @@
 					</view>
 				</view>
 				<!-- 弹出层 -->
-				<u-popup mode="bottom" v-model="show" :closeable="true">
-					<view class="content">
-						<yt-goods-pupop-content></yt-goods-pupop-content>
-						<view class="confrim-btn">
-							<u-button @click="show = false;">确定</u-button>
-						</view>
-					</view>
-				</u-popup>
+				<yt-sku-popup :visible="show" @close="show = false"></yt-sku-popup>
 			</view>
 		</view>
 	</view>

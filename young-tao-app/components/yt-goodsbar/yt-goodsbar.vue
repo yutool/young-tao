@@ -16,15 +16,22 @@
 			</view>
 		</view>
 		<view class="right-box">
-			<view class="cart btn">加入购物车</view>
-			<view class="buy btn">立即购买</view>
+			<view class="cart btn" @click="add">加入购物车</view>
+			<view class="buy btn" @click="buy">立即购买</view>
 		</view>
 	</view>
 </template>
 
 <script>
 export default {
-	
+	methods: {
+		add() {
+			this.$emit('add');
+		},
+		buy() {
+			this.$emit('buy');
+		}
+	}
 };
 </script>
 
