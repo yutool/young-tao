@@ -210,7 +210,7 @@
 		<yt-sku-popup :visible="show" @close="show = false"></yt-sku-popup>
 		<!-- 工具栏 -->
 		<view class="goods-bar">
-			<yt-goodsbar @add="show = true"></yt-goodsbar>
+			<yt-goodsbar @add="show = true" @buy="goBuy"></yt-goodsbar>
 		</view>
 	</view>
 </template>
@@ -243,6 +243,11 @@ export default {
 		onBack() {
 		  uni.navigateBack();
 		},
+		goBuy() {
+			uni.navigateTo({
+				url: '/pages/order/create'
+			})
+		}
   }
 };
 </script>

@@ -57,11 +57,11 @@
 				
 			};
 		},
-		onBackPress() {
-			if (this.visible === true) {
+		onBackPress(options) {
+			if (options.from === 'navigateBack' && this.visible) {
 				this.handleClose();
+				return true;
 			}
-			return true;
 		},
 		methods: {
 			handleClose() {

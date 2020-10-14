@@ -44,6 +44,14 @@
             "path" : "pages/goods/goods",
             "style" : {}
         }
+        ,{
+            "path" : "pages/order/order",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/order/create",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"navigationBarBackgroundColor": "#FFF",
