@@ -55,7 +55,7 @@
 		<!-- 支付栏 -->
 		<view class="paybar-wrap">
 			<view class="money">￥100.00</view>
-			<button class="pay-btn">确认支付</button>
+			<button class="pay-btn" @click="pay">确认支付</button>
 		</view>
 		
 	</view>
@@ -69,15 +69,19 @@
 			}
 		},
 		methods: {
-			
+			pay() {
+				uni.navigateTo({
+					url: '../pay/pay'
+				})
+			}
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
-$paybar-height: 100rpx;
+$paybar-height: 115rpx;
 .container {
-	margin-bottom: calc(120rpx);
+	margin-bottom: calc(130rpx);
 }
 .address-wrap {
 	margin-bottom: $module-margin;

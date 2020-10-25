@@ -11,7 +11,7 @@
 			</view>
 		</u-navbar>
 		
-		<u-sticky class="module-bottom">
+		<u-sticky class="module-bottom" :enable="stickyEnable" :offset-top="stickyTop">
 			<u-tabs :list="tabs" :current="1"></u-tabs>
 		</u-sticky>
 		<!-- 内容 -->
@@ -40,6 +40,11 @@
 	export default {
 		data() {
 			return {
+				stickyEnable: true,
+				stickyTop: 0,
+				// #ifdef MP-WEIXIN
+				stickyTop: 130,
+				// #endif
 				loadStatus: 'loadmore',
 				tabs: [
 					{ name: '关注' },
@@ -55,6 +60,12 @@
 		},
 		onLoad() {
 			this.addRandomData();
+		},
+		onShow() {
+			this.stickyEnable= true
+		},
+		onHide() {
+			this.stickyEnable= false
 		},
 		methods: {
 			addRandomData() {

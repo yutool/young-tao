@@ -15,13 +15,13 @@
 				<text class="iconfont icon-huaban"></text>
 			</view>
 		</u-navbar>
-		
-		<!-- 快捷导航 -->
-		<u-sticky offset-top="0">
-			<u-tabs :list="tabs" :current="0" height="60" gutter="20" active-color="#dd5d7b"></u-tabs>
+		<!-- 标签 -->
+		<u-sticky :enable="stickyEnable" :offset-top="stickyTop">
+			<u-tabs-swiper activeColor="#dd5d7b" ref="tabs" :list="tabs" :current="0" :is-scroll="false" swiperWidth="750"></u-tabs-swiper>
 		</u-sticky>
+		<!-- 轮播图 -->
 		<u-swiper :list="list" height="300" border-radius="0"></u-swiper>
-		
+		<!-- 快捷导航 -->
 		<scroll-view scroll-x="true" class="quick-nav-wrap">
 			<view class="quick-nav-row" v-for="i in 2">
 				<view v-for="i in 6" class="quick-nav-item">
@@ -120,6 +120,11 @@
 			return {
 				loadStatus: 'loadmore',
 				searchValue: '',
+				stickyEnable: true,
+				stickyTop: 0,
+				// #ifdef MP-WEIXIN
+				stickyTop: 130,
+				// #endif
 				carouselBackground: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
 				tabs: [
 					{ name: '首页' },
@@ -149,6 +154,12 @@
 		onLoad() {
 			this.addRandomData();
 		},
+		onShow() {
+			this.stickyEnable= true
+		},
+		onHide() {
+			this.stickyEnable= false
+		},
 		methods: {
 			addRandomData() {
 				this.loadStatus = 'loading';
@@ -159,7 +170,7 @@
 					}
 					this.loadStatus = 'loadmore';
 				}, 1000)
-			},
+			}
 		}
 	}
 </script>

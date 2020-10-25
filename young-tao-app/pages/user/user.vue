@@ -28,7 +28,7 @@
 			<view class="yt-container">
 				<!-- 用户订单 -->
 				<view class="order-wrap">
-					<view class="order-title">
+					<view class="order-title" @click="goToOrder">
 						<u-section :show-line="false" title="我的订单" sub-title="查看全部订单"></u-section>
 					</view>
 					<view class="order-box">
@@ -137,7 +137,12 @@
 				this.moving = false;
 				this.coverTransition = 'transform 0.3s cubic-bezier(.21,1.93,.53,.64)';
 				this.coverTransform = 'translateY(0px)';
-			} 
+			},
+			goToOrder() {
+				uni.navigateTo({
+					url: "../order/order"
+				})
+			}
 		}
 	}
 </script>

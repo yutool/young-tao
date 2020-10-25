@@ -13,20 +13,15 @@
 		</u-navbar>
 		
 		<!-- 收货地址 -->
-		<u-sticky>
+		<u-sticky :enable="stickyEnable" :offset-top="stickyTop">
 			<view class="shipping-address">
 				<text class="address-info">收货地址：xxxcdsfsdfsdfdsfdsfsdxxx</text>
 			</view>
 		</u-sticky>
 		
 		<!-- 内容 -->
-		<view class="yt-container">
-			<!-- 列表 -->
-			<view>
-				<yt-cart-card></yt-cart-card>
-				<yt-cart-card></yt-cart-card>
-				<yt-cart-card></yt-cart-card>
-			</view>
+		<view class="cart-wrap">
+			<yt-cart-card class="cart-item" v-for="i in 3" :key="i"></yt-cart-card>
 		</view>
 		
 		<!-- 支付栏 -->
@@ -40,6 +35,11 @@
 	export default {
 		data() {
 			return {
+				stickyEnable: true,
+				stickyTop: 0,
+				// #ifdef MP-WEIXIN
+				stickyTop: 130,
+				// #endif
 				list: [
 					'寒雨连江夜入吴',
 					'平明送客楚山孤',
@@ -47,6 +47,12 @@
 					'一片冰心在玉壶'
 				]
 			}
+		},
+		onShow() {
+			this.stickyEnable= true
+		},
+		onHide() {
+			this.stickyEnable= false
 		},
 		methods: {
 		}
@@ -66,6 +72,13 @@
 		font-weight: bolder;
 	}
 }
+// 购物车列表
+.cart-wrap {
+	.cart-item {
+		display: block;
+		margin: 0 20rpx 20rpx;
+	}
+}
 // 收货地址
 .shipping-address {
 	background-color: #fff;
@@ -79,6 +92,7 @@
 		white-space: nowrap;
 	}
 }
+// 工具栏
 .cart-pay {
 	position: fixed;
 	bottom: var(--window-bottom);
