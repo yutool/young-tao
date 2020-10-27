@@ -1,0 +1,15 @@
+description = "商品服务中心"
+
+subprojects {
+    apply plugin: 'java'
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+
+    jar {
+        manifest.attributes provider: 'gradle'
+    }
+
+    dependencies {
+        compile project(":youngtao-common:youngtao-common-core")
+    }
+}
