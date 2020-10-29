@@ -1,6 +1,7 @@
 package com.ankoye.youngtao.goods;
 
-import com.ankoye.youngtao.util.MathUtils;
+import com.ankoye.youngtao.core.result.ResponseResult;
+import com.ankoye.youngtao.core.util.MathUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -15,7 +16,8 @@ public class GoodsApplication {
     }
 
     @RequestMapping("/hello")
-    public String sayHello() {
-        return "生成随机数：" + MathUtils.randomDigitNumber(6);
+    public ResponseResult<String> sayHello() {
+        String str = MathUtils.randomDigitNumber(6);
+        return ResponseResult.success(str);
     }
 }

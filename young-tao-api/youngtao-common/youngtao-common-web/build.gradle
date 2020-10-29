@@ -1,0 +1,8 @@
+dependencies {
+    compile project(":youngtao-common:youngtao-common-core")
+
+    compile 'org.springframework.boot:spring-boot-starter-web'
+
+    implementation libs['mybatis-plus']
+    implementation libs['pagehelper']
+}

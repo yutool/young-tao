@@ -1,7 +1,12 @@
+apply from: 'dependency.gradle'
+
 buildscript {
     ext {
-        springBootVersion = '2.3.4.RELEASE'
-        springCloudVersion = 'Hoxton.SR8'
+        spring = [
+            boot         : "2.3.4.RELEASE",
+            cloud        : "Hoxton.SR8",
+            cloud_alibaba: "2.2.1.RELEASE",
+        ]
     }
     repositories {
         mavenLocal()
@@ -10,7 +15,7 @@ buildscript {
     }
     dependencies {
         // 让spring-boot支持gradle
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:$spring.boot"
     }
 }
 
@@ -34,13 +39,8 @@ subprojects {
     apply plugin: 'io.spring.dependency-management'
     dependencyManagement {
         imports {
-            // spring bom helps us to declare dependencies without specifying version numbers.
-            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-            mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+            mavenBom "org.springframework.boot:spring-boot-dependencies:$spring.boot"
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:$spring.cloud"
         }
     }
-
 }
-
-
-

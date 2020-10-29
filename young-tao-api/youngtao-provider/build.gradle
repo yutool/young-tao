@@ -10,6 +10,18 @@ subprojects {
     }
 
     dependencies {
-        compile project(":youngtao-common:youngtao-common-core")
+        compile project(":youngtao-common:youngtao-common-web")
+
+        compile libs['mybatis']
+        compile libs['mybatis-plus']
+        compile libs['pagehelper']
+
+        runtimeOnly 'mysql:mysql-connector-java'
+
+        compileOnly 'org.springframework.boot:spring-boot-devtools'
+        compileOnly 'org.projectlombok:lombok'
+        testImplementation('org.springframework.boot:spring-boot-starter-test') {
+            exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+        }
     }
 }

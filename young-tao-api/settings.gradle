@@ -9,4 +9,6 @@ include 'youngtao-provider:yongtao-provider-gsc'
 findProject(':youngtao-provider:yongtao-provider-gsc')?.name = 'yongtao-provider-gsc'
 include 'youngtao-common:youngtao-common-core'
 findProject(':youngtao-common:youngtao-common-core')?.name = 'youngtao-common-core'
+include 'youngtao-common:youngtao-common-web'
+findProject(':youngtao-common:youngtao-common-web')?.name = 'youngtao-common-web'
 

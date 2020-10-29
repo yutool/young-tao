@@ -1,4 +1,4 @@
-package com.ankoye.youngtao.util;
+package com.ankoye.youngtao.core.util;
 
 
 /**
