@@ -58,7 +58,7 @@ public interface IService<T> {
 	/**
 	 * 根据实体中的属性查询总数, 查询条件使用等号
 	 *
-	 * @param record the record
+	 * @param wrapper the wrapper
 	 *
 	 * @return the int
 	 */

@@ -1,0 +1,12 @@
+description = "商品管理中心"
+
+// 使用spring boot
+apply plugin: 'org.springframework.boot'
+
+dependencies {
+
+}
+
+test {
+    useJUnitPlatform()
+}

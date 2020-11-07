@@ -1,0 +1,12 @@
+description = "商品秒杀中心"
+
+// 使用spring boot
+apply plugin: 'org.springframework.boot'
+
+dependencies {
+
+}
+
+test {
+    useJUnitPlatform()
+}
