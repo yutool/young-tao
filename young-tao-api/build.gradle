@@ -4,7 +4,7 @@ buildscript {
     ext {
         spring = [
             boot         : "2.3.4.RELEASE",
-            cloud        : "Hoxton.SR8",
+            cloud        : "Hoxton.SR1",
             cloud_alibaba: "2.2.1.RELEASE",
         ]
     }

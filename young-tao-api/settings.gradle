@@ -34,4 +34,7 @@ include 'youngtao-provider-api:youngtao-provider-uac-api'
 findProject(':youngtao-provider-api:youngtao-provider-uac-api')?.name = 'youngtao-provider-uac-api'
 include 'youngtao-provider-api:youngtao-provider-umc-api'
 findProject(':youngtao-provider-api:youngtao-provider-umc-api')?.name = 'youngtao-provider-umc-api'
+include 'youngtao-gateway'
+include 'youngtao-gateway:youngtao-gateway-app'
+findProject(':youngtao-gateway:youngtao-gateway-app')?.name = 'youngtao-gateway-app'
 

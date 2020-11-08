@@ -115,6 +115,7 @@
 </template>
 
 <script>
+	import { getGoods } from '@/api/gmc/goods.js'
 	export default {
 		data() {
 			return {
@@ -156,6 +157,9 @@
 		},
 		onShow() {
 			this.stickyEnable= true
+			getGoods({name: 'zs', age: '18'}).then(res => {
+				console.log(res)
+			})
 		},
 		onHide() {
 			this.stickyEnable= false

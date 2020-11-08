@@ -1,0 +1,16 @@
+subprojects {
+    apply plugin: 'java'
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+
+    jar {
+        manifest.attributes provider: 'gradle'
+    }
+
+    dependencies {
+        compile 'org.springframework.cloud:spring-cloud-starter-gateway'
+        compile 'org.springframework.cloud:spring-cloud-starter-zookeeper-discovery'
+        compile 'org.springframework.boot:spring-boot-starter-actuator'
+        compile 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
+    }
+}
