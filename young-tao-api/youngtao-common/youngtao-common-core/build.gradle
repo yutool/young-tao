@@ -3,6 +3,7 @@ dependencies {
     compile libs['commons-lang3']
     compile libs['hutool-all']
     compile libs['jackson-databind']
+    compile libs['servlet-api']
 
     implementation libs['jedis']
 }

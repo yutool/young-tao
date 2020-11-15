@@ -12,5 +12,6 @@ subprojects {
         compile 'org.springframework.cloud:spring-cloud-starter-zookeeper-discovery'
         compile 'org.springframework.boot:spring-boot-starter-actuator'
         compile 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
+        compile 'org.hibernate:hibernate-validator:6.1.0.Final'
     }
 }

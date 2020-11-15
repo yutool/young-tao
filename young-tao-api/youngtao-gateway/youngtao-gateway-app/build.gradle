@@ -4,6 +4,7 @@ description = "商品管理中心"
 apply plugin: 'org.springframework.boot'
 
 dependencies {
+    compile project(":youngtao-common:youngtao-common-core")
 }
 
 test {
