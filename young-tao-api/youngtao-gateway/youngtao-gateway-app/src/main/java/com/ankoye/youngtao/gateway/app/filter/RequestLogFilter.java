@@ -1,18 +1,15 @@
 package com.ankoye.youngtao.gateway.app.filter;
 
 import com.ankoye.youngtao.gateway.app.model.LogData;
-import org.apache.commons.lang3.StringUtils;
+import com.ankoye.youngtao.gateway.app.util.LogHelper;
 import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
-import org.springframework.core.annotation.Order;
+import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferFactory;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.http.server.reactive.ServerHttpRequestDecorator;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.http.server.reactive.ServerHttpResponseDecorator;
 import org.springframework.stereotype.Component;
@@ -20,43 +17,30 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author ankoye@qq.com
  * @date 2020/11/15
  */
-@Order(-1)
 @Component
-public class RequestLogFilter implements GlobalFilter {
+public class RequestLogFilter implements GlobalFilter, Ordered {
 
     private static final Logger log = LoggerFactory.getLogger(RequestLogFilter.class);
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        ServerHttpRequest request = exchange.getRequest();
-        RecorderServerHttpRequestDecorator requestDecorator = new RecorderServerHttpRequestDecorator(request);
+        RecorderServerHttpRequestDecorator request = new RecorderServerHttpRequestDecorator(exchange.getRequest());
 
-        Flux<DataBuffer> body = requestDecorator.getBody();
-
-        // 读取requestBody传参
-        AtomicReference<String> requestBody = new AtomicReference<>("");
-        body.subscribe(buffer -> {
-            CharBuffer charBuffer = StandardCharsets.UTF_8.decode(buffer.asByteBuffer());
-            requestBody.set(charBuffer.toString());
-        });
-
-
+        // 封装logData
         LogData logData = new LogData();
-        logData.setUri(requestDecorator.getURI().toString());
-        logData.setMethod(requestDecorator.getMethod().toString());
-        logData.setBody(requestBody.get());
-        logData.setIp(getClientIp(requestDecorator));
+        logData.setUrl(LogHelper.getUrl(request));
+        logData.setMethod(request.getMethodValue());
+        logData.setParams(LogHelper.getRequestParams(request));
+        logData.setBody(LogHelper.getRequestBody(request));
+        logData.setIp(LogHelper.getClientIp(request));
 
-
+        // get result
         ServerHttpResponse response = exchange.getResponse();
         DataBufferFactory bufferFactory = response.bufferFactory();
         ServerHttpResponseDecorator decoratedResponse = new ServerHttpResponseDecorator(response) {
@@ -79,27 +63,11 @@ public class RequestLogFilter implements GlobalFilter {
             }
         };
 
-        return chain.filter(exchange.mutate().request(requestDecorator).response(decoratedResponse).build());
+        return chain.filter(exchange.mutate().request(request).response(decoratedResponse).build());
     }
 
-    private String getClientIp(ServerHttpRequestDecorator request) {
-        String result = null;
-        HttpHeaders headers = request.getHeaders();
-        if (headers.getFirst("X-Forwarded-For") != null) {
-            result = headers.getFirst("X-Forwarded-For");
-        } else if (headers.getFirst("Proxy-Client-IP") != null) {
-            result = headers.getFirst("Proxy-Client-IP");
-        } else if (headers.getFirst("WL-Proxy-Client-IP") != null) {
-            result = headers.getFirst("WL-Proxy-Client-IP");
-        } else if (headers.getFirst("HTTP_CLIENT_IP") != null) {
-            result = headers.getFirst("HTTP_CLIENT_IP");
-        } else if (headers.getFirst("X-Real-IP") != null) {
-            result = headers.getFirst("X-Real-IP");
-        }
-        if (StringUtils.isBlank(result) || "unknown".equalsIgnoreCase(result)) {
-            result = Objects.requireNonNull(request.getRemoteAddress()).getAddress().getHostAddress();
-        }
-        return result;
+    @Override
+    public int getOrder() {
+        return -99;
     }
-
 }

@@ -6,7 +6,9 @@ package com.ankoye.youngtao.gateway.app.model;
  */
 public class LogData {
 
-    private String uri;
+    private String url;
+
+    private String params;
 
     private String method;
 
@@ -16,12 +18,12 @@ public class LogData {
 
     private String ip;
 
-    public String getUri() {
-        return uri;
+    public String getUrl() {
+        return url;
     }
 
-    public void setUri(String uri) {
-        this.uri = uri;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getMethod() {
@@ -30,6 +32,14 @@ public class LogData {
 
     public void setMethod(String method) {
         this.method = method;
+    }
+
+    public String getParams() {
+        return params;
+    }
+
+    public void setParams(String params) {
+        this.params = params;
     }
 
     public String getBody() {
@@ -58,8 +68,9 @@ public class LogData {
 
     @Override
     public String toString() {
-        return "{ uri: " + uri +
+        return "{url: " + url +
                 ", method: " + method +
+                ", params: " + params +
                 ", body: " + body +
                 ", response: " + response +
                 ", ip: " + ip  + '}';
