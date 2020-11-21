@@ -40,6 +40,11 @@ public class CategoryData {
     private Object template;
 
     /**
+     * 上级分类id
+     */
+    private String parentId;
+
+    /**
      * 子目录
      */
     private List<CategoryData> children;
@@ -53,6 +58,7 @@ public class CategoryData {
                 .name(category.getName())
                 .icon(category.getIcon())
                 .url(category.getUrl())
+                .parentId(category.getParentId())
                 .template(category.getTemplate())
                 .build();
     }
