@@ -72,7 +72,7 @@ public class LogData {
                 ", method: " + method +
                 ", params: " + params +
                 ", body: " + body +
-                ", response: " + response +
-                ", ip: " + ip  + '}';
+                ", ip: " + ip + '}' + '\n' +
+                "response: "  + response;
     }
 }

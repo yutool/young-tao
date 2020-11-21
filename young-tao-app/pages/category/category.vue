@@ -13,22 +13,23 @@
 		<view class="menu-wrap">
 			<!-- 菜单 -->
 			<scroll-view scroll-y scroll-with-animation class="menu-box menu-scroll-view">
-				<view v-for="(item,index) in tabbar" :key="index" class="menu-item" :class="[current==index ? 'menu-item-active' : '']"
-				 :data-current="index" @tap.stop="swichMenu(index)">
-					<text class="u-line-1">{{item.name}}</text>
+				<view class="menu-item" v-for="(first, index) in categoryList" :key="first.categoryId" 
+					 :class="[current==index ? 'menu-item-active' : '']" :data-current="index" @tap.stop="swichMenu(index)"
+				>
+					<text class="u-line-1">{{first.name}}</text>
 				</view>
 			</scroll-view>
 			<!-- 商品 -->
-			<block v-for="(item,index) in tabbar" :key="index">
+			<block v-for="(first, index) in categoryList" :key="first.categoryId" >
 				<scroll-view scroll-y class="goods-box" v-if="current==index">
-					<view class="goods-item">
+					<view class="goods-item" v-for="second in first.children" :key="second.categoryId">
 						<view class="item-title">
-							<text>{{item.name}}</text>
+							<text>{{second.name}}</text>
 						</view>
 						<view class="item-container">
-							<view class="item-card" v-for="(item1, index1) in item.foods" :key="index1">
-								<image class="item-menu-image" :src="item1.icon" mode=""></image>
-								<view class="item-menu-name">{{item1.name}}</view>
+							<view class="item-card" v-for="third in second.children" :key="third.categoryId">
+								<image class="item-menu-image" :src="third.icon" mode=""></image>
+								<view class="item-menu-name">{{third.name}}</view>
 							</view>
 						</view>
 					</view>
@@ -39,11 +40,12 @@
 </template>
 
 <script>
-	import classifyData from "@/common/classify.data.js";
+	import { getCategory } from '@/api/gmc/category.js';
+	
 	export default {
 		data() {
 			return {
-				tabbar: classifyData,
+				categoryList: [],
 				current: 0, // 预设当前项的值
 				menuHeight: 0, // 左边菜单的高度
 				menuItemHeight: 0, // 左边菜单item的高度
@@ -81,6 +83,12 @@
 					}).exec();
 				})
 			}
+		},
+		mounted() {
+			getCategory().then(data => {
+				this.categoryList = data.categoryList;
+				console.log(this.categoryList)
+			});
 		}
 	}
 </script>

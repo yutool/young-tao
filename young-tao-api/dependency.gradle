@@ -9,6 +9,7 @@ ext {
         mybatis_plus        : "3.3.2",
         pagehelper          : "1.2.12",
         servlet_api         : "3.1.0",
+        druid               : "1.1.10",
     ]
     libs = [
         "guava"             : "com.google.guava:guava:$version.guava",
@@ -20,5 +21,6 @@ ext {
         "mybatis-plus"      : "com.baomidou:mybatis-plus-boot-starter:$version.mybatis_plus",
         "pagehelper"        : "com.github.pagehelper:pagehelper-spring-boot-starter:$version.pagehelper",
         "servlet-api"       : "javax.servlet:javax.servlet-api:$version.servlet_api",
+        "druid"             : "com.alibaba:druid-spring-boot-starter:$version.druid",
     ]
 }
