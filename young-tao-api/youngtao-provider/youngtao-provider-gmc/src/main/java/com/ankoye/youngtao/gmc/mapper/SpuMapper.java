@@ -1,6 +1,6 @@
 package com.ankoye.youngtao.gmc.mapper;
 
-import com.ankoye.youngtao.gmc.model.domain.CategoryDO;
+import com.ankoye.youngtao.gmc.model.domain.SpuDO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -9,6 +9,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @date 2020/11/21
  */
 @Mapper
-public interface CategoryMapper extends BaseMapper<CategoryDO> {
+public interface SpuMapper extends BaseMapper<SpuDO> {
 
 }

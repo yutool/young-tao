@@ -1,7 +1,7 @@
 package com.ankoye.youngtao.gmc.service;
 
 import com.ankoye.youngtao.gmc.model.data.CategoryData;
-import com.ankoye.youngtao.gmc.model.entity.CategoryDO;
+import com.ankoye.youngtao.gmc.model.domain.CategoryDO;
 import com.ankoye.youngtao.web.support.IService;
 
 import java.util.List;

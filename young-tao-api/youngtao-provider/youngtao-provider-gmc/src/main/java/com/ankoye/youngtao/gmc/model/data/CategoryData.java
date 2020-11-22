@@ -1,6 +1,6 @@
 package com.ankoye.youngtao.gmc.model.data;
 
-import com.ankoye.youngtao.gmc.model.entity.CategoryDO;
+import com.ankoye.youngtao.gmc.model.domain.CategoryDO;
 import lombok.Builder;
 import lombok.Data;
 

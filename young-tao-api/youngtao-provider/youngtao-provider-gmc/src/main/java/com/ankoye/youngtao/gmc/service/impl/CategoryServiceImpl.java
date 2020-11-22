@@ -2,7 +2,7 @@ package com.ankoye.youngtao.gmc.service.impl;
 
 import com.ankoye.youngtao.gmc.mapper.CategoryMapper;
 import com.ankoye.youngtao.gmc.model.data.CategoryData;
-import com.ankoye.youngtao.gmc.model.entity.CategoryDO;
+import com.ankoye.youngtao.gmc.model.domain.CategoryDO;
 import com.ankoye.youngtao.gmc.service.CategoryService;
 import com.ankoye.youngtao.web.support.BaseService;
 import com.google.common.collect.Lists;

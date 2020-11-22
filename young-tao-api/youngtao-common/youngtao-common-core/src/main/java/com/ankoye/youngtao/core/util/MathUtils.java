@@ -1,6 +1,8 @@
 package com.ankoye.youngtao.core.util;
 
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * 随机数生成工具类
  *
@@ -27,8 +29,12 @@ public class MathUtils {
      * @return   补充后的结果
      */
     public static String makeUpNewData(String target, int length, String add){
-        if(target.startsWith("-")) target.replace("-", "");
-        if(target.length() >= length) return target.substring(0, length);
+        if(target.startsWith("-")) {
+            StringUtils.replace(target, "-", "");
+        }
+        if(target.length() >= length) {
+            return target.substring(0, length);
+        }
         StringBuffer sb = new StringBuffer(FIRST_DEFAULT_DIGITS);
         for (int i = 0; i < length - (1 + target.length()); i++) {
             sb.append(add);
@@ -42,8 +48,14 @@ public class MathUtils {
      * @return
      */
     public static String randomDigitNumber(int length){
-        int start = Integer.parseInt(makeUpNewData("", length));//1000+8999=9999
-        int end = Integer.parseInt(makeUpNewData("", length + 1)) - start;//9000
+        int start = Integer.parseInt(makeUpNewData("", length));
+        int end = Integer.parseInt(makeUpNewData("", length + 1)) - start;
         return (int)(Math.random() * end) + start + "";
+    }
+
+    public static void main(String[] args) {
+        System.out.println(randomDigitNumber(7));
+        System.out.println(randomDigitNumber(3));
+        System.out.println(randomDigitNumber(6));
     }
 }

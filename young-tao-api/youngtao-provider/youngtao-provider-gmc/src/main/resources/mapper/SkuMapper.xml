@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ankoye.youngtao.gmc.mapper.SkuMapper">
+
+    <resultMap id="BaseResultMap" type="com.ankoye.youngtao.gmc.model.domain.SkuDO">
+        <result property="id" column="id" />
+        <result property="skuId" column="sku_id" />
+        <result property="spuId" column="spu_id" />
+        <result property="title" column="title" />
+        <result property="sku" column="sku" />
+        <result property="images" column="images" />
+        <result property="price" column="price" />
+        <result property="discount" column="discount" />
+        <result property="num" column="num" />
+        <result property="alertNum" column="alert_num" />
+        <result property="saleNum" column="sale_num" />
+        <result property="freezeNum" column="freeze_num" />
+        <result property="defaultShow" column="default_show" />
+        <result property="updateTime" column="update_time" />
+        <result property="createTime" column="create_time" />
+    </resultMap>
+
+    <insert id="batchInset" parameterType="skuDO">
+        insert into gmc_sku (
+            sku_id, spu_id, title, sku, images, price, num, alert_num, default_show
+        ) values
+        <foreach collection="skuList" item="sku" open="(" close=")" separator=",">
+            #{skuId}, #{spuId}, #{title}, #{sku}, #{images}, #{price}, #{num}, #{alertNum}, #{defaultShow}
+        </foreach>
+    </insert>
+</mapper>

@@ -1,4 +1,4 @@
-package com.ankoye.youngtao.gmc.model.entity;
+package com.ankoye.youngtao.gmc.model.domain;
 
 import com.ankoye.youngtao.web.support.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * 商品分类实体类
  *
- * @author ankoye
+ * @author ankoye@qq.com
  * @date 2020/11/21
  */
 @Data
