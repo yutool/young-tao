@@ -52,10 +52,4 @@ public class MathUtils {
         int end = Integer.parseInt(makeUpNewData("", length + 1)) - start;
         return (int)(Math.random() * end) + start + "";
     }
-
-    public static void main(String[] args) {
-        System.out.println(randomDigitNumber(7));
-        System.out.println(randomDigitNumber(3));
-        System.out.println(randomDigitNumber(6));
-    }
 }

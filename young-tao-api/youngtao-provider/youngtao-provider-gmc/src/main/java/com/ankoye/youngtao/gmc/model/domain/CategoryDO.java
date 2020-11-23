@@ -3,6 +3,7 @@ package com.ankoye.youngtao.gmc.model.domain;
 import com.ankoye.youngtao.web.support.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
@@ -13,6 +14,7 @@ import java.io.Serializable;
  * @date 2020/11/21
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @TableName("gmc_category")
 public class CategoryDO extends BaseEntity implements Serializable {
     private static final long serialVersionUID = -47219282192887378L;

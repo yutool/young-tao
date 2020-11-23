@@ -14,13 +14,13 @@
         <result property="category2Id" column="category2_id" />
         <result property="category3Id" column="category3_id" />
         <result property="cover" column="cover" />
-        <result property="priceRange" column="price_range" />
+        <result property="priceRange" column="price_range" typeHandler="com.ankoye.youngtao.web.typehandler.JsonListTypeHandler"/>
         <result property="detail" column="detail" />
-        <result property="serve" column="serve" />
-        <result property="coupon" column="coupon" />
-        <result property="spec" column="spec" />
-        <result property="skuTemplate" column="sku_template" />
-        <result property="fare" column="fare" />
+        <result property="serve" column="serve" typeHandler="com.ankoye.youngtao.web.typehandler.JsonListTypeHandler"/>
+        <result property="coupon" column="coupon" typeHandler="com.ankoye.youngtao.web.typehandler.JsonListTypeHandler"/>
+        <result property="spec" column="spec" typeHandler="com.ankoye.youngtao.web.typehandler.JsonMapTypeHandler"/>
+        <result property="skuTemplate" column="sku_template" typeHandler="com.ankoye.youngtao.web.typehandler.JsonMapTypeHandler" />
+        <result property="isFreeShipping" column="is_free_shipping" />
         <result property="saleNum" column="sale_num" />
         <result property="commentNum" column="comment_num" />
         <result property="seq" column="seq" />
@@ -29,5 +29,10 @@
         <result property="updateTime" column="update_time" />
         <result property="createTime" column="create_time" />
     </resultMap>
+
+    <select id="selectBySpuId" resultMap="BaseResultMap">
+        select * from gmc_spu
+        where spu_id = #{spuId}
+    </select>
 
 </mapper>

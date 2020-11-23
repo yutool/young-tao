@@ -1,13 +1,11 @@
 package com.ankoye.youngtao.gmc.controller;
 
 import com.ankoye.youngtao.core.result.ResponseResult;
+import com.ankoye.youngtao.gmc.model.data.ProductData;
 import com.ankoye.youngtao.gmc.model.request.AddProductRequest;
 import com.ankoye.youngtao.gmc.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author ankoye@qq.com
@@ -25,4 +23,11 @@ public class ProductController {
         Boolean result = productService.addProduct(request);
         return ResponseResult.success(result);
     }
+
+    @GetMapping("/{id}")
+    public ResponseResult<ProductData> getProduct(@PathVariable String id) {
+        ProductData data = productService.getBySpuId(id);
+        return ResponseResult.success(data);
+    }
+
 }

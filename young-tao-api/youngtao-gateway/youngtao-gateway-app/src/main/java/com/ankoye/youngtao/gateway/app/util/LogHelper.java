@@ -48,7 +48,7 @@ public class LogHelper {
      * @return Mono.empty()
      */
     public static Mono<Void> doRecord(LogData logData) {
-         log.info(JsonUtils.toString(logData));
+         log.info(JsonUtils.toJson(logData));
         return Mono.empty();
     }
 

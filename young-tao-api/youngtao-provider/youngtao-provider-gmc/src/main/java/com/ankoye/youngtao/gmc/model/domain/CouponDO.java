@@ -3,10 +3,11 @@ package com.ankoye.youngtao.gmc.model.domain;
 import com.ankoye.youngtao.web.support.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.io.Serializable;
 
 /**
  * 优惠券实体类
@@ -15,6 +16,7 @@ import java.io.Serializable;
  * @since 2020/11/21
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 @TableName("gmc_coupon")
 public class CouponDO extends BaseEntity implements Serializable {
     private static final long serialVersionUID = -74564248361768128L;
@@ -59,6 +61,6 @@ public class CouponDO extends BaseEntity implements Serializable {
     /**
      * 对应type的id
      */
-    private String targetid;
+    private String targetId;
 
 }

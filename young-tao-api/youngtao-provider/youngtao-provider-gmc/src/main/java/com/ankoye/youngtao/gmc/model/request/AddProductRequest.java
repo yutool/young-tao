@@ -1,10 +1,9 @@
 package com.ankoye.youngtao.gmc.model.request;
 
+import com.ankoye.youngtao.core.lang.JsonList;
+import com.ankoye.youngtao.core.lang.JsonMap;
 import com.ankoye.youngtao.gmc.model.domain.SkuDO;
 import com.ankoye.youngtao.gmc.model.domain.SpuDO;
-import com.ankoye.youngtao.gmc.model.json.SkuJson;
-import com.ankoye.youngtao.gmc.model.json.SkuTemplateJson;
-import com.ankoye.youngtao.gmc.model.json.SpecJson;
 import com.google.common.collect.Lists;
 import lombok.Data;
 import org.springframework.util.CollectionUtils;
@@ -28,11 +27,6 @@ public class AddProductRequest {
      * 商品标题
      */
     private String title;
-
-    /**
-     * 商家id
-     */
-    private String merchantId;
 
     /**
      * 品牌id
@@ -65,11 +59,6 @@ public class AddProductRequest {
     private String cover;
 
     /**
-     * 价格范围
-     */
-    private List<String> priceRange;
-
-    /**
      * 商品详情说明
      */
     private String detail;
@@ -77,32 +66,37 @@ public class AddProductRequest {
     /**
      * 商品服务
      */
-    private List<String> serve;
+    private JsonList<String> serve;
 
     /**
      * 优惠券
      */
-    private List<String> coupon;
+    private JsonList<String> coupon;
 
     /**
      * 规格参数
      */
-    private SpecJson spec;
+    private JsonMap<String> spec;
 
     /**
      * sku模板
      */
-    private SkuTemplateJson skuTemplate;
+    private JsonMap<List<String>> skuTemplate;
 
     /**
-     * 运费
+     * 是否包邮
      */
-    private BigDecimal fare;
+    private Boolean isFreeShipping;
+
+    /**
+     *  是否可销售
+     */
+    private Boolean isMarketable;
 
     /**
      * sku
      */
-    private List<Sku> skuList;
+    private JsonList<Sku> skuList;
 
     @Data
     public static class Sku {
@@ -115,12 +109,12 @@ public class AddProductRequest {
         /**
          * 商品规格
          */
-        private SkuJson sku;
+        private JsonMap<String> sku;
 
         /**
          * 商品图片
          */
-        private List<String> images;
+        private JsonList<String> images;
 
         /**
          * 单价
@@ -145,27 +139,26 @@ public class AddProductRequest {
         /**
          * 默认显示
          */
-        private Integer defaultShow;
+        private Boolean defaultShow;
     }
 
     public SpuDO convertToSpu() {
         return SpuDO.builder()
                 .spu(spu)
                 .title(title)
-                .merchantId(merchantId)
                 .brandId(brandId)
                 .brandName(brandName)
                 .category1Id(category1Id)
                 .category2Id(category2Id)
                 .category3Id(category3Id)
                 .cover(cover)
-                .priceRange(priceRange)
                 .detail(detail)
                 .serve(serve)
                 .coupon(coupon)
                 .spec(spec)
                 .skuTemplate(skuTemplate)
-                .fare(fare)
+                .isFreeShipping(isFreeShipping)
+                .isMarketable(isMarketable)
                 .build();
     }
 

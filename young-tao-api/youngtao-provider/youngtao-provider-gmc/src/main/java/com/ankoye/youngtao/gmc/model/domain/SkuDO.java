@@ -1,14 +1,16 @@
 package com.ankoye.youngtao.gmc.model.domain;
 
-import com.ankoye.youngtao.gmc.model.json.SkuJson;
+import com.ankoye.youngtao.core.lang.JsonList;
+import com.ankoye.youngtao.core.lang.JsonMap;
 import com.ankoye.youngtao.web.support.BaseEntity;
+import com.ankoye.youngtao.web.typehandler.JsonListTypeHandler;
+import com.ankoye.youngtao.web.typehandler.JsonMapTypeHandler;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * 商品SKU实体类
@@ -16,8 +18,12 @@ import java.util.List;
  * @author ankoye@qq.com
  * @since 2020/11/21
  */
+
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper=false)
 @TableName("gmc_sku")
 public class SkuDO extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 227889639103151085L;
@@ -37,12 +43,14 @@ public class SkuDO extends BaseEntity implements Serializable {
     /**
      * 商品规格
      */
-    private SkuJson sku;
+    @TableField(typeHandler = JsonMapTypeHandler.class)
+    private JsonMap<String> sku;
 
     /**
      * 商品图片
      */
-    private List<String> images;
+    @TableField(typeHandler = JsonListTypeHandler.class)
+    private JsonList<String> images;
 
     /**
      * 单价
@@ -77,6 +85,6 @@ public class SkuDO extends BaseEntity implements Serializable {
     /**
      * 默认显示
      */
-    private Integer defaultShow;
+    private Boolean defaultShow;
 
 }

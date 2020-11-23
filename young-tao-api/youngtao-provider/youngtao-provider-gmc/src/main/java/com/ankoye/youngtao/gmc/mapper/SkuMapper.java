@@ -14,4 +14,6 @@ import java.util.List;
 public interface SkuMapper extends BaseMapper<SkuDO> {
 
     int batchInset(List<SkuDO> skuList);
+
+    List<SkuDO> listBySpuId(String spuId);
 }

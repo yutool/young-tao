@@ -1,5 +1,6 @@
 package com.ankoye.youngtao.gmc.service;
 
+import com.ankoye.youngtao.gmc.model.data.ProductData;
 import com.ankoye.youngtao.gmc.model.request.AddProductRequest;
 
 /**
@@ -14,4 +15,10 @@ public interface ProductService {
      * @return bool
      */
     Boolean addProduct(AddProductRequest request);
+
+    /**
+     * 根据SpuId获取商品
+     * @param id spuId
+     */
+    ProductData getBySpuId(String id);
 }

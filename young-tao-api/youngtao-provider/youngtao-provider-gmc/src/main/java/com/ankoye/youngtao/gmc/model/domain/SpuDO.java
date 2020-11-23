@@ -1,11 +1,13 @@
 package com.ankoye.youngtao.gmc.model.domain;
 
-import com.ankoye.youngtao.gmc.model.json.SkuTemplateJson;
-import com.ankoye.youngtao.gmc.model.json.SpecJson;
+import com.ankoye.youngtao.core.lang.JsonList;
+import com.ankoye.youngtao.core.lang.JsonMap;
 import com.ankoye.youngtao.web.support.BaseEntity;
+import com.ankoye.youngtao.web.typehandler.JsonListTypeHandler;
+import com.ankoye.youngtao.web.typehandler.JsonMapTypeHandler;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -19,6 +21,9 @@ import java.util.List;
  */
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper=false)
 @TableName("gmc_spu")
 public class SpuDO extends BaseEntity implements Serializable {
 
@@ -72,7 +77,8 @@ public class SpuDO extends BaseEntity implements Serializable {
     /**
      * 价格范围
      */
-    private List<BigDecimal> priceRange;
+    @TableField(typeHandler = JsonListTypeHandler.class)
+    private JsonList<BigDecimal> priceRange;
 
     /**
      * 商品详情说明
@@ -82,27 +88,31 @@ public class SpuDO extends BaseEntity implements Serializable {
     /**
      * 商品服务
      */
-    private List<String> serve;
+    @TableField(typeHandler = JsonListTypeHandler.class)
+    private JsonList<String> serve;
 
     /**
      * 优惠券
      */
-    private List<String> coupon;
+    @TableField(typeHandler = JsonListTypeHandler.class)
+    private JsonList<String> coupon;
 
     /**
      * 规格参数
      */
-    private SpecJson spec;
+    @TableField(typeHandler = JsonMapTypeHandler.class)
+    private JsonMap<String> spec;
 
     /**
      * sku模板
      */
-    private SkuTemplateJson skuTemplate;
+    @TableField(typeHandler = JsonMapTypeHandler.class)
+    private JsonMap<List<String>> skuTemplate;
 
     /**
-     * 运费
+     * 是否包邮
      */
-    private BigDecimal fare;
+    private Boolean isFreeShipping;
 
     /**
      * 销售量
@@ -120,9 +130,9 @@ public class SpuDO extends BaseEntity implements Serializable {
     private Integer seq;
 
     /**
-     *  0-下架，1-上架
+     *  是否可销售
      */
-    private Integer isMarketable;
+    private Boolean isMarketable;
 
     /**
      * 0-审核中，1-审核成功，2-审核失败

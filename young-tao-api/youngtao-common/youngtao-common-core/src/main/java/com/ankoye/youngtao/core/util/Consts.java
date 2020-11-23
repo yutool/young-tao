@@ -1,4 +1,4 @@
-package com.ankoye.youngtao.core.common;
+package com.ankoye.youngtao.core.util;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;

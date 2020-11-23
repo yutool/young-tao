@@ -1,6 +1,8 @@
-package com.ankoye.youngtao.core.common;
+package com.ankoye.youngtao.core.lang;
 
 /**
+ * 元组
+ *
  * @author ankoye@qq.com
  * @date 2020/10/28
  */

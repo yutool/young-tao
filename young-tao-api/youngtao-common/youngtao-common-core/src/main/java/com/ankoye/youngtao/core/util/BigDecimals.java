@@ -1,4 +1,4 @@
-package com.ankoye.youngtao.core.common;
+package com.ankoye.youngtao.core.util;
 
 import java.math.BigDecimal;
 

@@ -1,6 +1,9 @@
 package com.ankoye.youngtao.web.support;
 
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -9,7 +12,8 @@ import java.util.Date;
  */
 public abstract class BaseEntity implements Serializable {
     /** 自增ID */
-    protected Integer id;
+    @TableId(type = IdType.AUTO)
+    protected Long id;
 
     /** 创建时间 */
     protected Date createTime;
@@ -17,11 +21,11 @@ public abstract class BaseEntity implements Serializable {
     /** 修改时间 */
     protected Date updateTime;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

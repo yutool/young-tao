@@ -11,4 +11,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface SpuMapper extends BaseMapper<SpuDO> {
 
+    SpuDO selectBySpuId(String spuId);
 }
