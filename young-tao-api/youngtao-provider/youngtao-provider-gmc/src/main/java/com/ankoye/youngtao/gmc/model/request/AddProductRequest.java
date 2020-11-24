@@ -59,6 +59,11 @@ public class AddProductRequest {
     private String cover;
 
     /**
+     * 商品展示
+     */
+    private JsonList<String> images;
+
+    /**
      * 商品详情说明
      */
     private String detail;
@@ -152,6 +157,7 @@ public class AddProductRequest {
                 .category2Id(category2Id)
                 .category3Id(category3Id)
                 .cover(cover)
+                .images(images)
                 .detail(detail)
                 .serve(serve)
                 .coupon(coupon)

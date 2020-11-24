@@ -14,6 +14,7 @@
         <result property="category2Id" column="category2_id" />
         <result property="category3Id" column="category3_id" />
         <result property="cover" column="cover" />
+        <result property="images" column="images" typeHandler="com.ankoye.youngtao.web.typehandler.JsonListTypeHandler"/>
         <result property="priceRange" column="price_range" typeHandler="com.ankoye.youngtao.web.typehandler.JsonListTypeHandler"/>
         <result property="detail" column="detail" />
         <result property="serve" column="serve" typeHandler="com.ankoye.youngtao.web.typehandler.JsonListTypeHandler"/>

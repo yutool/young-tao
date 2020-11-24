@@ -45,7 +45,7 @@
 			</view>
 			<scroll-view scroll-x="true">
 				<view class="seckill-content">
-					<yt-simple-goods-card v-for="i in 10" :key="i"></yt-simple-goods-card>
+					<yt-simple-product-card v-for="i in 10" :key="i"></yt-simple-product-card>
 				</view>
 			</scroll-view>
 		</view>
@@ -96,12 +96,12 @@
 				<u-waterfall v-model="goodsList">
 					<template v-slot:left="{leftList}">
 						<view v-for="(item, index) in leftList" :key="index">
-							<yt-goods-card margin="0 20rpx 20rpx 0"></yt-goods-card>
+							<yt-product-card margin="0 20rpx 20rpx 0"></yt-product-card>
 						</view>
 					</template>
 					<template v-slot:right="{rightList}">
 						<view v-for="(item, index) in rightList" :key="index">
-							<yt-goods-card margin="0 20rpx 20rpx 0"></yt-goods-card>
+							<yt-product-card margin="0 20rpx 20rpx 0"></yt-product-card>
 						</view>
 					</template>
 				</u-waterfall>

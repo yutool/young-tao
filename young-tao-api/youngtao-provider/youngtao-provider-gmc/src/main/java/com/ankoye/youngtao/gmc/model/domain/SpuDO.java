@@ -75,6 +75,11 @@ public class SpuDO extends BaseEntity implements Serializable {
     private String cover;
 
     /**
+     * 商品展示
+     */
+    private JsonList<String> images;
+
+    /**
      * 价格范围
      */
     @TableField(typeHandler = JsonListTypeHandler.class)

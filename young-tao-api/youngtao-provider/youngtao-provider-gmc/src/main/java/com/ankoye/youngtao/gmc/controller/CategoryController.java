@@ -5,6 +5,7 @@ import com.ankoye.youngtao.gmc.model.data.CategoryData;
 import com.ankoye.youngtao.gmc.model.response.GetCategoryResponse;
 import com.ankoye.youngtao.gmc.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,7 +25,7 @@ public class CategoryController {
      * 拉取目录，需要做个缓存
      * @return
      */
-    @RequestMapping("/getCategory")
+    @GetMapping("/get")
     public ResponseResult<GetCategoryResponse> getCategory() {
         List<CategoryData> categoryList = categoryService.getCategory();
         GetCategoryResponse response = new GetCategoryResponse();

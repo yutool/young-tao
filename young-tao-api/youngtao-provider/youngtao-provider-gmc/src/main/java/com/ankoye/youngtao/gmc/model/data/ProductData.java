@@ -72,6 +72,11 @@ public class ProductData {
     private String cover;
 
     /**
+     * 商品展示
+     */
+    private JsonList<String> images;
+
+    /**
      * 价格范围
      */
     @TableField(typeHandler = JsonListTypeHandler.class)
@@ -213,6 +218,7 @@ public class ProductData {
                 .category2Id(spuDO.getCategory2Id())
                 .category3Id(spuDO.getCategory3Id())
                 .cover(spuDO.getCover())
+                .images(spuDO.getImages())
                 .priceRange(spuDO.getPriceRange())
                 .detail(spuDO.getDetail())
                 .serve(spuDO.getServe())

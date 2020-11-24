@@ -33,7 +33,7 @@
 		methods: {
 			onclick() {
 				uni.navigateTo({
-				    url: '/pages/goods/goods'
+				    url: '/pages/product/product'
 				});
 			}
 		}
