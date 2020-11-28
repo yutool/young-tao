@@ -16,7 +16,7 @@
 			</view>
 		</view>
 		<!-- 商品信息 -->
-		<yt-create-order-goods v-for="i in 2" class="module-bottom"></yt-create-order-goods>
+		<yt-order-product v-for="i in 2" class="module-bottom"></yt-order-product>
 		
 		<!-- 商品金额 -->
 		<view class="money-wrap">
@@ -62,11 +62,17 @@
 </template>
 
 <script>
+	import { confirmOrder } from '@/api/gmc/product.js';
 	export default {
 		data() {
 			return {
 				
 			}
+		},
+		onLoad(option) {
+			const data = {skuList: [{skuId: '1532641744', count: 3}]}
+			confirmOrder(data).then(res => {
+			})
 		},
 		methods: {
 			pay() {

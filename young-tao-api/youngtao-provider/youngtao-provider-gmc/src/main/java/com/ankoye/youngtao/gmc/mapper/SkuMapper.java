@@ -4,6 +4,7 @@ import com.ankoye.youngtao.gmc.model.domain.SkuDO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -13,7 +14,9 @@ import java.util.List;
 @Mapper
 public interface SkuMapper extends BaseMapper<SkuDO> {
 
-    int batchInset(List<SkuDO> skuList);
+    int batchInset(Collection<SkuDO> skuList);
 
     List<SkuDO> listBySpuId(String spuId);
+
+    List<SkuDO> listBySkuIds(Collection<String> skuIds);
 }

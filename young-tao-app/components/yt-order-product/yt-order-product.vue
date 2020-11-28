@@ -13,7 +13,7 @@
 					<view class="sku">sku</view>
 					<view class="price-number">
 						<view class="price">￥219.00</view>
-						<viwe class="number">x1</viwe>
+						<view class="number">x1</view>
 					</view>
 					<view>支持七天无理由退货</view>
 				</view>

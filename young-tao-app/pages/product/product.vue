@@ -34,12 +34,12 @@
 		
 		<!-- 商品信息 -->
 		<view class="goods-info-wrap">
-			<u-swiper :list="list" border-radius="0" height="750" mode="number" indicator-pos="bottomRight"></u-swiper>
+			<u-swiper :list="spu.images" border-radius="0" height="750" mode="number" indicator-pos="bottomRight"></u-swiper>
 			<!-- 商品价格 -->
 			<view class="price-box">
 				<view class="price-left">
-					<view class="price">￥200.00</view>
-					<view class="old-price">￥200.00</view>
+					<view class="price">￥{{selectedSku.price}}</view>
+					<view class="old-price">￥{{selectedSku.price}}</view>
 				</view>
 				<view class="price-right">
 					<view class="item">
@@ -56,7 +56,7 @@
 			<view class="title-box">
 				<u-tag class="title-tag" text="新品" type="success" size="mini" mode="dark" />
 				<text class="title">
-					vivo iQOO Z1x 水漾白 6GB+128GB 骁龙765G 120Hz竞速屏 5000mAh超大电池 双模5G全网通手机 iqooz1x
+					{{spu.title}}
 				</text>
 			</view>
 		</view>
@@ -210,44 +210,53 @@
 		<yt-sku-popup :visible="show" @close="show = false"></yt-sku-popup>
 		<!-- 工具栏 -->
 		<view class="goods-bar">
-			<yt-goodsbar @add="show = true" @buy="goBuy"></yt-goodsbar>
+			<yt-product-toolbar @add="show = true" @buy="goBuy"></yt-product-toolbar>
 		</view>
 	</view>
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-			show: false,
-			tabIndex: 0,
-			navbar: {
-				scrollTop: 0,
-				opacity: 0,
-				threshold: 100
-			},
-			list: [
-				{ image: 'https://cdn.uviewui.com/uview/swiper/1.jpg' },
-				{ image: 'https://cdn.uviewui.com/uview/swiper/2.jpg' },
-				{ image: 'https://cdn.uviewui.com/uview/swiper/3.jpg' }
-			],
-    };
-  },
-	onPageScroll(e) {
-		this.navbar.scrollTop = e.scrollTop;
-		this.navbar.opacity = Math.max(Math.min(e.scrollTop/this.navbar.threshold, 1), 0);
-	},
-  methods: {
-		onBack() {
-		  uni.navigateBack();
+	import { getProduct } from '@/api/gmc/product.js';
+	export default {
+		data() {
+			return {
+				show: false,
+				tabIndex: 0,
+				spu: {},
+				selectedSku: {},
+				navbar: {
+					scrollTop: 0,
+					opacity: 0,
+					threshold: 100
+				},
+			};
 		},
-		goBuy() {
-			uni.navigateTo({
-				url: '/pages/order/create'
+		onPageScroll(e) {
+			this.navbar.scrollTop = e.scrollTop;
+			this.navbar.opacity = Math.max(Math.min(e.scrollTop/this.navbar.threshold, 1), 0);
+		},
+		onLoad(option) {
+			getProduct(option.id).then(res => {
+				if (res == null) {
+					return ;
+				}
+				this.spu = res;
+				for (const sku of res.skuList) if (sku.defaultShow) {
+					this.selectedSku = sku;
+				}
 			})
+		},
+		methods: {
+			onBack() {
+				uni.navigateBack();
+			},
+			goBuy() {
+				uni.navigateTo({
+					url: '/pages/order/create'
+				})
+			}
 		}
-  }
-};
+	};
 </script>
 
 <style lang="scss" scoped>

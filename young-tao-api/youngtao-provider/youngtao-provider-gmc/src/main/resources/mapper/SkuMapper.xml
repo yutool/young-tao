@@ -38,4 +38,12 @@
         select * from gmc_sku
         where spu_id = #{spuId}
     </select>
+
+    <select id="listBySkuIds" resultMap="BaseResultMap">
+        select * from gmc_sku
+        where sku_id in
+        <foreach collection="skuIds" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
 </mapper>

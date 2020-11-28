@@ -36,4 +36,12 @@
         where spu_id = #{spuId}
     </select>
 
+    <select id="listBySpuIds" resultMap="BaseResultMap">
+        select * from gmc_spu
+        where spu_id in
+        <foreach collection="spuIds" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
+
 </mapper>

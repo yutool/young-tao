@@ -1,7 +1,7 @@
 package com.ankoye.youngtao.gmc.service.impl;
 
-import com.ankoye.youngtao.core.util.BigDecimals;
 import com.ankoye.youngtao.core.lang.JsonList;
+import com.ankoye.youngtao.core.util.BigDecimals;
 import com.ankoye.youngtao.core.util.GlobalIdUtils;
 import com.ankoye.youngtao.gmc.common.constant.SpuConstant;
 import com.ankoye.youngtao.gmc.mapper.SkuMapper;
@@ -10,13 +10,19 @@ import com.ankoye.youngtao.gmc.model.data.ProductData;
 import com.ankoye.youngtao.gmc.model.domain.SkuDO;
 import com.ankoye.youngtao.gmc.model.domain.SpuDO;
 import com.ankoye.youngtao.gmc.model.request.AddProductRequest;
+import com.ankoye.youngtao.gmc.model.request.ConfirmOrderRequest;
+import com.ankoye.youngtao.gmc.model.response.ConfirmOrderResponse;
 import com.ankoye.youngtao.gmc.service.ProductService;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author ankoye@qq.com
@@ -62,5 +68,25 @@ public class ProductServiceImpl implements ProductService {
         SpuDO spuDO = spuMapper.selectBySpuId(id);
         List<SkuDO> skuDOList = skuMapper.listBySpuId(id);
         return ProductData.copyBy(spuDO, skuDOList);
+    }
+
+    @Override
+    public List<ConfirmOrderResponse> confirmOrder(ConfirmOrderRequest request) {
+        Map<String, Integer> countMap = request.getSkuList().stream().collect(Collectors.toMap(ConfirmOrderRequest.Data::getSkuId, ConfirmOrderRequest.Data::getCount));
+        List<SkuDO> skuDOS = skuMapper.listBySkuIds(countMap.keySet());
+        Map<String, List<SkuDO>> skuDOMap = Maps.newHashMap();
+        for (SkuDO skuDO : skuDOS) {
+            List<SkuDO> list = skuDOMap.getOrDefault(skuDO.getSpuId(), Lists.newArrayList());
+            list.add(skuDO);
+            skuDOMap.put(skuDO.getSpuId(), list);
+        }
+        List<SpuDO> spuDOS = spuMapper.listBySpuIds(skuDOMap.keySet());
+
+        List<ProductData> dataList = Lists.newArrayList();
+        for (SpuDO spuDO : spuDOS) {
+            ProductData data = ProductData.copyBy(spuDO, skuDOMap.get(spuDO.getSpuId()));
+            dataList.add(data);
+        }
+        return ConfirmOrderResponse.copyBy(spuDOS, skuDOMap, countMap);
     }
 }

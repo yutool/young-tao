@@ -3,9 +3,13 @@ package com.ankoye.youngtao.gmc.controller;
 import com.ankoye.youngtao.core.result.ResponseResult;
 import com.ankoye.youngtao.gmc.model.data.ProductData;
 import com.ankoye.youngtao.gmc.model.request.AddProductRequest;
+import com.ankoye.youngtao.gmc.model.request.ConfirmOrderRequest;
+import com.ankoye.youngtao.gmc.model.response.ConfirmOrderResponse;
 import com.ankoye.youngtao.gmc.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author ankoye@qq.com
@@ -20,14 +24,20 @@ public class ProductController {
 
     @PostMapping("/add")
     public ResponseResult<Boolean> addProduct(@RequestBody AddProductRequest request) {
-        Boolean result = productService.addProduct(request);
-        return ResponseResult.success(result);
+        Boolean response = productService.addProduct(request);
+        return ResponseResult.success(response);
     }
 
     @GetMapping("/{id}")
     public ResponseResult<ProductData> getProduct(@PathVariable String id) {
-        ProductData data = productService.getBySpuId(id);
-        return ResponseResult.success(data);
+        ProductData response = productService.getBySpuId(id);
+        return ResponseResult.success(response);
+    }
+
+    @PostMapping("/confirmOrder")
+    public ResponseResult<List<ConfirmOrderResponse>> confirmOrder(@RequestBody ConfirmOrderRequest request) {
+        List<ConfirmOrderResponse> response = productService.confirmOrder(request);
+        return ResponseResult.success(response);
     }
 
 }

@@ -207,6 +207,9 @@ public class ProductData {
     }
 
     public static ProductData copyBy(SpuDO spuDO, List<SkuDO> skuDOList) {
+        if (spuDO == null) {
+            return null;
+        }
         ProductData data = ProductData.builder()
                 .spuId(spuDO.getSpuId())
                 .spu(spuDO.getSpu())
