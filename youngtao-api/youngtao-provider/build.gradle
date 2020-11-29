@@ -13,6 +13,8 @@ subprojects {
         compile libs['mybatis-plus']
         compile libs['pagehelper']
         compile libs['druid']
+        compile libs['validation-api']
+        compile libs['hibernate-validator']
         compile 'org.springframework.cloud:spring-cloud-starter-zookeeper-discovery'
 
         runtimeOnly 'mysql:mysql-connector-java'

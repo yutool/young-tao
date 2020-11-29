@@ -10,6 +10,8 @@ ext {
         pagehelper          : "1.2.12",
         servlet_api         : "3.1.0",
         druid               : "1.1.10",
+        validation_api      : "2.0.1.Final",
+        validator           : "6.1.0.Final",
     ]
     libs = [
         "guava"             : "com.google.guava:guava:$version.guava",
@@ -22,5 +24,7 @@ ext {
         "pagehelper"        : "com.github.pagehelper:pagehelper-spring-boot-starter:$version.pagehelper",
         "servlet-api"       : "javax.servlet:javax.servlet-api:$version.servlet_api",
         "druid"             : "com.alibaba:druid-spring-boot-starter:$version.druid",
+        "validation-api"    : "javax.validation:validation-api:$version.validation_api",
+        "hibernate-validator": "org.hibernate:hibernate-validator:$version.validator",
     ]
 }

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youngtao.omc.mapper.OrderItemMapper">
+
+    <resultMap id="BaseResultMap" type="com.youngtao.omc.model.domain.OrderItemDO">
+        <result property="id" column="id" />
+        <result property="orderId" column="order_id" />
+        <result property="merchantId" column="merchant_id" />
+        <result property="spuId" column="spu_id" />
+        <result property="skuId" column="sku_id" />
+        <result property="title" column="title" />
+        <result property="sku" column="sku" />
+        <result property="image" column="image" />
+        <result property="oldPrice" column="old_price" />
+        <result property="price" column="price" />
+        <result property="num" column="num" />
+        <result property="totalPrice" column="total_price" />
+        <result property="updateTime" column="update_time" />
+        <result property="createTime" column="create_time" />
+    </resultMap>
+
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into youngtao_omc.omc_order_item(order_id, merchant_id, spu_id, sku_id, title, sku, image, old_price, price, num, total_price, update_time, create_time)
+        values (#{orderId}, #{merchantId}, #{spuId}, #{skuId}, #{title}, #{sku}, #{image}, #{oldPrice}, #{price}, #{num}, #{totalPrice}, #{updateTime}, #{createTime})
+    </insert>
+    
+    <update id="update">
+        update youngtao_omc.omc_order_item
+        <set>
+            <if test="orderId != null and orderId != ''">
+                order_id = #{orderId},
+            </if>
+            <if test="merchantId != null and merchantId != ''">
+                merchant_id = #{merchantId},
+            </if>
+            <if test="spuId != null and spuId != ''">
+                spu_id = #{spuId},
+            </if>
+            <if test="skuId != null and skuId != ''">
+                sku_id = #{skuId},
+            </if>
+            <if test="title != null and title != ''">
+                title = #{title},
+            </if>
+            <if test="sku != null">
+                sku = #{sku},
+            </if>
+            <if test="image != null and image != ''">
+                image = #{image},
+            </if>
+            <if test="oldPrice != null">
+                old_price = #{oldPrice},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="num != null">
+                num = #{num},
+            </if>
+            <if test="totalPrice != null">
+                total_price = #{totalPrice},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        delete from youngtao_omc.omc_order_item where id = #{id}
+    </delete>
+
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          id, order_id, merchant_id, spu_id, sku_id, title, sku, image, old_price, price, num, total_price, update_time, create_time
+        from youngtao_omc.omc_order_item
+        where id = #{id}
+    </select>
+
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          id, order_id, merchant_id, spu_id, sku_id, title, sku, image, old_price, price, num, total_price, update_time, create_time
+        from youngtao_omc.omc_order_item
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="orderId != null and orderId != ''">
+                and order_id = #{orderId}
+            </if>
+            <if test="merchantId != null and merchantId != ''">
+                and merchant_id = #{merchantId}
+            </if>
+            <if test="spuId != null and spuId != ''">
+                and spu_id = #{spuId}
+            </if>
+            <if test="skuId != null and skuId != ''">
+                and sku_id = #{skuId}
+            </if>
+            <if test="title != null and title != ''">
+                and title = #{title}
+            </if>
+            <if test="sku != null">
+                and sku = #{sku}
+            </if>
+            <if test="image != null and image != ''">
+                and image = #{image}
+            </if>
+            <if test="oldPrice != null">
+                and old_price = #{oldPrice}
+            </if>
+            <if test="price != null">
+                and price = #{price}
+            </if>
+            <if test="num != null">
+                and num = #{num}
+            </if>
+            <if test="totalPrice != null">
+                and total_price = #{totalPrice}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+        </where>
+    </select>
+
+</mapper>
