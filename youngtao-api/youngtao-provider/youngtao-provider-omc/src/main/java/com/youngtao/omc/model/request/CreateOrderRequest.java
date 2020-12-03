@@ -5,6 +5,7 @@ import com.youngtao.omc.model.domain.OrderDO;
 import com.youngtao.omc.model.domain.OrderItemDO;
 import lombok.Data;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -17,18 +18,21 @@ import java.util.List;
 @Data
 public class CreateOrderRequest {
 
+    @Valid
+    @NotEmpty
     private List<Order> data;
+
+    @NotBlank
+    private String shippingAddressId;
 
     @Data
     public static class Order {
-        @NotBlank
-        private String shippingAddressId;
 
         private String remark;
 
+        @Valid
         @NotEmpty
         private List<Item> orderItem;
-
     }
 
     @Data
@@ -43,7 +47,7 @@ public class CreateOrderRequest {
 
     public OrderDO convertToOrder(Order order) {
         OrderDO orderDO = new OrderDO();
-        orderDO.setShippingAddressId(order.getShippingAddressId());
+        orderDO.setShippingAddressId(shippingAddressId);
         orderDO.setRemark(order.getRemark());
         return orderDO;
     }

@@ -9,5 +9,9 @@ subprojects {
 
     dependencies {
         compile project(":youngtao-common:youngtao-common-core")
+        compile 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
     }
 }

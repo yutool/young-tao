@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 /**
  * @author ankoye@qq.com
  * @date 2020/11/29
@@ -21,8 +23,8 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping("/create")
-    public ResponseResult<Boolean> createOrder(@RequestBody CreateOrderRequest request) {
+    public ResponseResult<Boolean> createOrder(@Valid @RequestBody CreateOrderRequest request) {
         boolean response = orderService.createOrder(request);
-        return ResponseResult.success(true);
+        return ResponseResult.success(response);
     }
 }
