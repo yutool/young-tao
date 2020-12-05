@@ -13,6 +13,12 @@ import java.util.Collections;
  */
 public class JsonList<E> extends ArrayList<E> {
 
+    public JsonList() {}
+
+    public JsonList(JsonList<E> jsonList) {
+        super(jsonList);
+    }
+
     public static <T> JsonList<T> build(T... elements) {
         JsonList<T> instance = new JsonList<>();
         Collections.addAll(instance, elements);

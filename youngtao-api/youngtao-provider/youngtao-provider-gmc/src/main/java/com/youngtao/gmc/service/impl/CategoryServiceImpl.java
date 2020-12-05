@@ -1,6 +1,7 @@
 package com.youngtao.gmc.service.impl;
 
 import com.youngtao.gmc.mapper.CategoryMapper;
+import com.youngtao.gmc.model.convert.CategoryConvert;
 import com.youngtao.gmc.model.data.CategoryData;
 import com.youngtao.gmc.model.domain.CategoryDO;
 import com.youngtao.gmc.service.CategoryService;
@@ -8,6 +9,7 @@ import com.youngtao.web.support.BaseService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -26,12 +28,15 @@ public class CategoryServiceImpl extends BaseService<CategoryDO> implements Cate
     @Resource
     private CategoryMapper categoryMapper;
 
+    @Autowired
+    private CategoryConvert categoryConvert;
+
     @Override
     public List<CategoryData> getCategory() {
         List<CategoryDO> categoryDOS = categoryMapper.selectList(null);
         Map<String, CategoryData> map = Maps.newLinkedHashMap();
         for (CategoryDO category : categoryDOS) {
-            map.put(category.getCategoryId(), CategoryData.copyBy(category));
+            map.put(category.getCategoryId(), categoryConvert.toCategoryData(category));
         }
         // Convert to tree structure
         for (CategoryData data : map.values()) {

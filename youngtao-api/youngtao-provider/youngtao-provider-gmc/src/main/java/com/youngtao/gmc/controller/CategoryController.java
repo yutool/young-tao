@@ -1,8 +1,8 @@
 package com.youngtao.gmc.controller;
 
 import com.youngtao.core.result.ResponseResult;
+import com.youngtao.gmc.model.convert.CategoryConvert;
 import com.youngtao.gmc.model.data.CategoryData;
-import com.youngtao.gmc.model.response.GetCategoryResponse;
 import com.youngtao.gmc.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,17 +20,17 @@ import java.util.List;
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private CategoryConvert categoryConvert;
 
     /**
      * 拉取目录，需要做个缓存
      * @return
      */
     @GetMapping("/get")
-    public ResponseResult<GetCategoryResponse> getCategory() {
+    public ResponseResult<List<CategoryData>> getCategory() {
         List<CategoryData> categoryList = categoryService.getCategory();
-        GetCategoryResponse response = new GetCategoryResponse();
-        response.setCategoryList(categoryList);
-        return ResponseResult.success(response);
+        return ResponseResult.success(categoryList);
     }
 
 }

@@ -18,11 +18,7 @@ import java.math.BigDecimal;
  * @author ankoye@qq.com
  * @since 2020/11/21
  */
-
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(callSuper=false)
 @TableName("gmc_sku")
 public class SkuDO extends BaseEntity implements Serializable {
@@ -86,5 +82,4 @@ public class SkuDO extends BaseEntity implements Serializable {
      * 默认显示
      */
     private Boolean defaultShow;
-
 }

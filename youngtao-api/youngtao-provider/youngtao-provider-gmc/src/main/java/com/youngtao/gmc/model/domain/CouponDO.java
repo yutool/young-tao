@@ -62,5 +62,4 @@ public class CouponDO extends BaseEntity implements Serializable {
      * 对应type的id
      */
     private String targetId;
-
 }

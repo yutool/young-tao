@@ -1,7 +1,5 @@
 package com.youngtao.gmc.model.data;
 
-import com.youngtao.gmc.model.domain.CategoryDO;
-import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
@@ -11,7 +9,6 @@ import java.util.List;
  * @date 2020/11/21
  */
 @Data
-@Builder
 public class CategoryData {
 
     /**
@@ -48,18 +45,4 @@ public class CategoryData {
      * 子目录
      */
     private List<CategoryData> children;
-
-    public static CategoryData copyBy(CategoryDO category) {
-        if (category == null) {
-            return null;
-        }
-        return CategoryData.builder()
-                .categoryId(category.getCategoryId())
-                .name(category.getName())
-                .icon(category.getIcon())
-                .url(category.getUrl())
-                .parentId(category.getParentId())
-                .template(category.getTemplate())
-                .build();
-    }
 }

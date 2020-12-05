@@ -236,10 +236,9 @@
 			this.navbar.opacity = Math.max(Math.min(e.scrollTop/this.navbar.threshold, 1), 0);
 		},
 		onLoad(option) {
+			if (!option.id) return;
 			getProduct(option.id).then(res => {
-				if (res == null) {
-					return ;
-				}
+				if (res == null) return;
 				this.spu = res;
 				for (const sku of res.skuList) if (sku.defaultShow) {
 					this.selectedSku = sku;

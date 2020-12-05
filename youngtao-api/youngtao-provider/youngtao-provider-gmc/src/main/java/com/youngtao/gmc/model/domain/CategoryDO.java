@@ -63,5 +63,4 @@ public class CategoryDO extends BaseEntity implements Serializable {
      * 排序
      */
     private Integer seq;
-
 }

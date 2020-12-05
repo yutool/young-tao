@@ -20,9 +20,6 @@ import java.util.List;
  * @since 2020/11/21
  */
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(callSuper=false)
 @TableName("gmc_spu")
 public class SpuDO extends BaseEntity implements Serializable {
@@ -143,5 +140,4 @@ public class SpuDO extends BaseEntity implements Serializable {
      * 0-审核中，1-审核成功，2-审核失败
      */
     private Integer status;
-
 }

@@ -12,6 +12,12 @@ import java.util.LinkedHashMap;
  */
 public class JsonMap<V> extends LinkedHashMap<String, V> {
 
+    public JsonMap() {}
+
+    public JsonMap(JsonMap<V> jsonMap) {
+        super(jsonMap);
+    }
+
     public static <T> JsonMap<T> build() {
         return new JsonMap<>();
     }

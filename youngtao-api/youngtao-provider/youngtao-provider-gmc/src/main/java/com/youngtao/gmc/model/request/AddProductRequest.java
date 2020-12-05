@@ -2,11 +2,7 @@ package com.youngtao.gmc.model.request;
 
 import com.youngtao.core.lang.JsonList;
 import com.youngtao.core.lang.JsonMap;
-import com.youngtao.gmc.model.domain.SkuDO;
-import com.youngtao.gmc.model.domain.SpuDO;
-import com.google.common.collect.Lists;
 import lombok.Data;
-import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -101,7 +97,7 @@ public class AddProductRequest {
     /**
      * sku
      */
-    private JsonList<Sku> skuList;
+    private List<Sku> skuList;
 
     @Data
     public static class Sku {
@@ -146,46 +142,4 @@ public class AddProductRequest {
          */
         private Boolean defaultShow;
     }
-
-    public SpuDO convertToSpu() {
-        return SpuDO.builder()
-                .spu(spu)
-                .title(title)
-                .brandId(brandId)
-                .brandName(brandName)
-                .category1Id(category1Id)
-                .category2Id(category2Id)
-                .category3Id(category3Id)
-                .cover(cover)
-                .images(images)
-                .detail(detail)
-                .serve(serve)
-                .coupon(coupon)
-                .spec(spec)
-                .skuTemplate(skuTemplate)
-                .isFreeShipping(isFreeShipping)
-                .isMarketable(isMarketable)
-                .build();
-    }
-
-    public List<SkuDO> convertToSkuList() {
-        List<SkuDO> skuDOList = Lists.newArrayList();
-        if (!CollectionUtils.isEmpty(skuList)) {
-            for (Sku sku : skuList) {
-                SkuDO skuDO = SkuDO.builder()
-                        .title(sku.getTitle())
-                        .sku(sku.getSku())
-                        .images(sku.getImages())
-                        .price(sku.getPrice())
-                        .discount(sku.getDiscount())
-                        .num(sku.getNum())
-                        .alertNum(sku.getAlertNum())
-                        .defaultShow(sku.getDefaultShow())
-                        .build();
-                skuDOList.add(skuDO);
-            }
-        }
-        return skuDOList;
-    }
-
 }

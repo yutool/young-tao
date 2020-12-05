@@ -1,11 +1,16 @@
 package com.youngtao.gmc.service.impl;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.youngtao.core.lang.JsonList;
 import com.youngtao.core.util.BigDecimals;
 import com.youngtao.core.util.GlobalIdUtils;
 import com.youngtao.gmc.common.constant.SpuConstant;
 import com.youngtao.gmc.mapper.SkuMapper;
 import com.youngtao.gmc.mapper.SpuMapper;
+import com.youngtao.gmc.model.convert.ProductConvert;
+import com.youngtao.gmc.model.convert.SkuConvert;
+import com.youngtao.gmc.model.convert.SpuConvert;
 import com.youngtao.gmc.model.data.ProductData;
 import com.youngtao.gmc.model.domain.SkuDO;
 import com.youngtao.gmc.model.domain.SpuDO;
@@ -13,8 +18,7 @@ import com.youngtao.gmc.model.request.AddProductRequest;
 import com.youngtao.gmc.model.request.ConfirmOrderRequest;
 import com.youngtao.gmc.model.response.ConfirmOrderResponse;
 import com.youngtao.gmc.service.ProductService;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,16 +37,21 @@ public class ProductServiceImpl implements ProductService {
 
     @Resource
     private SpuMapper spuMapper;
-
     @Resource
     private SkuMapper skuMapper;
+    @Autowired
+    private ProductConvert productConvert;
+    @Autowired
+    private SpuConvert spuConvert;
+    @Autowired
+    private SkuConvert skuConvert;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean addProduct(AddProductRequest request) {
         String spuId = GlobalIdUtils.generateId();
         // fill sku
-        List<SkuDO> skuDOList = request.convertToSkuList();
+        List<SkuDO> skuDOList = skuConvert.toSku(request.getSkuList());
         BigDecimal minPrice = BigDecimals.MAX_INT_VALUE;
         BigDecimal maxPrice = BigDecimal.ZERO;
         for (SkuDO skuDO : skuDOList) {
@@ -52,7 +61,7 @@ public class ProductServiceImpl implements ProductService {
             maxPrice = maxPrice.max(skuDO.getPrice());
         }
         // fill spu
-        SpuDO spuDO = request.convertToSpu();
+        SpuDO spuDO = spuConvert.toSpu(request);
         spuDO.setSpuId(spuId);
         spuDO.setMerchantId("0");
         spuDO.setPriceRange(JsonList.build(minPrice, maxPrice));
@@ -67,7 +76,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductData getBySpuId(String id) {
         SpuDO spuDO = spuMapper.selectBySpuId(id);
         List<SkuDO> skuDOList = skuMapper.listBySpuId(id);
-        return ProductData.copyBy(spuDO, skuDOList);
+        return productConvert.toProductData(spuDO, skuDOList);
     }
 
     @Override

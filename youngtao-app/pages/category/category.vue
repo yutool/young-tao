@@ -85,9 +85,8 @@
 			}
 		},
 		mounted() {
-			getCategory().then(data => {
-				this.categoryList = data.categoryList;
-				console.log(this.categoryList)
+			getCategory().then(res => {
+				this.categoryList = res;
 			});
 		}
 	}

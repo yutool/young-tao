@@ -20,8 +20,11 @@ subprojects {
         runtimeOnly 'mysql:mysql-connector-java'
 
         compileOnly 'org.springframework.boot:spring-boot-devtools'
+        compileOnly libs['mapstruct']
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
+        annotationProcessor libs['mapstruct-processor']
+
         testImplementation('org.springframework.boot:spring-boot-starter-test') {
             exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
         }
