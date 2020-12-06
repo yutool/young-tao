@@ -114,65 +114,66 @@
 	</view>
 </template>
 
-<script>
-	export default {
-		data() {
-			return {
-				loadStatus: 'loadmore',
-				searchValue: '',
-				stickyEnable: true,
-				stickyTop: 0,
-				// #ifdef MP-WEIXIN
-				stickyTop: 130,
-				// #endif
-				carouselBackground: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
-				tabs: [
-					{ name: '首页' },
-					{ name: '女装' },
-					{ name: '数码' },
-					{ name: '电脑办公' },
-					{ name: '个人清洁' },
-					{ name: '男装' },
-					{ name: '母婴童装' },
-					{ name: '运动' },
-					{ name: '美妆' }
-				],
-				list: [{
-						image: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
-						title: '昨夜星辰昨夜风，画楼西畔桂堂东'
-					}, {
-						image: 'https://cdn.uviewui.com/uview/swiper/2.jpg',
-						title: '身无彩凤双飞翼，心有灵犀一点通'
-					}, {
-						image: 'https://cdn.uviewui.com/uview/swiper/3.jpg',
-						title: '谁念西风独自凉，萧萧黄叶闭疏窗，沉思往事立残阳'
-					}
-				],
-				goodsList: []
-			}
-		},
-		onLoad() {
-			this.addRandomData();
-		},
-		onShow() {
-			this.stickyEnable= true
-		},
-		onHide() {
-			this.stickyEnable= false
-		},
-		methods: {
-			addRandomData() {
-				this.loadStatus = 'loading';
-				// 模拟数据加载
-				setTimeout(() => {
-					for(let i = 0; i < 10; i++) {
-						this.goodsList.push({})
-					}
-					this.loadStatus = 'loadmore';
-				}, 1000)
-			}
+<script lang="ts">
+import { Vue, Component } from 'vue-property-decorator';
+import {mapState, mapMutations, mapGetters, mapActions} from 'vuex';
+
+@Component
+export default class Index extends Vue {
+	private loadStatus = 'loadmore'
+	private searchValue = ''
+	private stickyEnable = true
+	private stickyTop = 0
+	// #ifdef MP-WEIXIN
+	private stickyTop = 130
+	// #endif
+	private carouselBackground = 'https://cdn.uviewui.com/uview/swiper/1.jpg'
+	private tabs = [
+		{ name: '首页' },
+		{ name: '女装' },
+		{ name: '数码' },
+		{ name: '电脑办公' },
+		{ name: '个人清洁' },
+		{ name: '男装' },
+		{ name: '母婴童装' },
+		{ name: '运动' },
+		{ name: '美妆' }
+	]
+	private list = [{
+			image: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
+			title: '昨夜星辰昨夜风，画楼西畔桂堂东'
+		}, {
+			image: 'https://cdn.uviewui.com/uview/swiper/2.jpg',
+			title: '身无彩凤双飞翼，心有灵犀一点通'
+		}, {
+			image: 'https://cdn.uviewui.com/uview/swiper/3.jpg',
+			title: '谁念西风独自凉，萧萧黄叶闭疏窗，沉思往事立残阳'
 		}
+	]
+	private goodsList = [];
+	onLoad() {
+		this.addRandomData();
 	}
+	onShow() {
+		this.stickyEnable= true
+	}
+	onHide() {
+		this.stickyEnable= false
+	}
+	private addRandomData() {
+		this.loadStatus = 'loading';
+		// 模拟数据加载
+		setTimeout(() => {
+			for(let i = 0; i < 10; i++) {
+				this.goodsList.push({})
+			}
+			this.loadStatus = 'loadmore';
+		}, 1000)
+	}
+	get loading() {
+		return this.$store.state.app.loading
+	}
+}
 </script>
 
 <style lang="scss" scoped>

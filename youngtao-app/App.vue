@@ -2,6 +2,16 @@
 export default {
 	onLaunch: function() {
 		console.log('App Launch');
+		// #ifdef H5
+		const store = sessionStorage.getItem("store")
+		if (store) {
+			this.$store.dispatch('global/init', JSON.parse(store))
+			sessionStorage.removeItem("store")
+		}
+		window.addEventListener("beforeunload", () => {
+			sessionStorage.setItem("store", JSON.stringify(this.$store.state.global))
+		})
+		// #endif
 	},
 	onShow: function() {
 		console.log('App Show');

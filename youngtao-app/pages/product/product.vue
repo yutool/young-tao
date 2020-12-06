@@ -215,47 +215,49 @@
 	</view>
 </template>
 
-<script>
-	import { getProduct } from '@/api/gmc/product.js';
-	export default {
-		data() {
-			return {
-				show: false,
-				tabIndex: 0,
-				spu: {},
-				selectedSku: {},
-				navbar: {
-					scrollTop: 0,
-					opacity: 0,
-					threshold: 100
-				},
-			};
-		},
-		onPageScroll(e) {
-			this.navbar.scrollTop = e.scrollTop;
-			this.navbar.opacity = Math.max(Math.min(e.scrollTop/this.navbar.threshold, 1), 0);
-		},
-		onLoad(option) {
-			if (!option.id) return;
-			getProduct(option.id).then(res => {
-				if (res == null) return;
-				this.spu = res;
-				for (const sku of res.skuList) if (sku.defaultShow) {
-					this.selectedSku = sku;
-				}
-			})
-		},
-		methods: {
-			onBack() {
-				uni.navigateBack();
-			},
-			goBuy() {
-				uni.navigateTo({
-					url: '/pages/order/create'
-				})
+<script lang="ts">
+import { Vue, Component } from 'vue-property-decorator';
+import { getProduct } from '@/api/gmc/product.js';
+
+@Component
+export default class Product extends Vue {
+	private show = false
+	private tabIndex = 0
+	private spu = {}
+	private selectedSku = {}
+	private navbar = {
+		scrollTop: 0,
+		opacity: 0,
+		threshold: 100
+	}
+	
+	onPageScroll(e) {
+		this.navbar.scrollTop = e.scrollTop;
+		this.navbar.opacity = Math.max(Math.min(e.scrollTop/this.navbar.threshold, 1), 0);
+	}
+	
+	onLoad(option) {
+		// if (!option.id) return;
+		getProduct('1533531779').then(res => {
+			if (res == null) return;
+			this.spu = res;
+			for (const sku of res.skuList) if (sku.defaultShow) {
+				this.selectedSku = sku;
 			}
-		}
-	};
+		})
+	}
+	
+	private onBack() {
+		uni.navigateBack();
+	}
+	
+	private goBuy() {
+		this.$store.dispatch('global/setOrder', {num: '123'})
+		uni.navigateTo({
+			url: '/pages/order/create'
+		})
+	}
+}
 </script>
 
 <style lang="scss" scoped>

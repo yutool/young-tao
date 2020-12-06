@@ -35,7 +35,7 @@
 			<view class="total-box">
 				<view class="lable">
 					<text>合计：</text>
-					<text>￥100.00</text>
+					<text>￥{{order.num}}</text>
 				</view>
 			</view>
 		</view>
@@ -61,27 +61,26 @@
 	</view>
 </template>
 
-<script>
-	import { confirmOrder } from '@/api/gmc/product.js';
-	export default {
-		data() {
-			return {
-				
-			}
-		},
-		onLoad(option) {
-			const data = {skuList: [{skuId: '1532641744', count: 3}]}
-			confirmOrder(data).then(res => {
-			})
-		},
-		methods: {
-			pay() {
-				uni.navigateTo({
-					url: '../pay/pay'
-				})
-			}
-		}
+<script lang="ts">
+import { Vue, Component } from 'vue-property-decorator';
+import { confirmOrder } from '@/api/gmc/product.js';
+
+@Component
+export default class CreateOrder extends Vue {
+	onLoad(option) {
+		const data = {skuList: [{skuId: '1532641744', count: 3}]}
+		confirmOrder(data).then(res => {
+		})
 	}
+	private pay() {
+		uni.navigateTo({
+			url: '../pay/pay'
+		})
+	}
+	get order() {
+		return this.$store.state.global.order;
+	}
+}
 </script>
 
 <style lang="scss" scoped>

@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class="yt-order-card" v-for="order in data" :key="order.id">
+		<view class="yt-order-card" v-for="order in orderList" :key="order.id">
 			<view class="shop-box">
 				<view class="shop-name">
 					<u-icon name="home" :size="30" color="rgb(94,94,94)"></u-icon>
@@ -43,7 +43,7 @@
 
 <script>
 	export default {
-		props: ['data'],
+		props: ['orderList'],
 		methods: {
 			// 价格小数
 			priceDecimal() {

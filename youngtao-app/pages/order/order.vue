@@ -19,7 +19,7 @@
 				<swiper-item class="swiper-item">
 					<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="reachBottom">
 						<view class="page-box">
-							<yt-order-card :data="orderList[0]"></yt-order-card>
+							<yt-order-card :orderList="orderList[0]"></yt-order-card>
 							<u-loadmore :status="loadStatus[0]" bgColor="#f2f2f2"></u-loadmore>
 						</view>
 					</scroll-view>
@@ -27,7 +27,7 @@
 				<swiper-item class="swiper-item">
 					<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="reachBottom">
 						<view class="page-box">
-							<yt-order-card :data="orderList[0]"></yt-order-card>
+							<yt-order-card :orderList="orderList[0]"></yt-order-card>
 							<u-loadmore :status="loadStatus[1]" bgColor="#f2f2f2"></u-loadmore>
 						</view>
 					</scroll-view>
@@ -35,7 +35,7 @@
 				<swiper-item class="swiper-item">
 					<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="reachBottom">
 						<view class="page-box">
-							<yt-order-card :data="orderList[0]"></yt-order-card>
+							<yt-order-card :orderList="orderList[0]"></yt-order-card>
 							<u-loadmore :status="loadStatus[1]" bgColor="#f2f2f2"></u-loadmore>
 						</view>
 					</scroll-view>
@@ -59,7 +59,7 @@
 				<swiper-item class="swiper-item">
 					<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="reachBottom">
 						<view class="page-box">
-							<yt-order-card :data="orderList[3]"></yt-order-card>
+							<yt-order-card :orderList="orderList[3]"></yt-order-card>
 							<u-loadmore :status="loadStatus[3]" bgColor="#f2f2f2"></u-loadmore>
 						</view>
 					</scroll-view>

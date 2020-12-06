@@ -1,7 +1,8 @@
 import request from "./core/request.js";			// 纯粹的数据请求
 // import request from "./upload/upload.js";	// 数据请求同时继承了文件上传（包括七牛云上传）
+import store from '@/store'
 
-// const baseUrl = "https://youngtao.utools.club";
+// const baseUrl = "https://youngtao.test.utools.club";
 const baseUrl = 'http://localhost:19000';
 
 // 可以new多个request来支持多个域名请求
@@ -26,6 +27,7 @@ const $http = new request({
 let requestNum = 0;
 // 请求开始拦截器
 $http.requestStart = function(options) {
+	store.dispatch('app/setLoading', true)
 	if (options.load) {
 		if (requestNum <= 0) {
 			uni.showLoading({ title: '加载中', mask: true });
@@ -51,6 +53,7 @@ $http.requestStart = function(options) {
 
 // 请求结束
 $http.requestEnd = function(options) {
+	store.dispatch('app/setLoading', false)
 	// 判断当前接口是否需要加载动画
 	if (options.load) {
 		requestNum --;
