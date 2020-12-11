@@ -92,6 +92,29 @@ public class ProductServiceImpl implements ProductService {
         }
         List<SpuDO> spuDOS = spuMapper.listBySpuIds(skuDOMap.keySet());
 
-        return ConfirmOrderResponse.copyBy(spuDOS, skuDOMap, countMap);
+        // Processing return value
+        Map<String, ConfirmOrderResponse> resultMap = Maps.newHashMap();
+        for (SpuDO spuDO : spuDOS) {
+            ConfirmOrderResponse response;
+            if (resultMap.containsKey(spuDO.getMerchantId())) {
+                response = resultMap.get(spuDO.getMerchantId());
+                // 包邮 -> 运费0
+            } else {
+                response = new ConfirmOrderResponse();
+                response.setMerchantId(spuDO.getMerchantId());
+                // 添加字段0
+                response.setSkuList(Lists.newArrayList());
+            }
+            for (SkuDO skuDO : skuDOMap.get(spuDO.getSpuId())) {
+                ConfirmOrderResponse.Sku sku = new ConfirmOrderResponse.Sku();
+                sku.setSkuId(skuDO.getSkuId());
+                sku.setSku(skuDO.getSku());
+                sku.setPrice(skuDO.getPrice());
+                sku.setCount(countMap.get(skuDO.getSkuId()));
+                sku.setServe(spuDO.getServe());
+                response.getSkuList().add(sku);
+            }
+        }
+        return Lists.newArrayList(resultMap.values());
     }
 }

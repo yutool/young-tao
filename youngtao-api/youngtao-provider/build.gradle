@@ -15,6 +15,7 @@ subprojects {
         compile libs['druid']
         compile libs['validation-api']
         compile libs['hibernate-validator']
+        compile libs['tlog']
         compile 'org.springframework.cloud:spring-cloud-starter-zookeeper-discovery'
 
         runtimeOnly 'mysql:mysql-connector-java'

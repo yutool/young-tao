@@ -35,7 +35,7 @@
 			<view class="total-box">
 				<view class="lable">
 					<text>合计：</text>
-					<text>￥{{order.num}}</text>
+					<text>￥123</text>
 				</view>
 			</view>
 		</view>
@@ -68,8 +68,11 @@ import { confirmOrder } from '@/api/gmc/product.js';
 @Component
 export default class CreateOrder extends Vue {
 	onLoad(option) {
-		const data = {skuList: [{skuId: '1532641744', count: 3}]}
-		confirmOrder(data).then(res => {
+		console.log(this.confirmOrder)
+		if (this.confirmOrder.length == 0) {
+			// ...
+		}
+		confirmOrder({skuList: this.confirmOrder}).then(res => {
 		})
 	}
 	private pay() {
@@ -77,8 +80,8 @@ export default class CreateOrder extends Vue {
 			url: '../pay/pay'
 		})
 	}
-	get order() {
-		return this.$store.state.global.order;
+	get confirmOrder() {
+		return this.$store.state.global.confirmOrder;
 	}
 }
 </script>

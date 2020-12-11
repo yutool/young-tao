@@ -1,19 +1,19 @@
 const state = {
-	order: {}
+	confirmOrder: []
 }
 
 const mutations = {
-  SET_ORDER (state, order) {
-    state.order = order
+  SET_CONFIRM_ORDER (state, confirmOrder) {
+    state.confirmOrder = confirmOrder
   },
 	INIT (state, obj) {
-		state.order = obj.order
+		state.confirmOrder = obj.confirmOrder
 	}
 }
 
 const actions = {
-  setOrder ({commit}, order) {
-    commit('SET_ORDER', order)
+  setConfirmOrder ({commit}, confirmOrder) {
+    commit('SET_CONFIRM_ORDER', confirmOrder)
   },
 	init ({commit}, obj) {
 		commit('INIT', obj)

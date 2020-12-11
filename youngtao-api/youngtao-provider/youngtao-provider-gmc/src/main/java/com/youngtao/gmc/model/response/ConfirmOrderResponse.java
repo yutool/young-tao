@@ -3,8 +3,6 @@ package com.youngtao.gmc.model.response;
 import com.youngtao.core.lang.JsonList;
 import com.youngtao.core.lang.JsonMap;
 import com.youngtao.gmc.model.domain.SkuDO;
-import com.youngtao.gmc.model.domain.SpuDO;
-import com.google.common.collect.Lists;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -18,21 +16,13 @@ import java.util.Map;
 @Data
 public class ConfirmOrderResponse {
 
-    private String spuId;
-
-    private String title;
-
     private String merchantId;
 
     private String merchantName;
 
-    private String brandName;
-
-    private JsonList<String> serve;
-
     private Boolean isFreeShipping;
 
-    private List<Sku> skuLIst;
+    private List<Sku> skuList;
 
     @Data
     public static class Sku {
@@ -42,33 +32,8 @@ public class ConfirmOrderResponse {
 
         private BigDecimal price;
 
+        private JsonList<String> serve;
+
         private Integer count;
-    }
-
-    public static List<ConfirmOrderResponse> copyBy(List<SpuDO> spuDOS, Map<String, List<SkuDO>> skuDOMap, Map<String, Integer> countMap) {
-        List<ConfirmOrderResponse> dataList = Lists.newArrayList();
-        for (SpuDO spuDO : spuDOS) {
-            ConfirmOrderResponse data = new ConfirmOrderResponse();
-            data.setSpuId(spuDO.getSpuId());
-            data.setTitle(spuDO.getTitle());
-            data.setMerchantId(spuDO.getMerchantId());
-            data.setMerchantName(spuDO.getMerchantId());
-            data.setBrandName(spuDO.getBrandName());
-            data.setServe(spuDO.getServe());
-            data.setIsFreeShipping(spuDO.getIsFreeShipping());
-
-            List<Sku> skuList = Lists.newArrayList();
-            for (SkuDO skuDO : skuDOMap.get(spuDO.getSpuId())) {
-                Sku sku = new Sku();
-                sku.setSkuId(skuDO.getSkuId());
-                sku.setSku(skuDO.getSku());
-                sku.setPrice(skuDO.getPrice());
-                sku.setCount(countMap.get(sku.getSkuId()));
-                skuList.add(sku);
-            }
-            data.setSkuLIst(skuList);
-            dataList.add(data);
-        }
-        return dataList;
     }
 }

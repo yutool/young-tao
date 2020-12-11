@@ -252,7 +252,7 @@ export default class Product extends Vue {
 	}
 	
 	private goBuy() {
-		this.$store.dispatch('global/setOrder', {num: '123'})
+		this.$store.dispatch('global/setConfirmOrder', [{skuId: '1532641744', count: 2}])
 		uni.navigateTo({
 			url: '/pages/order/create'
 		})

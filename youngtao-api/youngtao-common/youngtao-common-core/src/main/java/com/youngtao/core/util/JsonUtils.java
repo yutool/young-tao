@@ -15,13 +15,11 @@ public class JsonUtils {
     private static final ObjectMapper mapper = new ObjectMapper();
 
     public static String toJson(Object obj) {
-        if(obj == null) {
-            return null;
-        }
-        if(obj.getClass() == String.class) {
-            return (String) obj;
-        }
         try {
+            if(obj == null) { return null; }
+            if(obj.getClass() == String.class) {
+                return (String) obj;
+            }
             return mapper.writeValueAsString(obj);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -30,10 +28,8 @@ public class JsonUtils {
     }
 
     public static <T> T fromJson(String json, Class<T> clazz) {
-        if (json == null) {
-            return null;
-        }
         try {
+            if (json == null) { return null; }
             return mapper.readValue(json, clazz);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -41,11 +37,9 @@ public class JsonUtils {
         return null;
     }
 
-    public static <T> List<T> toList(String json, Class<T> clazz) {
-        if (json == null) {
-            return null;
-        }
+    public static <T> List<T> fromJson2List(String json, Class<T> clazz) {
         try {
+            if (json == null) { return null; }
             return mapper.readValue(json, mapper.getTypeFactory().constructCollectionType(List.class, clazz));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
