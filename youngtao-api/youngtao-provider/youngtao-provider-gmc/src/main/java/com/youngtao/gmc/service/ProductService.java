@@ -23,12 +23,14 @@ public interface ProductService {
     /**
      * 根据SpuId获取商品
      * @param id spuId
+     * @return data
      */
     ProductData getBySpuId(String id);
 
     /**
      * 根据skuId查询信息
      * @param request skuIds
+     * @return list
      */
     List<ConfirmOrderResponse> confirmOrder(ConfirmOrderRequest request);
 }

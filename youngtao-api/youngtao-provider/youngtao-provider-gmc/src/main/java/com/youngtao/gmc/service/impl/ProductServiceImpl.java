@@ -4,8 +4,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.youngtao.core.lang.JsonList;
 import com.youngtao.core.util.BigDecimals;
-import com.youngtao.core.util.GlobalIdUtils;
 import com.youngtao.gmc.common.constant.SpuConstant;
+import com.youngtao.gmc.common.util.IdUtils;
 import com.youngtao.gmc.mapper.SkuMapper;
 import com.youngtao.gmc.mapper.SpuMapper;
 import com.youngtao.gmc.model.convert.ProductConvert;
@@ -49,14 +49,14 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean addProduct(AddProductRequest request) {
-        String spuId = GlobalIdUtils.generateId();
+        String spuId = IdUtils.productId();
         // fill sku
         List<SkuDO> skuDOList = skuConvert.toSku(request.getSkuList());
         BigDecimal minPrice = BigDecimals.MAX_INT_VALUE;
         BigDecimal maxPrice = BigDecimal.ZERO;
         for (SkuDO skuDO : skuDOList) {
             skuDO.setSpuId(spuId);
-            skuDO.setSkuId(GlobalIdUtils.generateId());
+            skuDO.setSkuId(IdUtils.productId());
             minPrice = minPrice.min(skuDO.getPrice());
             maxPrice = maxPrice.max(skuDO.getPrice());
         }
@@ -64,6 +64,7 @@ public class ProductServiceImpl implements ProductService {
         SpuDO spuDO = spuConvert.toSpu(request);
         spuDO.setSpuId(spuId);
         spuDO.setMerchantId("0");
+        spuDO.setShopName("樱桃官方旗舰店");
         spuDO.setPriceRange(JsonList.build(minPrice, maxPrice));
         spuDO.setStatus(SpuConstant.REVIEW_SUCCESS);
         // save the data
@@ -93,16 +94,17 @@ public class ProductServiceImpl implements ProductService {
         List<SpuDO> spuDOS = spuMapper.listBySpuIds(skuDOMap.keySet());
 
         // Processing return value
-        Map<String, ConfirmOrderResponse> resultMap = Maps.newHashMap();
+        Map<String, ConfirmOrderResponse> responseMap = Maps.newHashMap();
         for (SpuDO spuDO : spuDOS) {
             ConfirmOrderResponse response;
-            if (resultMap.containsKey(spuDO.getMerchantId())) {
-                response = resultMap.get(spuDO.getMerchantId());
-                // 包邮 -> 运费0
+            if (responseMap.containsKey(spuDO.getMerchantId())) {
+                response = responseMap.get(spuDO.getMerchantId());
+                response.setPostage(response.getPostage().min(spuDO.getPostage()));
             } else {
                 response = new ConfirmOrderResponse();
                 response.setMerchantId(spuDO.getMerchantId());
-                // 添加字段0
+                response.setShopName(spuDO.getShopName());
+                response.setPostage(spuDO.getPostage());
                 response.setSkuList(Lists.newArrayList());
             }
             for (SkuDO skuDO : skuDOMap.get(spuDO.getSpuId())) {
@@ -114,7 +116,8 @@ public class ProductServiceImpl implements ProductService {
                 sku.setServe(spuDO.getServe());
                 response.getSkuList().add(sku);
             }
+            responseMap.put(spuDO.getMerchantId(), response);
         }
-        return Lists.newArrayList(resultMap.values());
+        return Lists.newArrayList(responseMap.values());
     }
 }

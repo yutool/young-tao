@@ -2,12 +2,10 @@ package com.youngtao.gmc.model.response;
 
 import com.youngtao.core.lang.JsonList;
 import com.youngtao.core.lang.JsonMap;
-import com.youngtao.gmc.model.domain.SkuDO;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author ankoye@qq.com
@@ -18,9 +16,9 @@ public class ConfirmOrderResponse {
 
     private String merchantId;
 
-    private String merchantName;
+    private String shopName;
 
-    private Boolean isFreeShipping;
+    private BigDecimal postage;
 
     private List<Sku> skuList;
 

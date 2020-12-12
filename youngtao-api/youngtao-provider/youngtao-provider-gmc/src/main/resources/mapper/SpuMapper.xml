@@ -8,6 +8,7 @@
         <result property="spu" column="spu" />
         <result property="title" column="title" />
         <result property="merchantId" column="merchant_id" />
+        <result property="shopName" column="shop_name" />
         <result property="brandId" column="brand_id" />
         <result property="brandName" column="brand_name" />
         <result property="category1Id" column="category1_id" />
@@ -21,7 +22,7 @@
         <result property="coupon" column="coupon" typeHandler="com.youngtao.web.typehandler.JsonListTypeHandler"/>
         <result property="spec" column="spec" typeHandler="com.youngtao.web.typehandler.JsonMapTypeHandler"/>
         <result property="skuTemplate" column="sku_template" typeHandler="com.youngtao.web.typehandler.JsonMapTypeHandler" />
-        <result property="isFreeShipping" column="is_free_shipping" />
+        <result property="postage" column="postage" />
         <result property="saleNum" column="sale_num" />
         <result property="commentNum" column="comment_num" />
         <result property="seq" column="seq" />

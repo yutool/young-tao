@@ -52,7 +52,7 @@ public class OrderDO extends BaseEntity implements Serializable {
     /**
      * 运费
      */
-    private BigDecimal postFee;
+    private BigDecimal postage;
 
     /**
      * 总量 g
@@ -75,6 +75,11 @@ public class OrderDO extends BaseEntity implements Serializable {
     private Integer status;
 
     /**
+     * 订单支付号，给支付平台的订单Id
+     */
+    private Long paymentId;
+
+    /**
      * 支付流水号
      */
     private String transactionId;
@@ -83,5 +88,10 @@ public class OrderDO extends BaseEntity implements Serializable {
      * 支付时间
      */
     private Date payTime;
+
+    /**
+     * 支付方式
+     */
+    private Integer payType;
 
 }

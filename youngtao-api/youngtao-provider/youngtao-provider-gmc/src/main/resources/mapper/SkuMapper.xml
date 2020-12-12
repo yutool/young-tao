@@ -6,7 +6,6 @@
         <result property="id" column="id" />
         <result property="skuId" column="sku_id" />
         <result property="spuId" column="spu_id" />
-        <result property="title" column="title" />
         <result property="sku" column="sku" typeHandler="com.youngtao.web.typehandler.JsonMapTypeHandler"/>
         <result property="images" column="images" typeHandler="com.youngtao.web.typehandler.JsonListTypeHandler"/>
         <result property="price" column="price" />
@@ -22,11 +21,11 @@
 
     <insert id="batchInset" parameterType="skuDO">
         insert into gmc_sku (
-            sku_id, spu_id, title, sku, images, price, num, alert_num, default_show
+            sku_id, spu_id, sku, images, price, num, alert_num, default_show
         ) values
         <foreach collection="skuList" item="sku" separator=",">
             (
-                #{sku.skuId}, #{sku.spuId}, #{sku.title},
+                #{sku.skuId}, #{sku.spuId},
                 #{sku.sku, typeHandler=com.ankoye.youngtao.web.typehandler.MapJsonTypeHandler},
                 #{sku.images, typeHandler=com.ankoye.youngtao.web.typehandler.ListStringJsonTypeHandler},
                 #{sku.price}, #{sku.num}, #{sku.alertNum}, #{sku.defaultShow}

@@ -23,8 +23,8 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping("/create")
-    public ResponseResult<Boolean> createOrder(@Valid @RequestBody CreateOrderRequest request) {
-        boolean response = orderService.createOrder(request);
+    public ResponseResult<Long> createOrder(@Valid @RequestBody CreateOrderRequest request) {
+        Long response = orderService.createOrder(request);
         return ResponseResult.success(response);
     }
 }

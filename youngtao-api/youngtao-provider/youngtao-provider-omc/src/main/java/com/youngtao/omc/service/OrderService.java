@@ -15,5 +15,5 @@ public interface OrderService extends IService<OrderDO> {
      * @param request request
      * @return boolean
      */
-    boolean createOrder(CreateOrderRequest request);
+    Long createOrder(CreateOrderRequest request);
 }

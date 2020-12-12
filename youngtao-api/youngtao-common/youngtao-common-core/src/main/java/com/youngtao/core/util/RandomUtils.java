@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author ankoye@qq.com
  */
-public class MathUtils {
+public class RandomUtils {
 
     private static final String DEFAULT_DIGITS = "0";
     private static final String FIRST_DEFAULT_DIGITS = "1";

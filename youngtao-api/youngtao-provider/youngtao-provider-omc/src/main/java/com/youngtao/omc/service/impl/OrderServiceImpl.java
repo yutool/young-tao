@@ -36,16 +36,18 @@ public class OrderServiceImpl extends BaseService<OrderDO> implements OrderServi
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean createOrder(CreateOrderRequest request) {
+    public Long createOrder(CreateOrderRequest request) {
+        Long paymentId = IdUtils.paymentId();
+
         Date now = new Date();
         for (CreateOrderRequest.Order order : request.getData()) {
-            String orderId = IdUtils.generateOrderId();
+            String orderId = IdUtils.orderId();
             OrderDO orderDO = request.convertToOrder(order);
             List<OrderItemDO> orderItemDOS = request.convertToOrderItem(order);
             Result<SpuDTO> result = spuFeign.getBySpuId("1533531779");
         }
 
-        return true;
+        return paymentId;
     }
 
 }

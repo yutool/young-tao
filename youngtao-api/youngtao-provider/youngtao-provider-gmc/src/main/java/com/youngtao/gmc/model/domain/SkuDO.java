@@ -32,11 +32,6 @@ public class SkuDO extends BaseEntity implements Serializable {
     private String spuId;
 
     /**
-     * 商品标题
-     */
-    private String title;
-
-    /**
      * 商品规格
      */
     @TableField(typeHandler = JsonMapTypeHandler.class)

@@ -85,9 +85,9 @@ public class AddProductRequest {
     private JsonMap<List<String>> skuTemplate;
 
     /**
-     * 是否包邮
+     * 邮费
      */
-    private Boolean isFreeShipping;
+    private BigDecimal postage;
 
     /**
      *  是否可销售
@@ -101,11 +101,6 @@ public class AddProductRequest {
 
     @Data
     public static class Sku {
-
-        /**
-         * 商品标题
-         */
-        private String title;
 
         /**
          * 商品规格

@@ -42,6 +42,11 @@ public class SpuDO extends BaseEntity implements Serializable {
     private String merchantId;
 
     /**
+     * 店名
+     */
+    private String shopName;
+
+    /**
      * 品牌id
      */
     private String brandId;
@@ -112,9 +117,9 @@ public class SpuDO extends BaseEntity implements Serializable {
     private JsonMap<List<String>> skuTemplate;
 
     /**
-     * 是否包邮
+     * 邮费
      */
-    private Boolean isFreeShipping;
+    private BigDecimal postage;
 
     /**
      * 销售量

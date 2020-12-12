@@ -14,7 +14,11 @@ public final class IdUtils {
 
     private static final Snowflake SNOWFLAKE = IdUtil.createSnowflake(WORKER_ID, DATACENTER_ID);
 
-    public static String generateOrderId() {
+    public static String orderId() {
         return SNOWFLAKE.nextIdStr();
+    }
+
+    public static Long paymentId() {
+        return SNOWFLAKE.nextId();
     }
 }

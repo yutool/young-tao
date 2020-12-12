@@ -107,7 +107,7 @@ public class ProductData {
     /**
      * 是否包邮
      */
-    private Boolean isFreeShipping;
+    private BigDecimal postage;
 
     /**
      * 销售量
@@ -143,11 +143,6 @@ public class ProductData {
          * spuId
          */
         private String spuId;
-
-        /**
-         * 商品标题
-         */
-        private String title;
 
         /**
          * 商品规格
