@@ -3,7 +3,7 @@ package com.youngtao.core.result;
 /**
  * @author ankoye@qq.com
  */
-public enum ResultCode {
+public enum RpcResultCode {
 
     /* 成功状态码 */
     SUCCESS(0, "成功"),
@@ -60,7 +60,7 @@ public enum ResultCode {
 
     private String message;
 
-    ResultCode(Integer code, String message) {
+    RpcResultCode(Integer code, String message) {
         this.code = code;
         this.message = message;
     }
@@ -74,7 +74,7 @@ public enum ResultCode {
     }
 
     public static String getMessage(String name) {
-        for (ResultCode item : ResultCode.values()) {
+        for (RpcResultCode item : RpcResultCode.values()) {
             if (item.name().equals(name)) {
                 return item.message;
             }
@@ -83,7 +83,7 @@ public enum ResultCode {
     }
 
     public static Integer getCode(String name) {
-        for (ResultCode item : ResultCode.values()) {
+        for (RpcResultCode item : RpcResultCode.values()) {
             if (item.name().equals(name)) {
                 return item.code;
             }

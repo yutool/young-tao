@@ -92,7 +92,7 @@ $http.dataFactory = async function(res) {
 		
 		// 判断数据是否请求成功
 		if (result.success || result.code == 0) {
-			return Promise.resolve(result.data);
+			return Promise.resolve(result);
 		} 
 		// 未登录
 		else if (result.code == "1000" || result.code == "1001" || result.code == 1100) {

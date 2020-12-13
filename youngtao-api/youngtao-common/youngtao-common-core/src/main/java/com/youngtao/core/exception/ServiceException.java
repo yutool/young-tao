@@ -1,4 +1,4 @@
-package com.youngtao.web.exception;
+package com.youngtao.core.exception;
 
 /**
  * @author ankoye@qq.com

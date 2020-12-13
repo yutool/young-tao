@@ -33,6 +33,14 @@
         </foreach>
     </insert>
 
+    <update id="batchFreezeInventory" parameterMap="freezeInventoryQuery">
+        <foreach collection="skuList" item="item" close=";">
+            update gmc_sku
+            set num = num - #{item.num}, freeze_num = freeze_num + #{item.num}
+            where sku_id = #{item.skuId}
+        </foreach>
+    </update>
+
     <select id="listBySpuId" resultMap="BaseResultMap">
         select * from gmc_sku
         where spu_id = #{spuId}

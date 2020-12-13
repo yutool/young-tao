@@ -1,6 +1,9 @@
 package com.youngtao.omc.model.domain;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.youngtao.core.lang.JsonMap;
 import com.youngtao.web.support.BaseEntity;
+import com.youngtao.web.typehandler.JsonMapTypeHandler;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -24,11 +27,6 @@ public class OrderItemDO extends BaseEntity implements Serializable {
     private String orderId;
 
     /**
-     * 商家id
-     */
-    private String merchantId;
-
-    /**
      * spuId
      */
     private String spuId;
@@ -46,7 +44,8 @@ public class OrderItemDO extends BaseEntity implements Serializable {
     /**
      * sku Json
      */
-    private Object sku;
+    @TableField(typeHandler = JsonMapTypeHandler.class)
+    private JsonMap<String> sku;
 
     /**
      * 商品图片
@@ -54,12 +53,12 @@ public class OrderItemDO extends BaseEntity implements Serializable {
     private String image;
 
     /**
-     * 商品原价
+     * 商品单价
      */
     private BigDecimal oldPrice;
 
     /**
-     * 商品单价
+     * 商品实付价格
      */
     private BigDecimal price;
 

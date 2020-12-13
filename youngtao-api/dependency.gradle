@@ -14,6 +14,7 @@ ext {
         validator           : "6.1.0.Final",
         mapstruct           : "1.3.1.Final",
         tlog                : "1.2.0-BETA2",
+        rocketmq            : "2.1.0",
     ]
     libs = [
         "guava"             : "com.google.guava:guava:$version.guava",
@@ -31,5 +32,6 @@ ext {
         "mapstruct"         : "org.mapstruct:mapstruct:$version.mapstruct",
         "mapstruct-processor": "org.mapstruct:mapstruct-processor:$version.mapstruct",
         "tlog"              : "com.yomahub:tlog-all-spring-boot-starter:$version.tlog",
+        "rocketmq"          : "org.apache.rocketmq:rocketmq-spring-boot-starter:$version.rocketmq",
     ]
 }

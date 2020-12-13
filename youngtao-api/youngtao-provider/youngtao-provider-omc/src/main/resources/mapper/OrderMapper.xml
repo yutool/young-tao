@@ -5,6 +5,7 @@
     <resultMap id="BaseResultMap" type="com.youngtao.omc.model.domain.OrderDO">
         <result property="id" column="id" />
         <result property="orderId" column="order_id" />
+        <result property="merchantId" column="merchant_id" />
         <result property="userId" column="user_id" />
         <result property="totalPrice" column="total_price" />
         <result property="actualPrice" column="actual_price" />

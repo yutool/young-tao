@@ -25,6 +25,11 @@ public class OrderDO extends BaseEntity implements Serializable {
     private String orderId;
 
     /**
+     * 商家id
+     */
+    private String merchantId;
+
+    /**
      * 客户id
      */
     private String userId;

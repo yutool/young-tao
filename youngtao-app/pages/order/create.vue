@@ -64,25 +64,42 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { confirmOrder } from '@/api/gmc/product.js';
+import { createOrder } from '@/api/omc/order.js';
 
 @Component
 export default class CreateOrder extends Vue {
+	private merchantList= [];
 	onLoad(option) {
-		console.log(this.confirmOrder)
 		if (this.confirmOrder.length == 0) {
 			// ...
 		}
 		confirmOrder({skuList: this.confirmOrder}).then(res => {
+			for (const merchant of res.data) {
+				merchant.remark = ''
+			}
+			this.merchantList = res.data
+			console.log(this.merchantList)
 		})
 	}
 	private pay() {
-		uni.navigateTo({
-			url: '../pay/pay'
+		const order = []
+		for (const merchant of this.merchantList) {
+			const orderItem = []
+			for (const sku of merchant.skuList) {
+				orderItem.push({ skuId: sku.skuId, num: sku.count })
+			}
+			order.push({ orderItem, remark: merchant.remark })
+		}
+		console.log({ data: order, shippingAddressId: '0' })
+		createOrder({ data: order, shippingAddressId: '0' }).then(res => {
+			uni.navigateTo({
+				url: '../pay/pay'
+			})
 		})
 	}
 	get confirmOrder() {
 		return this.$store.state.global.confirmOrder;
-	}
+	} 
 }
 </script>
 

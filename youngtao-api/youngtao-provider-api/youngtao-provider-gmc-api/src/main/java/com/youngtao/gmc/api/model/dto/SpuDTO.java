@@ -100,7 +100,7 @@ public class SpuDTO implements Serializable {
     /**
      * 是否包邮
      */
-    private Boolean isFreeShipping;
+    private BigDecimal postage;
 
     /**
      * 销售量

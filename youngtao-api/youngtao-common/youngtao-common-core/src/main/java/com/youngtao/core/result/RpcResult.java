@@ -8,10 +8,10 @@ import java.util.Objects;
  *
  * @author ankoye@qq.com
  */
-public class Result<T> implements Serializable {
+public class RpcResult<T> implements Serializable {
     private static final long serialVersionUID = 4268670999252934435L;
 
-    private static final Integer SUCCESS_CODE = ResultCode.SUCCESS.code();
+    private static final Integer SUCCESS_CODE = RpcResultCode.SUCCESS.code();
 
     private Integer code;
 
@@ -19,56 +19,56 @@ public class Result<T> implements Serializable {
 
     private T data;
 
-    public Result() {
+    public RpcResult() {
     }
 
-    public Result(ResultCode resultCode) {
+    public RpcResult(RpcResultCode resultCode) {
         this.setResultCode(resultCode);
     }
 
-    public Result(Integer code, String message) {
+    public RpcResult(Integer code, String message) {
         this.code = code;
         this.message = message;
     }
 
-    public Result(Integer code, String message, T data) {
+    public RpcResult(Integer code, String message, T data) {
         this.code = code;
         this.message = message;
         this.data = data;
     }
 
-    public static <T> Result<T> success() {
-        return new Result<>(ResultCode.SUCCESS);
+    public static <T> RpcResult<T> success() {
+        return new RpcResult<>(RpcResultCode.SUCCESS);
     }
 
-    public static <T> Result<T> success(T data) {
-        Result<T> result = new Result<>(ResultCode.SUCCESS);
+    public static <T> RpcResult<T> success(T data) {
+        RpcResult<T> result = new RpcResult<>(RpcResultCode.SUCCESS);
         result.setData(data);
         return result;
     }
 
-    public static <T> Result<T> error() {
-        return new Result<>(ResultCode.ERROR);
+    public static <T> RpcResult<T> error() {
+        return new RpcResult<>(RpcResultCode.ERROR);
     }
 
-    public static <T> Result<T> error(T data) {
-        Result<T> result = new Result<>(ResultCode.ERROR);
+    public static <T> RpcResult<T> error(T data) {
+        RpcResult<T> result = new RpcResult<>(RpcResultCode.ERROR);
         result.setData(data);
         return result;
     }
 
-    public static <T> Result<T> error(ResultCode resultCode) {
-        return new Result<>(resultCode);
+    public static <T> RpcResult<T> error(RpcResultCode resultCode) {
+        return new RpcResult<>(resultCode);
     }
 
-    public static <T> Result<T> error(ResultCode resultCode, T data) {
-        Result<T> result = new Result<>(resultCode);
+    public static <T> RpcResult<T> error(RpcResultCode resultCode, T data) {
+        RpcResult<T> result = new RpcResult<>(resultCode);
         result.setData(data);
         return result;
     }
 
-    public static <T> Result<T> error(String errorMsg, T data) {
-        Result<T> result = new Result<>(-1, errorMsg);
+    public static <T> RpcResult<T> error(String errorMsg, T data) {
+        RpcResult<T> result = new RpcResult<>(-1, errorMsg);
         result.setData(data);
         return result;
     }
@@ -80,7 +80,7 @@ public class Result<T> implements Serializable {
         return this.data != null;
     }
 
-    private void setResultCode(ResultCode code) {
+    private void setResultCode(RpcResultCode code) {
         this.code = code.code();
         this.message = code.message();
     }

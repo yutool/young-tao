@@ -24,7 +24,8 @@ public class OrderController {
 
     @PostMapping("/create")
     public ResponseResult<Long> createOrder(@Valid @RequestBody CreateOrderRequest request) {
-        Long response = orderService.createOrder(request);
+        String userId = "0";
+        Long response = orderService.createOrder(request, userId);
         return ResponseResult.success(response);
     }
 }

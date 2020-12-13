@@ -1,8 +1,5 @@
 package com.youngtao.omc.model.request;
 
-import com.google.common.collect.Lists;
-import com.youngtao.omc.model.domain.OrderDO;
-import com.youngtao.omc.model.domain.OrderItemDO;
 import lombok.Data;
 
 import javax.validation.Valid;
@@ -27,16 +24,15 @@ public class CreateOrderRequest {
 
     @Data
     public static class Order {
-
-        private String remark;
-
         @Valid
         @NotEmpty
-        private List<Item> orderItem;
+        private List<OrderItem> orderItem;
+
+        private String remark;
     }
 
     @Data
-    public static class Item {
+    public static class OrderItem {
 
         @NotBlank
         private String skuId;
@@ -44,23 +40,4 @@ public class CreateOrderRequest {
         @Min(value = 1)
         private Integer num;
     }
-
-    public OrderDO convertToOrder(Order order) {
-        OrderDO orderDO = new OrderDO();
-        orderDO.setShippingAddressId(shippingAddressId);
-        orderDO.setRemark(order.getRemark());
-        return orderDO;
-    }
-
-    public List<OrderItemDO> convertToOrderItem(Order order) {
-        List<OrderItemDO> result = Lists.newArrayList();
-        for (Item item : order.getOrderItem()) {
-            OrderItemDO orderItemDO = new OrderItemDO();
-            orderItemDO.setSkuId(item.getSkuId());
-            orderItemDO.setNum(item.getNum());
-            result.add(orderItemDO);
-        }
-        return result;
-    }
-
 }
