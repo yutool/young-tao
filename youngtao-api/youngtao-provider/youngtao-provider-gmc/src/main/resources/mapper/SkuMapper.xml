@@ -33,7 +33,7 @@
         </foreach>
     </insert>
 
-    <update id="batchFreezeInventory" parameterMap="freezeInventoryQuery">
+    <update id="batchFreezeInventory" parameterType="freezeInventoryQuery">
         <foreach collection="skuList" item="item" close=";">
             update gmc_sku
             set num = num - #{item.num}, freeze_num = freeze_num + #{item.num}

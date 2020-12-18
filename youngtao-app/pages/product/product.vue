@@ -240,8 +240,8 @@ export default class Product extends Vue {
 		// if (!option.id) return;
 		getProduct('1533531779').then(res => {
 			if (res == null) return;
-			this.spu = res;
-			for (const sku of res.skuList) if (sku.defaultShow) {
+			this.spu = res.data;
+			for (const sku of this.spu.skuList) if (sku.defaultShow) {
 				this.selectedSku = sku;
 			}
 		})

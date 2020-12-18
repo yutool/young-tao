@@ -23,4 +23,17 @@
         <result property="createTime" column="create_time" />
     </resultMap>
 
+    <insert id="batchInsert" parameterType="orderDO">
+        insert into omc_order (
+            order_id, merchant_id, user_id, total_price, actual_price, pay_money,
+            shipping_address_id, postage, remark, `type`, status, payment_id
+        ) values
+        <foreach collection="orderList" item="item" separator=",">
+        (
+            #{item.orderId}, #{item.merchantId}, #{item.userId}, #{item.totalPrice}, #{item.actualPrice}, #{item.payMoney},
+            #{item.shippingAddressId},#{item.postage}, #{item.remark}, #{item.type}, #{item.status}, #{item.paymentId}
+        )
+        </foreach>
+    </insert>
+
 </mapper>

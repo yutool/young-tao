@@ -14,7 +14,7 @@ import java.util.List;
 public class SkuFeignFallback implements SkuFeign {
     @Override
     public RpcResult<List<SkuDTO>> listBySkuIds(List<String> skuIds) {
-        return null;
+        return new RpcResult<>();
     }
 
     @Override

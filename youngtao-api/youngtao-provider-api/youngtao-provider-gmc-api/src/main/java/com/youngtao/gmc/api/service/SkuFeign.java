@@ -22,9 +22,9 @@ public interface SkuFeign {
      * @param skuIds list
      * @return sku
      */
-    @PostMapping("/api/gmc/listBySkuIds")
+    @PostMapping("/api/gmc/sku/listBySkuIds")
     RpcResult<List<SkuDTO>> listBySkuIds(@RequestParam("skuIds") List<String> skuIds);
 
-    @PostMapping("/api/gmc/batchFreezeInventory")
+    @PostMapping("/api/gmc/sku/batchFreezeInventory")
     RpcResult<Boolean> batchFreezeInventory(@RequestParam("skus") List<FreezeInventoryArg> args);
 }

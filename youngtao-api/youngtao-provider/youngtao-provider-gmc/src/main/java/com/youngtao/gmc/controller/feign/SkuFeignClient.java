@@ -8,7 +8,6 @@ import com.youngtao.gmc.api.service.SkuFeign;
 import com.youngtao.gmc.mapper.SkuMapper;
 import com.youngtao.gmc.model.domain.SkuDO;
 import com.youngtao.gmc.model.query.FreezeInventoryQuery;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -24,7 +23,7 @@ public class SkuFeignClient implements SkuFeign {
     private SkuMapper skuMapper;
 
     @Override
-    public RpcResult<List<SkuDTO>> listBySkuIds(@RequestParam("skuIds") List<String> skuIds) {
+    public RpcResult<List<SkuDTO>> listBySkuIds(List<String> skuIds) {
         List<SkuDO> skuDOList = skuMapper.listBySkuIds(skuIds);
         List<SkuDTO> skuDTOList = BeanUtils.copyList(skuDOList, SkuDTO.class);
         return RpcResult.success(skuDTOList);

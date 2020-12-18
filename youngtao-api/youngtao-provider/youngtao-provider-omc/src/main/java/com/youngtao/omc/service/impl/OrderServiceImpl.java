@@ -8,7 +8,7 @@ import com.youngtao.gmc.api.model.dto.SkuDTO;
 import com.youngtao.gmc.api.model.dto.SpuDTO;
 import com.youngtao.gmc.api.service.SkuFeign;
 import com.youngtao.gmc.api.service.SpuFeign;
-import com.youngtao.omc.common.constant.OrderTypeConsts;
+import com.youngtao.omc.common.constant.OrderConsts;
 import com.youngtao.omc.common.util.IdUtils;
 import com.youngtao.omc.mapper.OrderItemMapper;
 import com.youngtao.omc.mapper.OrderMapper;
@@ -49,7 +49,7 @@ public class OrderServiceImpl extends BaseService<OrderDO> implements OrderServi
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
 
-    @Value("${order.topic}")
+    @Value("${order-topic}")
     private String orderTopic;
 
     @Override
@@ -83,17 +83,18 @@ public class OrderServiceImpl extends BaseService<OrderDO> implements OrderServi
         if (!skuListResult.isSuccess()) {
             CastException.cast(skuListResult);
         }
-
         Map<String, SkuDTO> skuDTOMap = skuListResult.getData().stream().collect(Collectors.toMap(SkuDTO::getSkuId, val -> val));
         // get SpuDTO map
         Set<String> spuIds = skuListResult.getData().stream().map(SkuDTO::getSpuId).collect(Collectors.toSet());
         RpcResult<List<SpuDTO>> spuListResult = spuFeign.listBySpuIds(spuIds);
-        if (spuListResult.isSuccess()) {
+        if (!spuListResult.isSuccess()) {
             CastException.cast(spuListResult);
         }
         Map<String, SpuDTO> spuDTOMap = spuListResult.getData().stream().collect(Collectors.toMap(SpuDTO::getSpuId, val -> val));
         // data storage
         Long paymentId = IdUtils.paymentId();
+        List<OrderItemDO> orderItemDOList = Lists.newArrayList();
+        List<OrderDO> orderDOList = Lists.newArrayList();
         for (CreateOrderRequest.Order order : request.getData()) {
             String orderId = IdUtils.orderId();
             // sku
@@ -115,6 +116,7 @@ public class OrderServiceImpl extends BaseService<OrderDO> implements OrderServi
                 orderItemDO.setNum(item.getNum());
                 BigDecimal price = BigDecimals.round(skuDTO.getPrice(), item.getNum());
                 orderItemDO.setTotalPrice(price);
+                orderItemDOList.add(orderItemDO);
 
                 totalPrice = totalPrice.add(price);
                 postage = postage.min(spuDTO.getPostage());
@@ -127,12 +129,17 @@ public class OrderServiceImpl extends BaseService<OrderDO> implements OrderServi
             orderDO.setUserId(userId);
             orderDO.setTotalPrice(totalPrice);
             orderDO.setActualPrice(totalPrice);
+            orderDO.setPayMoney(totalPrice);
             orderDO.setShippingAddressId(request.getShippingAddressId());
             orderDO.setPostage(postage);
             orderDO.setRemark(order.getRemark());
-            orderDO.setType(OrderTypeConsts.ORDER);
+            orderDO.setType(OrderConsts.ORDER_TYPE);
+            orderDO.setStatus(OrderConsts.PAYMENT_STATUS);
             orderDO.setPaymentId(paymentId);
+            orderDOList.add(orderDO);
         }
+        orderMapper.batchInsert(orderDOList);
+        orderItemMapper.batchInsert(orderItemDOList);
         return paymentId;
     }
 
