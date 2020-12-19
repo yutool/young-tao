@@ -9,10 +9,28 @@
 	margin-bottom: $module-margin;
 }
 
-// 元素水平居中
+// flex布局
 .items-center {
 	display: flex;
 	align-items: center;
+}
+.items-between {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.items-around {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+}
+.flex-1 {flex: 1;}
+.flex-2 {flex: 2;}
+.flex-3 {flex: 3;}
+.flex-4 {flex: 4;}
+.flex-5 {flex: 5;}
+.item-end {
+	align-self: flex-end;
 }
 
 

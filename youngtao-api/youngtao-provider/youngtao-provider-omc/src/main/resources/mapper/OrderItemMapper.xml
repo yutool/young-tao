@@ -26,7 +26,7 @@
         <foreach collection="list" item="item" separator=",">
         (
             #{item.orderId}, #{item.spuId}, #{item.skuId}, #{item.title},
-            #{item.sku, typeHandler="com.youngtao.web.typehandler.JsonMapTypeHandler"},
+            #{item.sku, typeHandler=com.youngtao.web.typehandler.JsonMapTypeHandler},
             #{item.image}, #{item.oldPrice}, #{item.price}, #{item.num}, #{item.totalPrice}
         )
         </foreach>

@@ -56,6 +56,10 @@
             "path" : "pages/pay/pay",
             "style" : {}
         }
+        ,{
+            "path" : "pages/seckill/seckill",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"navigationBarBackgroundColor": "#FFF",

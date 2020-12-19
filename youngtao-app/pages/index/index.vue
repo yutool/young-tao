@@ -41,7 +41,7 @@
 						<text class="time-countdown">00:00:00</text>
 					</view>
 				</view>
-				<view>更多 &gt;</view>
+				<navigator url="/pages/seckill/seckill">更多 &gt;</navigator>
 			</view>
 			<scroll-view scroll-x="true">
 				<view class="seckill-content">
