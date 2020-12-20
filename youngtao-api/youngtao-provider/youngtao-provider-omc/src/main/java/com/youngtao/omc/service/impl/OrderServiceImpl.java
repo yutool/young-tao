@@ -1,9 +1,9 @@
 package com.youngtao.omc.service.impl;
 
 import com.google.common.collect.Lists;
-import com.youngtao.core.exception.CastException;
 import com.youngtao.core.result.RpcResult;
 import com.youngtao.core.util.BigDecimals;
+import com.youngtao.core.util.RpcResultUtils;
 import com.youngtao.gmc.api.model.dto.SkuDTO;
 import com.youngtao.gmc.api.model.dto.SpuDTO;
 import com.youngtao.gmc.api.service.SkuFeign;
@@ -80,16 +80,12 @@ public class OrderServiceImpl extends BaseService<OrderDO> implements OrderServi
             }
         }
         RpcResult<List<SkuDTO>> skuListResult = skuFeign.listBySkuIds(skuIds);
-        if (!skuListResult.isSuccess()) {
-            CastException.cast(skuListResult);
-        }
+        RpcResultUtils.checkNotNull(skuListResult);
         Map<String, SkuDTO> skuDTOMap = skuListResult.getData().stream().collect(Collectors.toMap(SkuDTO::getSkuId, val -> val));
         // get SpuDTO map
         Set<String> spuIds = skuListResult.getData().stream().map(SkuDTO::getSpuId).collect(Collectors.toSet());
         RpcResult<List<SpuDTO>> spuListResult = spuFeign.listBySpuIds(spuIds);
-        if (!spuListResult.isSuccess()) {
-            CastException.cast(spuListResult);
-        }
+        RpcResultUtils.checkNotNull(spuListResult);
         Map<String, SpuDTO> spuDTOMap = spuListResult.getData().stream().collect(Collectors.toMap(SpuDTO::getSpuId, val -> val));
         // data storage
         Long paymentId = IdUtils.paymentId();

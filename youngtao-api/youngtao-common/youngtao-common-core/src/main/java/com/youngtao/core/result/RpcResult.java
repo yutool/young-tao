@@ -74,10 +74,7 @@ public class RpcResult<T> implements Serializable {
     }
 
     public boolean isSuccess() {
-        if (!Objects.equals(this.code, SUCCESS_CODE)) {
-            return false;
-        }
-        return this.data != null;
+        return Objects.equals(this.code, SUCCESS_CODE);
     }
 
     private void setResultCode(RpcResultCode code) {

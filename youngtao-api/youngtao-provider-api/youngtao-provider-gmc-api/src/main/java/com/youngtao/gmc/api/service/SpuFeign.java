@@ -21,11 +21,16 @@ public interface SpuFeign {
     /**
      * 根据spuId获取spu
      * @param spuId spuId
-     * @return spu
+     * @return record
      */
     @GetMapping("/api/gmc/spu/{spuId}")
     RpcResult<SpuDTO> getBySpuId(@PathVariable("spuId") String spuId);
 
+    /**
+     * 根据spuId获取spu
+     * @param spuIds list
+     * @return list
+     */
     @GetMapping("/api/gmc/spu/listBySpuIds")
     RpcResult<List<SpuDTO>> listBySpuIds(@RequestParam("spuIds") Collection<String> spuIds);
 }

@@ -4,7 +4,7 @@ description = "商品秒杀中心"
 apply plugin: 'org.springframework.boot'
 
 dependencies {
-
+    compile 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
 }
 
 test {

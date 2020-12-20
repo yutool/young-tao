@@ -19,6 +19,8 @@ public interface SkuMapper extends BaseMapper<SkuDO> {
 
     List<SkuDO> listBySpuId(String spuId);
 
+    List<SkuDO> listBySpuIds(Collection<String> spuId);
+
     List<SkuDO> listBySkuIds(Collection<String> skuIds);
 
     Integer batchFreezeInventory(Collection<FreezeInventoryQuery> args);
