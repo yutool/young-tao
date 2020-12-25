@@ -15,6 +15,8 @@ import java.util.List;
  * @date 2020/12/20
  */
 public class DateUtils {
+    public static final Integer MENU_SIZE = 5;
+
     private static final FastDateFormat MENU_FORMAT = FastDateFormat.getInstance("yyyyMMddHH");
     private static final FastDateFormat DAY_FORMAT = FastDateFormat.getInstance("yyyy-MM-dd");
     private static final DateTimeFormatter MENU_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHH");
@@ -73,7 +75,7 @@ public class DateUtils {
 
         // 当前需要显示的时间菜单
         List<String> dateMenus = new ArrayList<>();
-        for (int i = 0; i < 5 ; i++) {
+        for (int i = 0; i < MENU_SIZE; i++) {
             dateMenus.add(MENU_FORMAT.format(plusHours(now,i << 1)));
         }
         return dateMenus;

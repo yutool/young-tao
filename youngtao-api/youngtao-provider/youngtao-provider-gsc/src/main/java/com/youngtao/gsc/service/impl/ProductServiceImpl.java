@@ -20,7 +20,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<SkuData> listByTime(String time) {
-        return null;
+        return productManager.listByTime(time);
     }
 
     @Override

@@ -69,11 +69,6 @@ public class SkuDO extends BaseEntity implements Serializable {
     private Date endTime;
 
     /**
-     * 秒杀时间段
-     */
-    private Integer region;
-
-    /**
      * 秒杀商品数
      */
     private Integer num;

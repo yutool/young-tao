@@ -32,8 +32,6 @@ public class SkuData implements Serializable {
 
     private Date endTime;
 
-    private Integer region;
-
     private Integer num;
 
     private Integer residue;
