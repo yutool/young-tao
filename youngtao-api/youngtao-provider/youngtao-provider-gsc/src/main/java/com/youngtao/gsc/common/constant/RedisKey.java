@@ -11,19 +11,14 @@ import lombok.Getter;
  */
 public enum RedisKey {
     /**
-     * 秒杀商品空间
-     * key: 秒杀时间段(yyyyMMddHH)
+     * key: menu
      */
-    SKU_SPACE("youngtao:gsc:sku:space:%s"),
-    /**
-     * key: skuId
-     */
-    SKU_KEY("youngtao:gsc:sku:info:%s"),
+    SKU_SET_KEY("youngtao:gsc:sku:info:%s"),
     /**
      * 扣减库存
      * key: skuId
      */
-    SKU_COUNT_KEY("youngtao:gsc:sku:count:%s")
+    SKU_COUNT_KEY("youngtao:gsc:sku:count:%s_%s")
     ;
 
     @Getter

@@ -1,6 +1,7 @@
 package com.youngtao.gsc.model.domain;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.youngtao.core.lang.JsonMap;
 import com.youngtao.web.support.BaseEntity;
 import com.youngtao.web.typehandler.JsonMapTypeHandler;
@@ -19,6 +20,7 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@TableName("gsc_sku")
 public class SkuDO extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 612145136697446022L;
 

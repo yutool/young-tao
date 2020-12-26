@@ -13,7 +13,6 @@
         <result property="price" column="price" />
         <result property="startTime" column="start_time" />
         <result property="endTime" column="end_time" />
-        <result property="region" column="region" />
         <result property="num" column="num" />
         <result property="residue" column="residue" />
         <result property="isMarketable" column="is_marketable" />
@@ -22,5 +21,9 @@
         <result property="updateTime" column="update_time" />
         <result property="createTime" column="create_time" />
     </resultMap>
+
+    <select id="getBySkuId" resultMap="BaseResultMap">
+        select * from gsc_sku where sku_id = #{skuId}
+    </select>
 
 </mapper>

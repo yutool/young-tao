@@ -1,12 +1,13 @@
 package com.youngtao.gsc.common.task;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.youngtao.gsc.common.cache.RedisManager;
 import com.youngtao.gsc.common.constant.RedisKey;
 import com.youngtao.gsc.common.util.DateUtils;
 import com.youngtao.gsc.mapper.SkuMapper;
 import com.youngtao.gsc.model.convert.SkuConvert;
+import com.youngtao.gsc.model.data.SkuData;
 import com.youngtao.gsc.model.domain.SkuDO;
+import com.youngtao.web.cache.RedisManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -16,7 +17,9 @@ import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * @author ankoye@qq.com
@@ -26,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class ProductPushTask {
     @Autowired
-    private RedisManager redisManager;
+    private RedisManager<String> redisManager;
     @Resource
     private SkuMapper skuMapper;
     @Autowired
@@ -52,9 +55,10 @@ public class ProductPushTask {
         List<SkuDO> skuDOList = skuMapper.selectList(wrapper);
         // 添加至redis
         String menu = DateUtils.formatToMenu(startTime);
+        Set<SkuData> skuDataList = skuDOList.stream().map(val -> skuConvert.toSkuData(val)).collect(Collectors.toSet());
+        redisManager.zaddAll(RedisKey.SKU_SET_KEY.format(menu), skuDataList, span+3, TimeUnit.HOURS);
         for (SkuDO skuDO : skuDOList) {
-            redisManager.put(RedisKey.SKU_SPACE.format(menu), RedisKey.SKU_KEY.format(skuDO.getSkuId()), skuConvert.toSkuData(skuDO), span+3, TimeUnit.HOURS);
-            redisManager.set(RedisKey.SKU_COUNT_KEY.format(skuDO.getSkuId()), skuDO.getResidue(), span+3, TimeUnit.HOURS);
+            redisManager.set(RedisKey.SKU_COUNT_KEY.format(menu, skuDO.getSkuId()), skuDO.getResidue(), span+3, TimeUnit.HOURS);
         }
     }
 }

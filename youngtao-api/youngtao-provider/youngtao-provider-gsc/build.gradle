@@ -5,6 +5,7 @@ apply plugin: 'org.springframework.boot'
 
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
+    compile project(":youngtao-provider-api:youngtao-provider-gmc-api")
 }
 
 test {

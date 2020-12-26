@@ -1,13 +1,25 @@
 package com.youngtao.gsc.service.impl;
 
-import com.youngtao.gsc.manager.ProductManager;
+import com.youngtao.core.result.RpcResult;
+import com.youngtao.core.util.RpcResultUtils;
+import com.youngtao.gmc.api.model.dto.ProductDTO;
+import com.youngtao.gmc.api.service.ProductFeign;
+import com.youngtao.gsc.common.constant.CacheKey;
+import com.youngtao.gsc.common.constant.RedisKey;
+import com.youngtao.gsc.mapper.SkuMapper;
+import com.youngtao.gsc.model.convert.ProductConvert;
+import com.youngtao.gsc.model.convert.SkuConvert;
 import com.youngtao.gsc.model.data.ProductData;
 import com.youngtao.gsc.model.data.SkuData;
+import com.youngtao.gsc.model.domain.SkuDO;
 import com.youngtao.gsc.service.ProductService;
+import com.youngtao.web.cache.DCacheManager;
+import com.youngtao.web.cache.RedisManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import javax.annotation.Resource;
+import java.util.Set;
 
 /**
  * @author ankoye@qq.com
@@ -16,15 +28,42 @@ import java.util.List;
 @Service
 public class ProductServiceImpl implements ProductService {
     @Autowired
-    private ProductManager productManager;
+    private RedisManager<String> redisManager;
+    @Autowired
+    private DCacheManager<String> dCacheManager;
+    @Autowired
+    private ProductFeign productFeign;
+    @Resource
+    private SkuMapper skuMapper;
+    @Autowired
+    private ProductConvert productConvert;
+    @Autowired
+    private SkuConvert skuConvert;
 
     @Override
-    public List<SkuData> listByTime(String time) {
-        return productManager.listByTime(time);
+    public Set<SkuData> listByTime(String time, Integer page, Integer size) {
+        long start = (page - 1) * size;
+        long end = page * size;
+        return redisManager.zrange(RedisKey.SKU_SET_KEY.format(time), start, end);
     }
 
     @Override
-    public ProductData detail(String skuId) {
-        return null;
+    public ProductData detail(String time, String skuId) {
+        int count = redisManager.get(RedisKey.SKU_COUNT_KEY.format(time, skuId));
+        ProductData data = dCacheManager.get(CacheKey.PRODUCT_KEY.format(time, skuId), v -> {
+            SkuDO skuDO = skuMapper.getBySkuId(skuId);
+            RpcResult<ProductDTO> productResult = productFeign.getBySpuId(skuDO.getSpuId());
+            RpcResultUtils.checkNotNull(productResult);
+            ProductData productData = productConvert.toProductData(productResult.getData());
+            productData.getSkuList().removeIf(sku -> sku.getSkuId().equals(skuId));
+            productData.getSkuList().add(skuConvert.toProductSku(skuDO));
+            return productData;
+        });
+        for (ProductData.Sku sku : data.getSkuList()) {
+            if (sku.getSkuId().equals(skuId)) {
+                sku.setResidue(count);
+            }
+        }
+        return data;
     }
 }

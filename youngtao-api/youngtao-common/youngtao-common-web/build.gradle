@@ -3,7 +3,9 @@ dependencies {
 
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-aop'
+    compile 'com.github.ben-manes.caffeine:caffeine'
 
     implementation libs['mybatis-plus']
     implementation libs['pagehelper']
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
 }

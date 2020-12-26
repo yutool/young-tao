@@ -72,7 +72,6 @@ public class ProductData {
     /**
      * 价格范围
      */
-    @TableField(typeHandler = JsonListTypeHandler.class)
     private JsonList<BigDecimal> priceRange;
 
     /**
@@ -83,25 +82,21 @@ public class ProductData {
     /**
      * 商品服务
      */
-    @TableField(typeHandler = JsonListTypeHandler.class)
     private JsonList<String> serve;
 
     /**
      * 优惠券
      */
-    @TableField(typeHandler = JsonListTypeHandler.class)
     private JsonList<String> coupon;
 
     /**
      * 规格参数
      */
-    @TableField(typeHandler = JsonMapTypeHandler.class)
     private JsonMap<String> spec;
 
     /**
      * sku模板
      */
-    @TableField(typeHandler = JsonMapTypeHandler.class)
     private JsonMap<List<String>> skuTemplate;
 
     /**
@@ -147,13 +142,11 @@ public class ProductData {
         /**
          * 商品规格
          */
-        @TableField(typeHandler = JsonMapTypeHandler.class)
         private JsonMap<String> sku;
 
         /**
          * 商品图片
          */
-        @TableField(typeHandler = JsonListTypeHandler.class)
         private JsonList<String> images;
 
         /**

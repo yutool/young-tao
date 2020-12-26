@@ -1,8 +1,8 @@
 package com.youngtao.gsc.mapper;
-
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.youngtao.gsc.model.domain.SkuDO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 
 /**
@@ -11,5 +11,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface SkuMapper extends BaseMapper<SkuDO> {
-
+    SkuDO getBySkuId(@Param("skuId") String skuId);
 }

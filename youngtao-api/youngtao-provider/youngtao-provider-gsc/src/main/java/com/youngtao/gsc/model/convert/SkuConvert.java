@@ -1,8 +1,10 @@
 package com.youngtao.gsc.model.convert;
 
+import com.youngtao.gsc.model.data.ProductData;
 import com.youngtao.gsc.model.data.SkuData;
 import com.youngtao.gsc.model.domain.SkuDO;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 /**
  * @author ankoye@qq.com
@@ -12,4 +14,12 @@ import org.mapstruct.Mapper;
 public interface SkuConvert {
 
     SkuData toSkuData(SkuDO skuDO);
+
+    @Mapping(target = "images", ignore = true)
+    @Mapping(target = "discount", ignore = true)
+    @Mapping(target = "alertNum", ignore = true)
+    @Mapping(target = "saleNum", ignore = true)
+    @Mapping(target = "freezeNum", ignore = true)
+    @Mapping(target = "defaultShow", ignore = true)
+    ProductData.Sku toProductSku(SkuDO skuDO);
 }
