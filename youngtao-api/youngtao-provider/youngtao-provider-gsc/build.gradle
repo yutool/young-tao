@@ -4,8 +4,10 @@ description = "商品秒杀中心"
 apply plugin: 'org.springframework.boot'
 
 dependencies {
+    compile libs['rocketmq']
     compile 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
     compile project(":youngtao-provider-api:youngtao-provider-gmc-api")
+    compile project(":youngtao-provider-api:youngtao-provider-omc-api")
 }
 
 test {

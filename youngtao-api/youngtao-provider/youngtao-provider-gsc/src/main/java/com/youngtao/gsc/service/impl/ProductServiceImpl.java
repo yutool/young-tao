@@ -6,19 +6,17 @@ import com.youngtao.gmc.api.model.dto.ProductDTO;
 import com.youngtao.gmc.api.service.ProductFeign;
 import com.youngtao.gsc.common.constant.CacheKey;
 import com.youngtao.gsc.common.constant.RedisKey;
-import com.youngtao.gsc.mapper.SkuMapper;
+import com.youngtao.gsc.manager.ProductManager;
 import com.youngtao.gsc.model.convert.ProductConvert;
 import com.youngtao.gsc.model.convert.SkuConvert;
 import com.youngtao.gsc.model.data.ProductData;
 import com.youngtao.gsc.model.data.SkuData;
-import com.youngtao.gsc.model.domain.SkuDO;
 import com.youngtao.gsc.service.ProductService;
 import com.youngtao.web.cache.DCacheManager;
 import com.youngtao.web.cache.RedisManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.Set;
 
 /**
@@ -33,8 +31,8 @@ public class ProductServiceImpl implements ProductService {
     private DCacheManager<String> dCacheManager;
     @Autowired
     private ProductFeign productFeign;
-    @Resource
-    private SkuMapper skuMapper;
+    @Autowired
+    private ProductManager productManager;
     @Autowired
     private ProductConvert productConvert;
     @Autowired
@@ -49,16 +47,19 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductData detail(String time, String skuId) {
-        int count = redisManager.get(RedisKey.SKU_COUNT_KEY.format(time, skuId));
+        Integer count = redisManager.getNum(RedisKey.SKU_COUNT_KEY.format(time, skuId));
+        if (count == null) {
+            return null;
+        }
         ProductData data = dCacheManager.get(CacheKey.PRODUCT_KEY.format(time, skuId), v -> {
-            SkuDO skuDO = skuMapper.getBySkuId(skuId);
-            RpcResult<ProductDTO> productResult = productFeign.getBySpuId(skuDO.getSpuId());
+            SkuData skuData = productManager.getSkuData(time, skuId);
+            RpcResult<ProductDTO> productResult = productFeign.getBySpuId(skuData.getSkuId());
             RpcResultUtils.checkNotNull(productResult);
             ProductData productData = productConvert.toProductData(productResult.getData());
             productData.getSkuList().removeIf(sku -> sku.getSkuId().equals(skuId));
-            productData.getSkuList().add(skuConvert.toProductSku(skuDO));
+            productData.getSkuList().add(skuConvert.toProductSku(skuData));
             return productData;
-        });
+        }, true);
         for (ProductData.Sku sku : data.getSkuList()) {
             if (sku.getSkuId().equals(skuId)) {
                 sku.setResidue(count);

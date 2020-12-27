@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  * @author ankoye@qq.com
  * @date 2020/12/20
  */
-@FeignClient(value = "youngtao-gmc-serve", name = "product", fallback = ProductFeignFallback.class)
+@FeignClient(value = "youngtao-gmc-serve", contextId = "product", fallback = ProductFeignFallback.class)
 public interface ProductFeign {
 
     /**
@@ -20,5 +20,5 @@ public interface ProductFeign {
      * @return list
      */
     @GetMapping("/api/gmc/product/listBySpuIds/{id}")
-    RpcResult<ProductDTO> getBySpuId(@PathVariable String id);
+    RpcResult<ProductDTO> getBySpuId(@PathVariable("id") String id);
 }

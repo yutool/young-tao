@@ -2,7 +2,6 @@ package com.youngtao.core.exception;
 
 
 import com.youngtao.core.result.ResponseCode;
-import com.youngtao.core.result.RpcResult;
 
 /**
  * 异常抛出类
@@ -20,9 +19,5 @@ public class CastException {
 
     public static void cast(ResponseCode responseCode) {
         throw new ServiceException(responseCode.code(), responseCode.message());
-    }
-
-    public static void cast(RpcResult<?> result) {
-        throw new RpcResultException(result.getCode(), result.getMessage());
     }
 }

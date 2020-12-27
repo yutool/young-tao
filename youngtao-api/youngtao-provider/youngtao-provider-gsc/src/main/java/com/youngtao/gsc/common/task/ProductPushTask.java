@@ -58,7 +58,7 @@ public class ProductPushTask {
         Set<SkuData> skuDataList = skuDOList.stream().map(val -> skuConvert.toSkuData(val)).collect(Collectors.toSet());
         redisManager.zaddAll(RedisKey.SKU_SET_KEY.format(menu), skuDataList, span+3, TimeUnit.HOURS);
         for (SkuDO skuDO : skuDOList) {
-            redisManager.set(RedisKey.SKU_COUNT_KEY.format(menu, skuDO.getSkuId()), skuDO.getResidue(), span+3, TimeUnit.HOURS);
+            redisManager.setNum(RedisKey.SKU_COUNT_KEY.format(menu, skuDO.getSkuId()), skuDO.getResidue(), span+3, TimeUnit.HOURS);
         }
     }
 }

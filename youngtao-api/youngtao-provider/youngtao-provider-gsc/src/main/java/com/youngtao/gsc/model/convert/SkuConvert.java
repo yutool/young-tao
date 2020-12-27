@@ -22,4 +22,12 @@ public interface SkuConvert {
     @Mapping(target = "freezeNum", ignore = true)
     @Mapping(target = "defaultShow", ignore = true)
     ProductData.Sku toProductSku(SkuDO skuDO);
+
+    @Mapping(target = "images", ignore = true)
+    @Mapping(target = "discount", ignore = true)
+    @Mapping(target = "alertNum", ignore = true)
+    @Mapping(target = "saleNum", ignore = true)
+    @Mapping(target = "freezeNum", ignore = true)
+    @Mapping(target = "defaultShow", ignore = true)
+    ProductData.Sku toProductSku(SkuData skuData);
 }

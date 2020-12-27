@@ -51,6 +51,10 @@ public class DCacheManager<K> {
     }
 
     public <V> V get(K key, Function<K, ? extends V> func) {
+        return get(key, func, false);
+    }
+
+    public <V> V get(K key, Function<K, ? extends V> func, boolean cacheNull) {
         if (redisTemplate == null) {
             throw new NullPointerException("redisTemplate may be not init");
         }
@@ -60,6 +64,8 @@ public class DCacheManager<K> {
                 value = func.apply(null);
                 if (value != null) {
                     redisTemplate.opsForValue().set(key, value, redisTimeout, TimeUnit.MINUTES);
+                } else if (cacheNull) {
+                    redisTemplate.opsForValue().set(key, value, 1, TimeUnit.MINUTES);
                 }
             }
             return value;
