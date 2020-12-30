@@ -3,6 +3,7 @@ package com.youngtao.omc.controller;
 import com.youngtao.core.result.ResponseResult;
 import com.youngtao.omc.model.request.CreateOrderRequest;
 import com.youngtao.omc.service.OrderService;
+import com.youngtao.web.support.ResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +17,7 @@ import javax.validation.Valid;
  * @date 2020/11/29
  */
 @RestController
+@ResponseWrapper
 @RequestMapping("/order")
 public class OrderController {
 

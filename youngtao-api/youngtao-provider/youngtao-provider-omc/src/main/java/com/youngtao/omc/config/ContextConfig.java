@@ -1,5 +1,7 @@
 package com.youngtao.omc.config;
 
+import com.youngtao.web.advice.GlobalExceptionAdvice;
+import com.youngtao.web.advice.ResponseResultAdvice;
 import com.youngtao.web.log.GlobalLogAspect;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,4 +17,15 @@ public class ContextConfig {
     public GlobalLogAspect globalLogAspect() {
         return new GlobalLogAspect();
     }
+
+    @Bean
+    public ResponseResultAdvice responseResultAdvice() {
+        return new ResponseResultAdvice();
+    }
+
+    @Bean
+    public GlobalExceptionAdvice globalExceptionAdvice() {
+        return new GlobalExceptionAdvice();
+    }
+
 }
