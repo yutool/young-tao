@@ -6,7 +6,7 @@ package com.youngtao.omc.common.constant;
  */
 public class OmcMQTagConsts {
     /**
-     * 创建订单
+     * 创建秒杀订单
      */
-    public static final String CREATE_ORDER = "createOrder";
+    public static final String CREATE_GSC_ORDER = "createGscOrder";
 }

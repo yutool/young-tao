@@ -16,7 +16,7 @@ public interface SkuConvert {
     SkuData toSkuData(SkuDO skuDO);
 
     @Mapping(target = "images", ignore = true)
-    @Mapping(target = "discount", ignore = true)
+    @Mapping(target = "oldPrice", ignore = true)
     @Mapping(target = "alertNum", ignore = true)
     @Mapping(target = "saleNum", ignore = true)
     @Mapping(target = "freezeNum", ignore = true)
@@ -24,7 +24,7 @@ public interface SkuConvert {
     ProductData.Sku toProductSku(SkuDO skuDO);
 
     @Mapping(target = "images", ignore = true)
-    @Mapping(target = "discount", ignore = true)
+    @Mapping(target = "oldPrice", ignore = true)
     @Mapping(target = "alertNum", ignore = true)
     @Mapping(target = "saleNum", ignore = true)
     @Mapping(target = "freezeNum", ignore = true)

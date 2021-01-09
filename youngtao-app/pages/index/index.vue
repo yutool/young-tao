@@ -93,21 +93,21 @@
 					</view>
 				</view>
 				<!-- 推荐商品 -->
-				<u-waterfall v-model="goodsList">
+				<u-waterfall v-model="productList">
 					<template v-slot:left="{leftList}">
 						<view v-for="(item, index) in leftList" :key="index">
-							<yt-product-card margin="0 20rpx 20rpx 0"></yt-product-card>
+							<yt-product-card margin="0 20rpx 20rpx 0" :data="item"></yt-product-card>
 						</view>
 					</template>
 					<template v-slot:right="{rightList}">
 						<view v-for="(item, index) in rightList" :key="index">
-							<yt-product-card margin="0 20rpx 20rpx 0"></yt-product-card>
+							<yt-product-card margin="0 20rpx 20rpx 0" :data="item"></yt-product-card>
 						</view>
 					</template>
 				</u-waterfall>
 				<!-- 加载更多 -->
 				<view class="pt-3 pb-3">
-					<u-loadmore  bg-color="rgb(240, 240, 240)" :status="loadStatus" @loadmore="addRandomData"></u-loadmore>
+					<u-loadmore  bg-color="rgb(240, 240, 240)" :status="loadStatus" @loadmore="addRecommendData"></u-loadmore>
 				</view>
 			</view>
 		</view>
@@ -117,6 +117,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import {mapState, mapMutations, mapGetters, mapActions} from 'vuex';
+import { getRecommendProduct } from '@/api/gmc/product.js';
 
 @Component
 export default class Index extends Vue {
@@ -150,9 +151,9 @@ export default class Index extends Vue {
 			title: '谁念西风独自凉，萧萧黄叶闭疏窗，沉思往事立残阳'
 		}
 	]
-	private goodsList = [];
+	private productList = [];
 	onLoad() {
-		this.addRandomData();
+		this.addRecommendData();
 	}
 	onShow() {
 		this.stickyEnable= true
@@ -160,15 +161,28 @@ export default class Index extends Vue {
 	onHide() {
 		this.stickyEnable= false
 	}
-	private addRandomData() {
+	private addRecommendData() {
+		const len = this.productList.length;
+		const size = 10;
+		const page = len / size + 1;
+		if (len % size !== 0) {
+			return ;
+		}
 		this.loadStatus = 'loading';
-		// 模拟数据加载
-		setTimeout(() => {
-			for(let i = 0; i < 10; i++) {
-				this.goodsList.push({})
-			}
+		getRecommendProduct({page, size}).then(res => {
+			const {data} = res;
+			this.productList.push(...data)
 			this.loadStatus = 'loadmore';
-		}, 1000)
+		}).catch(error => {
+			this.loadStatus = 'loadmore';
+		})
+		// 模拟数据加载
+		// setTimeout(() => {
+		// 	for(let i = 0; i < 10; i++) {
+		// 		this.productList.push({})
+		// 	}
+		// 	this.loadStatus = 'loadmore';
+		// }, 1000)
 	}
 	get loading() {
 		return this.$store.state.app.loading

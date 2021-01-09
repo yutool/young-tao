@@ -41,7 +41,9 @@ public class GlobalExceptionAdvice {
     @ResponseBody
     @ExceptionHandler(MethodArgumentNotValidException.class)
     private ResponseResult<?> methodArgumentNotValid(MethodArgumentNotValidException ex) {
-        return ResponseResult.error(ResponseCode.PARAM_IS_INVALID);
+        String message = ex.getMessage().substring(ex.getMessage().lastIndexOf(": [") + 3);
+        message = message.substring(0, message.lastIndexOf("]"));
+        return new ResponseResult<>(ResponseCode.PARAM_IS_INVALID.code(), message);
     }
 
     /**

@@ -118,9 +118,9 @@ public class AddProductRequest {
         private BigDecimal price;
 
         /**
-         * 折扣
+         * 原价
          */
-        private Float discount;
+        private BigDecimal oldPrice;
 
         /**
          * 库存数量

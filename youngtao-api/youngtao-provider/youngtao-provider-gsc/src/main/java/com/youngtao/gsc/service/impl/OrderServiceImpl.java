@@ -69,9 +69,9 @@ public class OrderServiceImpl implements OrderService {
         orderQueue.setStatus(OrderQueue.QUEUING);
         orderQueue.setMenu(request.getMenu());
         redisManager.hput(RedisKey.ORDER_QUEUE.format(menu), RedisKey.ORDER_QUEUE_KEY.format(userId, skuId), orderQueue);
-        // 6. 发送顺序消息，保证公平
+        // 6. 发送顺序消息，创建订单
         SkuData skuData = productManager.getSkuData(request.getMenu(), request.getSkuId());
-        rocketMQTemplate.syncSendOrderly(RocketMQUtils.withTag(orderTopic, OmcMQTagConsts.CREATE_ORDER), skuData, request.getSkuId());
+        rocketMQTemplate.syncSendOrderly(RocketMQUtils.withTag(orderTopic, OmcMQTagConsts.CREATE_GSC_ORDER), skuData, request.getSkuId());
         RedisLock.unlock(lockKey, lock);
         return orderQueue;
     }

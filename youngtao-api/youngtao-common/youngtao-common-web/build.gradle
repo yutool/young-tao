@@ -4,6 +4,8 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-aop'
     compile 'com.github.ben-manes.caffeine:caffeine'
+    compile libs['validation-api']
+    compile libs['hibernate-validator']
 
     implementation libs['mybatis-plus']
     implementation libs['pagehelper']

@@ -75,25 +75,33 @@ public class RedisManager<K> {
 
     // ------ hash
 
-    public <T> List<T> hashValues(String namespace) {
-        return (List<T>) redisTemplate.boundHashOps(namespace).values();
+    public <T> List<T> hashValues(String obj) {
+        return (List<T>) redisTemplate.boundHashOps(obj).values();
     }
 
-    public <T> T hget(String namespace, K key) {
-        return (T) redisTemplate.boundHashOps(namespace).get(key);
+    public <T> T hget(String objKey, K key) {
+        return (T) redisTemplate.boundHashOps(objKey).get(key);
     }
 
-    public void hput(String namespace, K key, Object value) {
-        if (redisTemplate.hasKey(namespace)) {
-            redisTemplate.boundHashOps(namespace).put(key, value);
+    public void hput(String objKey, K key, Object value) {
+        if (redisTemplate.hasKey(objKey)) {
+            redisTemplate.boundHashOps(objKey).put(key, value);
         }
-        redisTemplate.boundHashOps(namespace).put(key, value);
-        defaultTimeout(namespace);
+        redisTemplate.boundHashOps(objKey).put(key, value);
+        defaultTimeout(objKey);
     }
 
-    public void hput(String namespace, K key, Object value, long timeout, TimeUnit timeUnit) {
-        redisTemplate.boundHashOps(namespace).put(key, value);
-        redisTemplate.boundHashOps(namespace).expire(timeout, timeUnit);
+    public void hput(String objKey, K key, Object value, long timeout, TimeUnit timeUnit) {
+        redisTemplate.boundHashOps(objKey).put(key, value);
+        redisTemplate.boundHashOps(objKey).expire(timeout, timeUnit);
+    }
+
+    public long hincr(String objKey, K key, long delta) {
+        return redisTemplate.boundHashOps("1").increment(key, delta);
+    }
+
+    public Double hincr(String objKey, K key, double delta) {
+        return redisTemplate.boundHashOps("1").increment(key, delta);
     }
 
     // ------ zset

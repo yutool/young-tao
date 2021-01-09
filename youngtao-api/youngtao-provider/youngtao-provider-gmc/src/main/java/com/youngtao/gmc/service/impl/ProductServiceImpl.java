@@ -1,5 +1,6 @@
 package com.youngtao.gmc.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.youngtao.core.lang.JsonList;
@@ -12,12 +13,14 @@ import com.youngtao.gmc.model.convert.ProductConvert;
 import com.youngtao.gmc.model.convert.SkuConvert;
 import com.youngtao.gmc.model.convert.SpuConvert;
 import com.youngtao.gmc.model.data.ProductData;
+import com.youngtao.gmc.model.data.SpuSkuData;
 import com.youngtao.gmc.model.domain.SkuDO;
 import com.youngtao.gmc.model.domain.SpuDO;
 import com.youngtao.gmc.model.request.AddProductRequest;
 import com.youngtao.gmc.model.request.ConfirmOrderRequest;
 import com.youngtao.gmc.model.response.ConfirmOrderResponse;
 import com.youngtao.gmc.service.ProductService;
+import com.youngtao.web.model.PageArg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +29,7 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -34,7 +38,6 @@ import java.util.stream.Collectors;
  */
 @Service
 public class ProductServiceImpl implements ProductService {
-
     @Resource
     private SpuMapper spuMapper;
     @Resource
@@ -83,19 +86,19 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ConfirmOrderResponse> confirmOrder(ConfirmOrderRequest request) {
         Map<String, Integer> countMap = request.getSkuList().stream().collect(Collectors.toMap(ConfirmOrderRequest.Data::getSkuId, ConfirmOrderRequest.Data::getCount));
-        List<SkuDO> skuDOS = skuMapper.listBySkuIds(countMap.keySet());
+        List<SkuDO> skuDOList = skuMapper.listBySkuIds(countMap.keySet());
 
         Map<String, List<SkuDO>> skuDOMap = Maps.newHashMap();
-        for (SkuDO skuDO : skuDOS) {
+        for (SkuDO skuDO : skuDOList) {
             List<SkuDO> list = skuDOMap.getOrDefault(skuDO.getSpuId(), Lists.newArrayList());
             list.add(skuDO);
             skuDOMap.put(skuDO.getSpuId(), list);
         }
-        List<SpuDO> spuDOS = spuMapper.listBySpuIds(skuDOMap.keySet());
+        List<SpuDO> spuDOList = spuMapper.listBySpuIds(skuDOMap.keySet());
 
         // Processing return value
         Map<String, ConfirmOrderResponse> responseMap = Maps.newHashMap();
-        for (SpuDO spuDO : spuDOS) {
+        for (SpuDO spuDO : spuDOList) {
             ConfirmOrderResponse response;
             if (responseMap.containsKey(spuDO.getMerchantId())) {
                 response = responseMap.get(spuDO.getMerchantId());
@@ -119,5 +122,23 @@ public class ProductServiceImpl implements ProductService {
             responseMap.put(spuDO.getMerchantId(), response);
         }
         return Lists.newArrayList(responseMap.values());
+    }
+
+    @Override
+    public List<SpuSkuData> listRecommendProduct(PageArg arg) {
+        // 获取数据
+        PageHelper.startPage(arg.getPage(), arg.getSize());
+        List<SpuDO> spuList = spuMapper.selectList(null);
+        Set<String> spuIds = spuList.stream().map(SpuDO::getSpuId).collect(Collectors.toSet());
+        List<SkuDO> skuList = skuMapper.listDefaultBySpuId(spuIds);
+        // 整理数据
+        Map<String, SkuDO> spuIdMap = skuList.stream().collect(Collectors.toMap(SkuDO::getSpuId, val -> val));
+        List<SpuSkuData> result = Lists.newArrayList();
+        for (SpuDO spuDO : spuList) {
+            SpuSkuData spuSkuData = productConvert.toSpuSkuData(spuDO, spuIdMap.get(spuDO.getSpuId()));
+            spuSkuData.generateTitle();
+            result.add(spuSkuData);
+        }
+        return result;
     }
 }

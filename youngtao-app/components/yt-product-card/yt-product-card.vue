@@ -1,16 +1,16 @@
 <template>
 	<view class="yt-goods-card" :style="{margin}" @click="onclick">
 		<view class="yt-goods-image">
-			<image class="image" :src="item.image"></image>
+			<image class="image" :src="data.images[0]"></image>
 		</view>
 		<view class="yt-goods-content">
 			<view class="yt-goods-title">
-				<text class="yt-goods-title-tip">{{item.tip}}</text>
-				<text class="yt-goods-title-text">{{item.title}}</text>
+				<text class="yt-goods-title-tip">自营</text>
+				<text class="yt-goods-title-text">{{data.title}}</text>
 			</view>
 			<view class="yt-goods-price">
-				<text class="yt-goods-price-original">￥{{item.favourPrice}}</text>
-				<text class="yt-goods-price-favour">￥{{item.originalPrice}}</text>
+				<text class="yt-goods-price-original">￥{{data.price}}</text>
+				<text class="yt-goods-price-favour">￥{{data.oldPrice}}</text>
 			</view>
 		</view>
 	</view>
@@ -18,21 +18,14 @@
 
 <script>
 	export default {
-		props: ['margin'],
+		props: ['margin', 'data'],
 		data() {
 			return {
-				item:	{
-						image: 'https://img-cdn-qiniu.dcloud.net.cn/uploads/example/product1.jpg',
-						title: 'Apple iPhone X 256GB 深空灰色 移动联通电信4G手机',
-						originalPrice: 9999,
-						favourPrice: 8888,
-						tip: '自营'
-					}
 			};
 		},
 		methods: {
 			onclick() {
-				uni.navigateTo({url: '/pages/product/product'});
+				uni.navigateTo({url: `/pages/product/product?spuId=${this.data.spuId}`});
 			}
 		}
 	}

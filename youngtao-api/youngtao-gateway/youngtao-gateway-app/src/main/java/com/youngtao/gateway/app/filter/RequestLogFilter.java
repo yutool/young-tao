@@ -1,7 +1,5 @@
 package com.youngtao.gateway.app.filter;
 
-import com.youngtao.gateway.app.model.LogData;
-import com.youngtao.gateway.app.util.LogHelper;
 import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,14 +29,6 @@ public class RequestLogFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         RecorderServerHttpRequestDecorator request = new RecorderServerHttpRequestDecorator(exchange.getRequest());
 
-        // 封装logData
-        LogData logData = new LogData();
-        logData.setUrl(LogHelper.getUrl(request));
-        logData.setMethod(request.getMethodValue());
-        logData.setParams(LogHelper.getRequestParams(request));
-        logData.setBody(LogHelper.getRequestBody(request));
-        logData.setIp(LogHelper.getClientIp(request));
-
         // get result
         ServerHttpResponse response = exchange.getResponse();
         DataBufferFactory bufferFactory = response.bufferFactory();
@@ -52,8 +42,7 @@ public class RequestLogFilter implements GlobalFilter, Ordered {
                         byte[] content = new byte[dataBuffer.readableByteCount()];
                         dataBuffer.read(content);
                         String responseResult = new String(content, StandardCharsets.UTF_8);
-                        logData.setResponse(responseResult);
-                        log.info("app gateway request info: {}", logData);
+                        log.info("app gateway request info: {}", responseResult);
                         return bufferFactory.wrap(content);
                     }));
                 }

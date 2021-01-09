@@ -9,7 +9,7 @@
         <result property="sku" column="sku" typeHandler="com.youngtao.web.typehandler.JsonMapTypeHandler"/>
         <result property="images" column="images" typeHandler="com.youngtao.web.typehandler.JsonListTypeHandler"/>
         <result property="price" column="price" />
-        <result property="discount" column="discount" />
+        <result property="oldPrice" column="old_price" />
         <result property="num" column="num" />
         <result property="alertNum" column="alert_num" />
         <result property="saleNum" column="sale_num" />
@@ -60,5 +60,14 @@
         <foreach collection="spuIds" item="item" separator="," open="(" close=")">
             #{item}
         </foreach>
+    </select>
+
+    <select id="listDefaultBySpuId" resultMap="BaseResultMap">
+        select * from gmc_sku
+        where spu_id in
+        <foreach collection="spuIds" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+        and default_show = true
     </select>
 </mapper>

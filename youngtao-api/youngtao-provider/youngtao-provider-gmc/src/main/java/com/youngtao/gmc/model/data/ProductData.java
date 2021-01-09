@@ -1,10 +1,7 @@
 package com.youngtao.gmc.model.data;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.youngtao.core.lang.JsonList;
 import com.youngtao.core.lang.JsonMap;
-import com.youngtao.web.typehandler.JsonListTypeHandler;
-import com.youngtao.web.typehandler.JsonMapTypeHandler;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -155,9 +152,9 @@ public class ProductData {
         private BigDecimal price;
 
         /**
-         * 折扣
+         * 原价
          */
-        private Float discount;
+        private BigDecimal oldPrice;
 
         /**
          * 库存数量
