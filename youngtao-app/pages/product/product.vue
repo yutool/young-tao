@@ -56,7 +56,7 @@
 			<view class="title-box">
 				<u-tag class="title-tag" text="新品" type="success" size="mini" mode="dark" />
 				<text class="title">
-					{{spu.title}}
+					{{selectedSku.title}}
 				</text>
 			</view>
 		</view>
@@ -95,10 +95,10 @@
 		
 		<!-- 配送 -->
 		<view class="delivery-wrap wrap">
-			<view class="selected-box box">
+			<view class="selected-box box" @click="show = true, popupType = 0">
 				<view class="title">已选</view>
-				<view class="content">
-					G304 无线游戏鼠标 黑色，0.185kg，1件
+				<view class="content" v-if="selectedSku.sku">
+					{{Object.values(selectedSku.sku).join('，')}}
 				</view>
 				<view>...</view>
 			</view>
@@ -207,10 +207,12 @@
 			</view>
 		</view>
 		
-		<yt-sku-popup :visible="show" @close="show = false"></yt-sku-popup>
+		<yt-sku-popup v-if="JSON.stringify(selectedSku) !== '{}'" :spu="spu" :selected="selectedSku" :type="popupType"
+		 :visible="show" @close="show = false" @confirm="handleConfirm">
+		</yt-sku-popup>
 		<!-- 工具栏 -->
 		<view class="goods-bar">
-			<yt-product-toolbar @add="show = true" @buy="goBuy"></yt-product-toolbar>
+			<yt-product-toolbar @add="show = true, popupType = 1" @buy="show = true, popupType = 2"></yt-product-toolbar>
 		</view>
 	</view>
 </template>
@@ -222,6 +224,7 @@ import { getProduct } from '@/api/gmc/product.js';
 @Component
 export default class Product extends Vue {
 	private show = false
+	private popupType = 0 // 0 - 切换sku，1 - 加入购物车，2 - 立即购买
 	private tabIndex = 0
 	private spu = {}
 	private selectedSku = {}
@@ -237,7 +240,7 @@ export default class Product extends Vue {
 	}
 	
 	onLoad(option) {
-		const spuId = this.$route.query.spuId
+		const spuId = option.spuId
 		if (!spuId) return;
 		getProduct(spuId).then(res => {
 			if (res == null) return;
@@ -252,11 +255,18 @@ export default class Product extends Vue {
 		uni.navigateBack();
 	}
 	
-	private goBuy() {
-		this.$store.dispatch('global/setConfirmOrder', [{skuId: '1532641744', count: 2}])
-		uni.navigateTo({
-			url: '/pages/order/create'
-		})
+	private handleConfirm(sku) {
+		if (this.popupType === 0) {
+			this.selectedSku = sku;
+		}
+		else if (this.popupType === 1) { // 加入购物车
+
+		} else if (this.popupType === 2) { // 立即购买
+			this.$store.dispatch('global/setConfirmOrder', [{skuId: sku.skuId, count: 2}])
+			uni.navigateTo({
+				url: '/pages/order/create'
+			})
+		}
 	}
 }
 </script>

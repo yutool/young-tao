@@ -24,7 +24,7 @@ public class ProductData {
     /**
      * 商品标题
      */
-    private String title;
+//    private String title;
 
     /**
      * 商家id

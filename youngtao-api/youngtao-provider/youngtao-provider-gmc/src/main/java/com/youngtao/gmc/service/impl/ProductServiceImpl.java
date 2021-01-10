@@ -21,6 +21,7 @@ import com.youngtao.gmc.model.request.ConfirmOrderRequest;
 import com.youngtao.gmc.model.response.ConfirmOrderResponse;
 import com.youngtao.gmc.service.ProductService;
 import com.youngtao.web.model.PageArg;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +37,7 @@ import java.util.stream.Collectors;
  * @author ankoye@qq.com
  * @date 2020/11/22
  */
+@Slf4j
 @Service
 public class ProductServiceImpl implements ProductService {
     @Resource
@@ -80,7 +82,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductData getBySpuId(String id) {
         SpuDO spuDO = spuMapper.selectBySpuId(id);
         List<SkuDO> skuDOList = skuMapper.listBySpuId(id);
-        return productConvert.toProductData(spuDO, skuDOList);
+        return productConvert.toProductDataWithTitle(spuDO, skuDOList);
     }
 
     @Override
@@ -133,12 +135,6 @@ public class ProductServiceImpl implements ProductService {
         List<SkuDO> skuList = skuMapper.listDefaultBySpuId(spuIds);
         // 整理数据
         Map<String, SkuDO> spuIdMap = skuList.stream().collect(Collectors.toMap(SkuDO::getSpuId, val -> val));
-        List<SpuSkuData> result = Lists.newArrayList();
-        for (SpuDO spuDO : spuList) {
-            SpuSkuData spuSkuData = productConvert.toSpuSkuData(spuDO, spuIdMap.get(spuDO.getSpuId()));
-            spuSkuData.generateTitle();
-            result.add(spuSkuData);
-        }
-        return result;
+        return spuList.stream().map(val -> productConvert.toSpuSkuData(val, spuIdMap.get(val.getSpuId()))).collect(Collectors.toList());
     }
 }

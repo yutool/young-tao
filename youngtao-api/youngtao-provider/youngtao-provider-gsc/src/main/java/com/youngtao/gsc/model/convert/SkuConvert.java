@@ -13,6 +13,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface SkuConvert {
 
+    @Mapping(target = "title", ignore = true)
     SkuData toSkuData(SkuDO skuDO);
 
     @Mapping(target = "images", ignore = true)

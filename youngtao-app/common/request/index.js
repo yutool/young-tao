@@ -2,8 +2,8 @@ import request from "./core/request.js";			// 纯粹的数据请求
 // import request from "./upload/upload.js";	// 数据请求同时继承了文件上传（包括七牛云上传）
 import store from '@/store'
 
-// const baseUrl = "https://youngtao.test.utools.club";
-const baseUrl = 'http://localhost:19000';
+const baseUrl = "https://youngtao.cn.utools.club";
+// const baseUrl = 'http://localhost:19000';
 
 // 可以new多个request来支持多个域名请求
 const $http = new request({

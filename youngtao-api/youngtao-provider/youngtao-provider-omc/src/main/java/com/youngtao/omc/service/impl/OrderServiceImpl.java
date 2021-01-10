@@ -104,7 +104,7 @@ public class OrderServiceImpl extends BaseService<OrderDO> implements OrderServi
                 orderItemDO.setOrderId(orderId);
                 orderItemDO.setSpuId(skuDTO.getSpuId());
                 orderItemDO.setSkuId(item.getSkuId());
-                orderItemDO.setTitle(spuDTO.getTitle());
+//                orderItemDO.setTitle(spuDTO.getTitle());
                 orderItemDO.setSku(skuDTO.getSku());
                 orderItemDO.setImage(skuDTO.getImages().get(0));
                 orderItemDO.setOldPrice(skuDTO.getPrice());

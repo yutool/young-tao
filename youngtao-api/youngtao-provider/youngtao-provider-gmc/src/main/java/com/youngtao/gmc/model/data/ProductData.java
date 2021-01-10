@@ -22,11 +22,6 @@ public class ProductData {
     private String spu;
 
     /**
-     * 商品标题
-     */
-    private String title;
-
-    /**
      * 商家id
      */
     private String merchantId;
@@ -131,54 +126,26 @@ public class ProductData {
 
         private String skuId;
 
-        /**
-         * spuId
-         */
         private String spuId;
 
-        /**
-         * 商品规格
-         */
+        private String title;
+
         private JsonMap<String> sku;
 
-        /**
-         * 商品图片
-         */
         private JsonList<String> images;
 
-        /**
-         * 单价
-         */
         private BigDecimal price;
 
-        /**
-         * 原价
-         */
         private BigDecimal oldPrice;
 
-        /**
-         * 库存数量
-         */
         private Integer num;
 
-        /**
-         * 库存预警数量
-         */
         private Integer alertNum;
 
-        /**
-         * 销量
-         */
         private Integer saleNum;
 
-        /**
-         * 冻结库存
-         */
         private Integer freezeNum;
 
-        /**
-         * 默认显示
-         */
         private Boolean defaultShow;
     }
 }

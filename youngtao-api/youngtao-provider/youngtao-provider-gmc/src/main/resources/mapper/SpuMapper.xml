@@ -6,7 +6,6 @@
         <result property="id" column="id" />
         <result property="spuId" column="spu_id" />
         <result property="spu" column="spu" />
-        <result property="title" column="title" />
         <result property="merchantId" column="merchant_id" />
         <result property="shopName" column="shop_name" />
         <result property="brandId" column="brand_id" />

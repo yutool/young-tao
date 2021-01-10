@@ -22,7 +22,7 @@ public class AddProductRequest {
     /**
      * 商品标题
      */
-    private String title;
+//    private String title;
 
     /**
      * 品牌id

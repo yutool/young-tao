@@ -25,7 +25,7 @@ public class SpuDTO implements Serializable {
     /**
      * 商品标题
      */
-    private String title;
+//    private String title;
 
     /**
      * 商家id
