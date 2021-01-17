@@ -115,8 +115,10 @@ public class ProductServiceImpl implements ProductService {
             for (SkuDO skuDO : skuDOMap.get(spuDO.getSpuId())) {
                 ConfirmOrderResponse.Sku sku = new ConfirmOrderResponse.Sku();
                 sku.setSkuId(skuDO.getSkuId());
+                sku.setSpu(spuDO.getSpu());
                 sku.setSku(skuDO.getSku());
                 sku.setPrice(skuDO.getPrice());
+                sku.setImage(skuDO.getImages().get(0));
                 sku.setCount(countMap.get(skuDO.getSkuId()));
                 sku.setServe(spuDO.getServe());
                 response.getSkuList().add(sku);

@@ -16,30 +16,10 @@
 			</view>
 		</view>
 		<!-- 商品信息 -->
-		<yt-order-product v-for="i in 2" class="module-bottom"></yt-order-product>
-		
-		<!-- 商品金额 -->
-		<view class="money-wrap">
-			<view class="money-box">
-				<view class="lable">商品金额</view>
-				<view class="value">￥100.00</view>
-			</view>
-			<view class="money-box">
-				<view class="lable">退货无忧</view>
-				<view class="value">￥0.00</view>
-			</view>
-			<view class="money-box">
-				<view class="lable">运费（总量0.565kg)</view>
-				<view class="value">￥0.00</view>
-			</view>
-			<view class="total-box">
-				<view class="lable">
-					<text>合计：</text>
-					<text>￥123</text>
-				</view>
-			</view>
+		<view class="module-bottom">
+			<yt-order-product v-for="merchant in merchantList" :data="merchant">
+			</yt-order-product>
 		</view>
-		
 		<!-- 发票 -->
 		<view class="other-wrap">
 			<view class="other-box">
@@ -54,10 +34,9 @@
 		
 		<!-- 支付栏 -->
 		<view class="paybar-wrap">
-			<view class="money">￥100.00</view>
+			<view class="money">总计：￥{{totalMoney}}</view>
 			<button class="pay-btn" @click="pay">确认支付</button>
 		</view>
-		
 	</view>
 </template>
 
@@ -97,6 +76,15 @@ export default class CreateOrder extends Vue {
 			})
 		})
 	}
+	get totalMoney() {
+		var sum = 0;
+		for (const merchant of this.merchantList) {
+			for (const item of merchant.skuList) {
+				sum += item.price * item.count;
+			}
+		}
+		return sum;
+	}
 	get confirmOrder() {
 		return this.$store.state.global.confirmOrder;
 	} 
@@ -106,7 +94,7 @@ export default class CreateOrder extends Vue {
 <style lang="scss" scoped>
 $paybar-height: 115rpx;
 .container {
-	margin-bottom: calc(130rpx);
+	margin-bottom: calc(135rpx);
 }
 .address-wrap {
 	margin-bottom: $module-margin;
@@ -118,22 +106,6 @@ $paybar-height: 115rpx;
 		.address {
 			flex: 1;
 		}
-	}
-}
-.money-wrap {
-	margin-bottom: $module-margin;
-	padding: 30rpx;
-	background-color: #fff;
-	.money-box {
-		display: flex;
-		.lable {
-			flex: 1;
-		}
-		.value {
-		}
-	}
-	.total-box {
-		text-align: right;
 	}
 }
 .other-wrap {

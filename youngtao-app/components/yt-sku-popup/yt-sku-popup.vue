@@ -36,7 +36,7 @@
 				<!-- 数量 -->
 				<view class="number-box">
 					<view class="box-title">数量：{{selectedSku.num || 0}}</view>
-					<u-number-box :min="1" :max="selectedSku.num || 1"></u-number-box>
+					<u-number-box v-model="count" :min="1" :max="selectedSku.num || 1"></u-number-box>
 				</view>
 				<!-- 服务 -->
 				<view class="serve-box" v-if="type === 2">
@@ -65,7 +65,8 @@
 		props: ['visible', 'spu', 'selected', 'type'],
 		data() {
 			return {
-				selectedSku: {}
+				selectedSku: {},
+				count: 1
 			};
 		},
 		onBackPress(options) {
@@ -100,7 +101,7 @@
 					return;
 				}
 				this.handleClose();
-				this.$emit("confirm", this.selectedSku);
+				this.$emit("confirm", this.selectedSku, this.count);
 			}
 		}
 	}

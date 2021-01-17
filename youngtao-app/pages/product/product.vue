@@ -255,14 +255,14 @@ export default class Product extends Vue {
 		uni.navigateBack();
 	}
 	
-	private handleConfirm(sku) {
+	private handleConfirm(sku, count) {
 		if (this.popupType === 0) {
 			this.selectedSku = sku;
 		}
 		else if (this.popupType === 1) { // 加入购物车
 
 		} else if (this.popupType === 2) { // 立即购买
-			this.$store.dispatch('global/setConfirmOrder', [{skuId: sku.skuId, count: 2}])
+			this.$store.dispatch('global/setConfirmOrder', [{skuId: sku.skuId, count}])
 			uni.navigateTo({
 				url: '/pages/order/create'
 			})

@@ -26,9 +26,13 @@ public class ConfirmOrderResponse {
     public static class Sku {
         private String skuId;
 
+        private String spu;
+
         private JsonMap<String> sku;
 
         private BigDecimal price;
+
+        private String image;
 
         private JsonList<String> serve;
 
