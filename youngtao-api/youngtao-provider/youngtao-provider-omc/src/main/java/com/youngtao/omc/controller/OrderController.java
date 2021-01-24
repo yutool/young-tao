@@ -1,6 +1,5 @@
 package com.youngtao.omc.controller;
 
-import com.youngtao.core.result.ResponseResult;
 import com.youngtao.omc.model.request.CreateOrderRequest;
 import com.youngtao.omc.service.OrderService;
 import com.youngtao.web.support.ResponseWrapper;
@@ -25,9 +24,8 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping("/create")
-    public ResponseResult<Long> createOrder(@Valid @RequestBody CreateOrderRequest request) {
+    public String createOrder(@Valid @RequestBody CreateOrderRequest request) {
         String userId = "0";
-        Long response = orderService.createOrder(request, userId);
-        return ResponseResult.success(response);
+        return orderService.createOrder(request, userId);
     }
 }

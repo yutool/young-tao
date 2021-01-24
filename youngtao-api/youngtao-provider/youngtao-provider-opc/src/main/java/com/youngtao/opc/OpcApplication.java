@@ -1,4 +1,4 @@
-package com.youngtao.omc;
+package com.youngtao.opc;
 
 import com.yomahub.tlog.core.enhance.bytes.AspectLogEnhance;
 import org.springframework.boot.SpringApplication;
@@ -7,16 +7,16 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
  * @author ankoye@qq.com
- * @date 2020/11/29
+ * @date 2021/01/17
  */
 @SpringBootApplication
-@EnableFeignClients(basePackages = {"com.youngtao.gmc.api.service", "com.youngtao.opc.api.service"})
-public class OmcApplication {
+@EnableFeignClients
+public class OpcApplication {
     static {
         AspectLogEnhance.enhance();
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(OmcApplication.class, args);
+        SpringApplication.run(OpcApplication.class, args);
     }
 }

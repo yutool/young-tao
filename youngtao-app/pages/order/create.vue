@@ -72,7 +72,7 @@ export default class CreateOrder extends Vue {
 		console.log({ data: order, shippingAddressId: '0' })
 		createOrder({ data: order, shippingAddressId: '0' }).then(res => {
 			uni.navigateTo({
-				url: '../pay/pay'
+				url: `../pay/pay?payId=${res.data}`
 			})
 		})
 	}

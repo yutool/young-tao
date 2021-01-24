@@ -82,17 +82,7 @@ public class OrderDO extends BaseEntity implements Serializable {
     /**
      * 订单支付号，给支付平台的订单Id
      */
-    private Long paymentId;
-
-    /**
-     * 支付流水号
-     */
-    private String transactionId;
-
-    /**
-     * 支付时间
-     */
-    private Date payTime;
+    private String paymentId;
 
     /**
      * 支付方式

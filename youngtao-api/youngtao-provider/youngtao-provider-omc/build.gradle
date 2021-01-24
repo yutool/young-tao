@@ -6,6 +6,7 @@ apply plugin: 'org.springframework.boot'
 dependencies {
     compile libs['rocketmq']
     compile project(":youngtao-provider-api:youngtao-provider-gmc-api")
+    compile project(":youngtao-provider-api:youngtao-provider-opc-api")
 }
 
 test {

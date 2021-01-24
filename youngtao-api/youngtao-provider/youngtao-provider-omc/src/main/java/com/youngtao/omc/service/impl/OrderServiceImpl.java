@@ -16,6 +16,7 @@ import com.youngtao.omc.model.domain.OrderDO;
 import com.youngtao.omc.model.domain.OrderItemDO;
 import com.youngtao.omc.model.request.CreateOrderRequest;
 import com.youngtao.omc.service.OrderService;
+import com.youngtao.opc.api.service.OrderPayRecordFeign;
 import com.youngtao.web.support.BaseService;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,13 +49,15 @@ public class OrderServiceImpl extends BaseService<OrderDO> implements OrderServi
     private SkuFeign skuFeign;
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
+    @Autowired
+    private OrderPayRecordFeign orderPayRecordFeign;
 
     @Value("${order-topic}")
     private String orderTopic;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Long createOrder(CreateOrderRequest request, String userId) {
+    public String createOrder(CreateOrderRequest request, String userId) {
         // 预扣库存
 //        List<FreezeInventoryArg> args = Lists.newArrayList();
 //        for (CreateOrderRequest.Order order : request.getData()) {
@@ -88,9 +91,9 @@ public class OrderServiceImpl extends BaseService<OrderDO> implements OrderServi
         RpcResultUtils.checkNotNull(spuListResult);
         Map<String, SpuDTO> spuDTOMap = spuListResult.getData().stream().collect(Collectors.toMap(SpuDTO::getSpuId, val -> val));
         // data storage
-        Long paymentId = IdUtils.paymentId();
         List<OrderItemDO> orderItemDOList = Lists.newArrayList();
         List<OrderDO> orderDOList = Lists.newArrayList();
+        BigDecimal payMoney = BigDecimal.ZERO;
         for (CreateOrderRequest.Order order : request.getData()) {
             String orderId = IdUtils.orderId();
             // sku
@@ -104,7 +107,7 @@ public class OrderServiceImpl extends BaseService<OrderDO> implements OrderServi
                 orderItemDO.setOrderId(orderId);
                 orderItemDO.setSpuId(skuDTO.getSpuId());
                 orderItemDO.setSkuId(item.getSkuId());
-//                orderItemDO.setTitle(spuDTO.getTitle());
+                orderItemDO.setTitle(spuDTO.getSpu());
                 orderItemDO.setSku(skuDTO.getSku());
                 orderItemDO.setImage(skuDTO.getImages().get(0));
                 orderItemDO.setOldPrice(skuDTO.getPrice());
@@ -131,12 +134,17 @@ public class OrderServiceImpl extends BaseService<OrderDO> implements OrderServi
             orderDO.setRemark(order.getRemark());
             orderDO.setType(OrderConsts.ORDER_TYPE);
             orderDO.setStatus(OrderConsts.PAYMENT_STATUS);
-            orderDO.setPaymentId(paymentId);
             orderDOList.add(orderDO);
+            payMoney = payMoney.add(totalPrice);
+        }
+        RpcResult<String> paymentResult = orderPayRecordFeign.addRecord(payMoney);
+        RpcResultUtils.checkNotNull(paymentResult);
+        for (OrderDO orderDO : orderDOList) {
+            orderDO.setPaymentId(paymentResult.getData());
         }
         orderMapper.batchInsert(orderDOList);
         orderItemMapper.batchInsert(orderItemDOList);
-        return paymentId;
+        return paymentResult.getData();
     }
 
 }

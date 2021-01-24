@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youngtao.opc.mapper.OrderPayRecordMapper">
+
+    <resultMap id="BaseResultMap" type="com.youngtao.opc.model.domain.OrderPayRecordDO">
+        <result property="id" column="id" />
+        <result property="paymentId" column="payment_id" />
+        <result property="payType" column="pay_type" />
+        <result property="money" column="money" />
+        <result property="remark" column="remark" />
+        <result property="status" column="status" />
+        <result property="transactionId" column="transaction_id" />
+        <result property="payTime" column="pay_time" />
+        <result property="updateTime" column="update_time" />
+        <result property="createTime" column="create_time" />
+    </resultMap>
+
+    <insert id="save" keyProperty="id" useGeneratedKeys="true">
+        insert into youngtao_opc.opc_order_pay_record(payment_id, pay_type, money, remark, status, update_time, create_time)
+        values (#{paymentId}, #{payType}, #{money}, #{remark}, #{status}, #{updateTime}, #{createTime})
+    </insert>
+
+    <select id="selectByPaymentId" resultMap="BaseResultMap">
+        select * from opc_order_pay_record
+        where payment_id = #{id}
+    </select>
+
+</mapper>

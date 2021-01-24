@@ -9,7 +9,7 @@
 		</u-navbar>
 		<!-- 付款金额 -->
 		<view class="price-wrap">
-			<view class="price">￥38.88</view>
+			<view class="price">￥{{orderPayRecord.money}}</view>
 			<view class="time">支付剩余时间：00:29:10</view>
 		</view>
 		<!-- 支付类型 -->
@@ -51,17 +51,24 @@
 	</view>
 </template>
 
-<script>
-	export default {
-		data() {
-			return {
-				payType: 1
-			}
-		},
-		methods: {
-			
-		}
+<script lang="ts">
+import { Vue, Component } from 'vue-property-decorator';
+import { getByPaymentId } from '@/api/opc/orderPayRecord.js';
+
+@Component
+export default class CreateOrder extends Vue {
+	private payType = 1;
+	private orderPayRecord = {};
+	
+	onLoad(option) {
+		const payId = option.payId
+		if (!payId) return;
+		getByPaymentId(payId).then(res => {
+			if (res.data == null) return;
+			this.orderPayRecord = res.data;
+		})
 	}
+}
 </script>
 
 <style lang="scss" scoped>

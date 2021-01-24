@@ -4,7 +4,7 @@ description = "订单支付中心"
 apply plugin: 'org.springframework.boot'
 
 dependencies {
-
+    compile project(':youngtao-provider-api:youngtao-provider-opc-api')
 }
 
 test {
