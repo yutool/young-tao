@@ -12,7 +12,14 @@ public class BigDecimals {
     /**
      * 四舍五入
      */
-    public static BigDecimal round(BigDecimal num, Integer mul) {
+    public static BigDecimal multiRound(BigDecimal num, Integer mul) {
         return num.multiply(new BigDecimal(mul)).setScale(2, BigDecimal.ROUND_HALF_UP);
+    }
+
+    /**
+     * 四舍五入
+     */
+    public static String round(BigDecimal num) {
+        return num.setScale(2, BigDecimal.ROUND_HALF_UP).toString();
     }
 }

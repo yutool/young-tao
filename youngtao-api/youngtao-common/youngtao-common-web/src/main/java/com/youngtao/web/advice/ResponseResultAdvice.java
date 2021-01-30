@@ -2,6 +2,7 @@ package com.youngtao.web.advice;
 
 import com.youngtao.core.result.ResponseResult;
 import com.youngtao.core.util.JsonUtils;
+import com.youngtao.web.support.NoWrapper;
 import com.youngtao.web.support.ResponseWrapper;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -18,8 +19,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 @SuppressWarnings("all")
 @ControllerAdvice(annotations = RestController.class)
 public class ResponseResultAdvice implements ResponseBodyAdvice {
+
     @Override
     public boolean supports(MethodParameter methodParameter, Class aClass) {
+        if (methodParameter.getMethodAnnotation(NoWrapper.class) != null) {
+            return false;
+        }
         Class<?> clazz = methodParameter.getDeclaringClass();
         return clazz.getAnnotation(ResponseWrapper.class) != null;
     }

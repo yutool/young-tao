@@ -14,7 +14,7 @@ const $http = new request({
 	header: {						
 		'content-type': 'application/json;charset=UTF-8'
 	},
-	timeout: 6000,			// 请求超时时间（默认6000）
+	timeout: 10000,			// 请求超时时间（默认10000）
 	// 默认配置（可不写）
 	config: {
 		isPrompt: true,		// 是否自动提示错误

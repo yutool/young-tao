@@ -15,6 +15,7 @@ ext {
         mapstruct           : "1.3.1.Final",
         tlog                : "1.2.0-BETA2",
         rocketmq            : "2.1.0",
+        alipay              : "4.9.153.ALL",
     ]
     libs = [
         "guava"             : "com.google.guava:guava:$version.guava",
@@ -33,5 +34,6 @@ ext {
         "mapstruct-processor": "org.mapstruct:mapstruct-processor:$version.mapstruct",
         "tlog"              : "com.yomahub:tlog-all-spring-boot-starter:$version.tlog",
         "rocketmq"          : "org.apache.rocketmq:rocketmq-spring-boot-starter:$version.rocketmq",
+        "alipay"            : "com.alipay.sdk:alipay-sdk-java:$version.alipay",
     ]
 }

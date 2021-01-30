@@ -113,7 +113,7 @@ public class OrderServiceImpl extends BaseService<OrderDO> implements OrderServi
                 orderItemDO.setOldPrice(skuDTO.getPrice());
                 orderItemDO.setPrice(skuDTO.getPrice());
                 orderItemDO.setNum(item.getNum());
-                BigDecimal price = BigDecimals.round(skuDTO.getPrice(), item.getNum());
+                BigDecimal price = BigDecimals.multiRound(skuDTO.getPrice(), item.getNum());
                 orderItemDO.setTotalPrice(price);
                 orderItemDOList.add(orderItemDO);
 
