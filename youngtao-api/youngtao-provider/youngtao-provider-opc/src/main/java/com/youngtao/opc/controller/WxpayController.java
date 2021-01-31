@@ -29,7 +29,7 @@ public class WxpayController {
     @Autowired
     private WxpayConfig config;
 
-    @GetMapping("/app")
+    @PostMapping("/app")
     public WxpayResponse appPay(@RequestBody WxpayAppRequest request) {
         return wxpayService.appPay(request);
     }

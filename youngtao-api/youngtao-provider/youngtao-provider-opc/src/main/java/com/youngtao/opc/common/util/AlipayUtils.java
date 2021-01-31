@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -40,11 +39,10 @@ public class AlipayUtils {
     }
 
     /**
-     * 校验签名
+     * 解析返回值
      */
-    public boolean rsaCheck(HttpServletRequest request){
-        // 获取支付宝POST过来反馈信息
-        Map<String, String> params = new HashMap<>(1);
+    public Map<String, String> parseToMap(HttpServletRequest request) {
+        Map<String, String> params = new HashMap<>(32);
         Map<String, String[]> requestParams = request.getParameterMap();
         for (Object o : requestParams.keySet()) {
             String name = (String) o;
@@ -56,7 +54,13 @@ public class AlipayUtils {
             }
             params.put(name, valueStr);
         }
+        return params;
+    }
 
+    /**
+     * 校验签名
+     */
+    public boolean rsaCheck(Map<String, String> params){
         try {
             return AlipaySignature.rsaCheckV1(params,
                     config.getPublicKey(),
@@ -65,9 +69,5 @@ public class AlipayUtils {
         } catch (AlipayApiException e) {
             return false;
         }
-    }
-
-    public String getParam(HttpServletRequest request, String arg) {
-        return new String(request.getParameter(arg).getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
     }
 }

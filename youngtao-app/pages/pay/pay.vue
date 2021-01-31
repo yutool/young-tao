@@ -14,33 +14,33 @@
 		</view>
 		<!-- 支付类型 -->
 		<view class="pay-type-wrap">
-			<view class="type-box b-b">
-				<view class="icon iconfont icon-qiandai"></view>
-				<view class="content">
-					<view class="title">微信支付</view>
-					<view class="hint">推荐使用微信支付</view>
-				</view>
-				<label class="radio">
-					<radio value="" color="#fa436a" :checked='payType === 1' @click="payType = 1"></radio>
-				</label>
-			</view>
-			<view class="type-box b-b">
+			<view class="type-box b-b" @click="payType = 1">
 				<view class="icon iconfont icon-qiandai"></view>
 				<view class="content">
 					<view class="title">支付宝支付</view>
+					<view class="hint">推荐使用支付宝支付</view>
 				</view>
 				<label class="radio">
-					<radio value="" color="#fa436a" :checked='payType === 2' @click="payType = 2"></radio>
+					<radio value="" color="#fa436a" :checked='payType === 1'></radio>
 				</label>
 			</view>
-			<view class="type-box">
+			<view class="type-box b-b" @click="payType = 2">
+				<view class="icon iconfont icon-qiandai"></view>
+				<view class="content">
+					<view class="title">微信支付</view>
+				</view>
+				<label class="radio">
+					<radio value="" color="#fa436a" :checked='payType === 2'></radio>
+				</label>
+			</view>
+			<view class="type-box" @click="payType = 3">
 				<view class="icon iconfont icon-qiandai"></view>
 				<view class="content">
 					<view class="title">樱桃钱包</view>
 					<view class="hint">可用余额 ¥198.5</view>
 				</view>
 				<label class="radio">
-					<radio value="" color="#fa436a" :checked='payType === 3' @click="payType = 3"></radio>
+					<radio value="" color="#fa436a" :checked='payType === 3'></radio>
 				</label>
 			</view>
 		</view>
@@ -54,57 +54,66 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { getByPaymentId } from '@/api/opc/orderPayRecord.js';
+import { wxAppPay } from '@/api/opc/wxpay.js';
+import { aliAppPay, aliPayCheck } from '@/api/opc/alipay.js';
 
 @Component
 export default class CreateOrder extends Vue {
 	private payType = 1;
 	private orderPayRecord = {};
+	private payId;
 	
 	onLoad(option) {
-		const payId = option.payId
-		if (!payId) return;
-		getByPaymentId(payId).then(res => {
+		this.payId = option.payId
+		if (!this.payId) return;
+		getByPaymentId(this.payId).then(res => {
 			if (res.data == null) return;
 			this.orderPayRecord = res.data;
 		})
 	}
 	
 	private handleClick() {
-		if (this.payType == 1) {				// 微信支付
-			appPay('wxpay', {})
-		} else if (this.payType == 2) {	// 支付宝
-			appPay('alipay', 'alipay_sdk=alipay-sdk-java-dynamicVersionNo&app_id=2016091700532697&biz_content=%7B%22body%22%3A%22%E6%88%91%E6%98%AF%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE%22%2C%22out_trade_no%22%3A%2235712635712635%22%2C%22product_code%22%3A%22QUICK_MSECURITY_PAY%22%2C%22subject%22%3A%22App%E6%94%AF%E4%BB%98%E6%B5%8B%E8%AF%95Java%22%2C%22timeout_express%22%3A%2230m%22%2C%22total_amount%22%3A%220.01%22%7D&charset=utf-8&format=JSON&method=alipay.trade.app.pay&sign=KIogNAr5uIEo6u7hGv7jg9TeV6KF23VKTuFSRzeHpOd2uam4tiJ7%2FzSuFV0XI303XhmrrxEGGk62Kkjsbigtdrk7rRGGXpQMUVoiyj9De7NY3UQeRzJhUUrqDduv7oywdgPQdJWiFgpq0%2Btau0ROtRGSJD7M306t04s%2BjA%2F0BOE4jAtotjhpnhmMfMXK3TiUP4U4GITi%2FH56s3zwYorIFVlWcPxFzAjqKeGbF9jQ6CsrpecGds5krCV46fJc34dh9BurzsG8VmvBE5%2FnuvPhM5Pixykb30lII3SDy4xgnAphRZP%2FXOnB2DZwNXnHi%2BX1iO4i3SkxxNEaoXD%2FPlw9qQ%3D%3D&sign_type=RSA2×tamp=2021-01-24+16%3A35%3A29&version=1.0');
+		if (this.payType == 1) {				// 支付宝
+			const alipay = uni.requireNativePlugin('JY-ALIPAY')
+			aliAppPay({'paymentId': this.payId, 'body': '樱桃订单：xxx', 'subject': 'subject'}).then(res => {
+				alipay.show({ // 发起支付
+					if_sanbox: true, 
+					auto_create_order_info: false,
+					order_info: res.data
+				}, result => {
+					if (result.resultStatus == '9000') {
+						const obj = JSON.parse(result.result)
+						const { out_trade_no } = obj.alipay_trade_app_pay_response
+						aliPayCheck({paymentId: out_trade_no}).then(res => {
+							if (res.data) {
+								uni.showModal({ content: '支付成功', showCancel: false})
+							}
+						})
+					} else if (result.resultStatus == '5002555') {
+						uni.showModal({ content: '支付sdk出错', showCancel: false });
+					} else {
+						uni.showModal({ content: result.memo, showCancel: false });
+					}
+				});
+			})
+		} else if (this.payType == 2) {	// 微信支付
+			wxAppPay({'paymentId': this.payId, 'body': '樱桃订单：xxx'}).then(res => {
+				uni.requestPayment({
+					provider: wxpay,
+					orderInfo: res.data,
+					success: res => {
+						uni.showModal({ content: '支付成功', showCancel: false})
+					},
+					fail: err => {
+						uni.showModal({ content: `支付失败: ${err.errMsg || ''}`, showCancel: false });
+					},
+					complete: () => {
+						// this.submitting = false;
+					}
+				});
+			})
 		} else if (this.payType == 3) {	// 樱桃支付
-			
 		}
-	}
-	
-	private appPay(provider, orderInfo) {
-		uni.requestPayment({
-			provider: provider,
-			orderInfo: orderInfo,
-			success: res => {
-				console.log('支付成功', res)
-			},
-			fail: err => {
-				console.log('支付失败', err)
-				const message = err.errMsg || '';
-				if (message.indexOf('[payment支付宝:62001]') !== -1) {
-					uni.showModal({
-						content: '您已取消支付。如有需要，您可在我的订单里重新付款。30分钟内有效。',
-						showCancel: false
-					});
-				} else {
-					uni.showModal({
-						content: '支付失败,原因为: ' + message,
-						showCancel: false
-					});
-				}
-			},
-			complete: () => {
-				// this.submitting = false;
-			}
-		});
 	}
 }
 </script>

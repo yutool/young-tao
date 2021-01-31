@@ -4,6 +4,7 @@ package com.youngtao.omc.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.youngtao.omc.model.domain.OrderDO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -14,5 +15,7 @@ import java.util.List;
 @Mapper
 public interface OrderMapper extends BaseMapper<OrderDO> {
 
-    Integer batchInsert(List<OrderDO> orderList);
+    int batchInsert(List<OrderDO> orderList);
+
+    int updateStatus(@Param("paymentId") String paymentId, @Param("status") Integer status);
 }

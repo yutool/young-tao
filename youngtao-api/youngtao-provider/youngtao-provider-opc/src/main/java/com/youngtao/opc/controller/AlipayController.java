@@ -1,20 +1,19 @@
 package com.youngtao.opc.controller;
 
-import com.youngtao.opc.common.constant.AlipayEnum;
 import com.youngtao.opc.common.util.AlipayUtils;
+import com.youngtao.opc.model.request.AlipayAppCheckRequest;
 import com.youngtao.opc.model.request.AlipayAppRequest;
 import com.youngtao.opc.service.AlipayService;
 import com.youngtao.web.support.NoWrapper;
 import com.youngtao.web.support.ResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * @author ankoye@qq.com
@@ -29,30 +28,24 @@ public class AlipayController {
     @Autowired
     private AlipayUtils alipayUtils;
 
-    @GetMapping("/app")
+    @PostMapping("/app")
     public String appPay(@RequestBody AlipayAppRequest request) {
         return alipayService.appPay(request);
     }
 
+    @PostMapping("/check")
+    public boolean check(@RequestBody AlipayAppCheckRequest request) {
+        return alipayService.check(request);
+    }
+
     @NoWrapper
-    @RequestMapping("/notify")
-    public ResponseEntity<Object> notify(HttpServletRequest request) {
+    @PostMapping("/notify")
+    public String notify(HttpServletRequest request) {
+        Map<String, String> resultMap = alipayUtils.parseToMap(request);
         // 内容验签，防止黑客篡改参数
-        if (alipayUtils.rsaCheck(request)) {
-            //交易状态
-            String tradeStatus = alipayUtils.getParam(request, "trade_status");
-            // 商户订单号
-            String outTradeNo = alipayUtils.getParam(request, "out_trade_no");
-            //支付宝交易号
-            String tradeNo = alipayUtils.getParam(request, "trade_no");
-            //付款金额
-            String totalAmount = alipayUtils.getParam(request, "total_amount");
-            //验证
-            if (tradeStatus.equals(AlipayEnum.SUCCESS.getValue()) || tradeStatus.equals(AlipayEnum.FINISHED.getValue())) {
-                // 验证通过后应该根据业务需要处理订单
-            }
-            return new ResponseEntity<>(HttpStatus.OK);
+        if (alipayUtils.rsaCheck(resultMap)) {
+            return alipayService.payNotify(resultMap);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return "failure";
     }
 }

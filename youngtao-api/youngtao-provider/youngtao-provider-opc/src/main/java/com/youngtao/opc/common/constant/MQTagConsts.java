@@ -1,13 +1,10 @@
-package com.youngtao.omc.common.constant;
+package com.youngtao.opc.common.constant;
 
 /**
  * @author ankoye@qq.com
- * @date 2020/12/13
+ * @date 2021/01/31
  */
 public interface MQTagConsts {
-    /** 创建订单 */
-    String CREATE_ORDER = "createOrder";
-
     /** 支付成功 */
     String PAY_SUCCESS = "paySuccess";
 }

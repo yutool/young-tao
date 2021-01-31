@@ -34,4 +34,10 @@
         </foreach>
     </insert>
 
+    <update id="updateStatus">
+        update omc_order
+        set status = #{status}
+        where payment_id = #{paymentId}
+    </update>
+
 </mapper>

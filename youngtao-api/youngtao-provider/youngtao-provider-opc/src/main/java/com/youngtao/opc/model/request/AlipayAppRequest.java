@@ -2,7 +2,6 @@ package com.youngtao.opc.model.request;
 
 import lombok.Data;
 
-import java.math.BigDecimal;
 
 /**
  * @author ankoye@qq.com
@@ -13,5 +12,4 @@ public class AlipayAppRequest {
     private String paymentId;
     private String subject;
     private String body;
-    private BigDecimal money;
 }

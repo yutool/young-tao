@@ -11,7 +11,7 @@ import org.apache.rocketmq.spring.core.RocketMQListener;
  */
 @RocketMQMessageListener(
         topic = "${order.topic}",
-        selectorExpression = MQTagConsts.CREATE,
+        selectorExpression = MQTagConsts.CREATE_ORDER,
         consumerGroup = "order-create-group"
 )
 public class CreateOrderListener implements RocketMQListener<CreateOrderRequest> {
