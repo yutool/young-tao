@@ -1,22 +1,18 @@
 <template>
 	<view class="yt-simple-goods-card">
-		<image class="yt-simple-goods-img" src="http://img14.360buyimg.com/mobilecms/s372x372_jfs/t1/119069/23/14795/154967/5f34aebdE98cc1eac/a22d93a5fe5ddd66.jpg!q70.dpg.webp"></image>
+		<image class="yt-simple-goods-img" :src="data.image"></image>
 		<view class="yt-simple-goods-title">
-			标题abcdefgaaafadfadsf
+			{{data.title || 'title'}}
 		</view>
 		<view class="yt-simple-goods-price">
-			￥200
+			￥{{data.price}}
 		</view>
 	</view>
 </template>
 
 <script>
 	export default {
-		data() {
-			return {
-				
-			};
-		}
+		props: ['data']
 	}
 </script>
 

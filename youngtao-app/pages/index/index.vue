@@ -45,7 +45,8 @@
 			</view>
 			<scroll-view scroll-x="true">
 				<view class="seckill-content">
-					<yt-simple-product-card v-for="i in 10" :key="i"></yt-simple-product-card>
+					<yt-simple-product-card v-for="product in msProductList" :data="product" :key="product.skuId">
+					</yt-simple-product-card>
 				</view>
 			</scroll-view>
 		</view>
@@ -118,6 +119,7 @@
 import { Vue, Component } from 'vue-property-decorator';
 import {mapState, mapMutations, mapGetters, mapActions} from 'vuex';
 import { getRecommendProduct } from '@/api/gmc/product.js';
+import { getSeckillPage } from '@/api/gsc/product.js';
 
 @Component
 export default class Index extends Vue {
@@ -152,7 +154,11 @@ export default class Index extends Vue {
 		}
 	]
 	private productList = [];
+	private msTime = '';
+	private msProductList = [];
+	
 	onLoad() {
+		this.getSeckillPage();
 		this.addRecommendData();
 	}
 	onShow() {
@@ -161,6 +167,16 @@ export default class Index extends Vue {
 	onHide() {
 		this.stickyEnable= false
 	}
+	
+	// 加载秒杀信息
+	private getSeckillPage() {
+		getSeckillPage().then(res => {
+			console.log(res)
+			this.msTime = res.data.currentTime;
+			this.msProductList = res.data.skuList;
+		})
+	}
+	// 获取推荐商品
 	private addRecommendData() {
 		const len = this.productList.length;
 		const size = 10;

@@ -6,17 +6,20 @@ import com.youngtao.gmc.api.model.dto.ProductDTO;
 import com.youngtao.gmc.api.service.ProductFeign;
 import com.youngtao.gsc.common.constant.CacheKey;
 import com.youngtao.gsc.common.constant.RedisKey;
+import com.youngtao.gsc.common.util.DateUtils;
 import com.youngtao.gsc.manager.ProductManager;
 import com.youngtao.gsc.model.convert.ProductConvert;
 import com.youngtao.gsc.model.convert.SkuConvert;
 import com.youngtao.gsc.model.data.ProductData;
 import com.youngtao.gsc.model.data.SkuData;
+import com.youngtao.gsc.model.response.GetSeckillPageResponse;
 import com.youngtao.gsc.service.ProductService;
 import com.youngtao.web.cache.DCacheManager;
 import com.youngtao.web.cache.RedisManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -37,6 +40,15 @@ public class ProductServiceImpl implements ProductService {
     private ProductConvert productConvert;
     @Autowired
     private SkuConvert skuConvert;
+
+    @Override
+    public GetSeckillPageResponse getSeckillPage() {
+        GetSeckillPageResponse response = new GetSeckillPageResponse();
+        response.setCurrentTime(new Date());
+        Set<SkuData> skuDataSet = listByTime(DateUtils.currentMenu(), 1, 10);
+        response.setSkuList(skuDataSet);
+        return response;
+    }
 
     @Override
     public Set<SkuData> listByTime(String time, Integer page, Integer size) {

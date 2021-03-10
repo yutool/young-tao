@@ -1,5 +1,7 @@
 package com.youngtao.gsc.config;
 
+import com.youngtao.web.advice.GlobalExceptionAdvice;
+import com.youngtao.web.advice.ResponseResultAdvice;
 import com.youngtao.web.cache.DCacheManager;
 import com.youngtao.web.cache.RedisManager;
 import com.youngtao.web.log.GlobalLogAspect;
@@ -17,6 +19,16 @@ public class ContextConfig {
     @Bean
     public GlobalLogAspect globalLogAspect() {
         return new GlobalLogAspect();
+    }
+
+    @Bean
+    public ResponseResultAdvice responseResultAdvice() {
+        return new ResponseResultAdvice();
+    }
+
+    @Bean
+    public GlobalExceptionAdvice globalExceptionAdvice() {
+        return new GlobalExceptionAdvice();
     }
 
     @Bean

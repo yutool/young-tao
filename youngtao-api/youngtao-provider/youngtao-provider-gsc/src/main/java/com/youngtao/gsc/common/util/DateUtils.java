@@ -24,9 +24,9 @@ public class DateUtils {
     /**
      * 转换时间
      */
-    public static String menuToDay(String menu) {
+    public static Date menuToDate(String menu) {
         try {
-            return DAY_FORMAT.format(MENU_FORMAT.parse(menu));
+            return MENU_FORMAT.parse(menu);
         } catch (ParseException e) {
             e.printStackTrace();
         }

@@ -2,6 +2,7 @@ package com.youngtao.gsc.service;
 
 import com.youngtao.gsc.model.data.ProductData;
 import com.youngtao.gsc.model.data.SkuData;
+import com.youngtao.gsc.model.response.GetSeckillPageResponse;
 
 import java.util.Set;
 
@@ -28,4 +29,6 @@ public interface ProductService {
      * @return record
      */
     ProductData detail(String time, String skuId);
+
+    GetSeckillPageResponse getSeckillPage();
 }
