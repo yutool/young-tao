@@ -8,9 +8,9 @@ import com.youngtao.web.typehandler.JsonMapTypeHandler;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.io.Serializable;
 
 /**
  * 秒杀sku实体类

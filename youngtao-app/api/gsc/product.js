@@ -5,3 +5,15 @@ export function getSeckillPage(page, size) {
 		url: `/gsc/product/getSeckillPage`
 	})
 }
+
+export function getTimeMenu() {
+	return request.get({
+		url: `/gsc/product/timeMenu`
+	})
+}
+
+export function listByTime(time, page, size) {
+	return request.get({
+		url: `/gsc/product/listByTime/${time}/${page}/${size}`
+	})
+}

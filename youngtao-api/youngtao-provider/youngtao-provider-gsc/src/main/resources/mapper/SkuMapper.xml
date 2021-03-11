@@ -25,4 +25,16 @@
         select * from gsc_sku where sku_id = #{skuId}
     </select>
 
+    <select id="loadSkuToRedis" resultMap="BaseResultMap">
+        select * from gsc_sku
+        where start_time <![CDATA[>=]]> #{startTime}
+        and end_time <![CDATA[<=]]> #{endTime}
+        and status = 1
+        and is_marketable = 1
+        and residue > 0
+        <if test="skuIds != null and skuIds.size() > 0">
+            and sku_id not in <foreach collection="skuIds" item="item" open="(" close=")" separator=",">#{item}</foreach>
+        </if>
+    </select>
+
 </mapper>

@@ -2,12 +2,12 @@
 	<yt-card>
 		<view class="yt-seckill-product-card" @click="onclick">
 			<view class="product-image">
-				<image :src="item.image"></image>
+				<image :src="data.image"></image>
 			</view>
 			<view class="product-info">
 				<!-- 标题 -->
 				<view class="title-box">
-					<view class="title"> {{item.title}} </view>
+					<view class="title"> {{data.title}} </view>
 					<view class="description">免息 | 前10送惊喜大礼包</view>
 				</view>
 				<view class="info-bottom">
@@ -15,8 +15,8 @@
 						<!-- 价格 -->
 						<view class="price-box">
 							<view>
-								<span class="price">￥{{item.price}}</span> 
-								<span class="old-price">￥{{item.oldPrice}}</span>
+								<span class="price">￥{{data.price}}</span> 
+								<span class="old-price">￥{{data.oldPrice}}</span>
 							</view>
 							<view class="description">xxx历史最低价</view>
 						</view>
@@ -43,6 +43,7 @@
 
 <script>
 	export default {
+		props: ['data'],
 		data() {
 			return {
 				item:	{

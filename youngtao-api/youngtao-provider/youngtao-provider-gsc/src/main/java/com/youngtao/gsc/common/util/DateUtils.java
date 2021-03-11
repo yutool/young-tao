@@ -15,7 +15,7 @@ import java.util.List;
  * @date 2020/12/20
  */
 public class DateUtils {
-    public static final Integer MENU_SIZE = 5;
+    public static final Integer MENU_SIZE = 6;
 
     private static final FastDateFormat MENU_FORMAT = FastDateFormat.getInstance("yyyyMMddHH");
     private static final FastDateFormat DAY_FORMAT = FastDateFormat.getInstance("yyyy-MM-dd");

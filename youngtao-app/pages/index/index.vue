@@ -37,7 +37,7 @@
 				<view class="seckill-title">
 					<image class="seckill-title-img" src="../../static/images/secskill-img.jpg"></image>
 					<view class="seckill-title-time">
-						<text class="time-hour">10场</text>
+						<text class="time-hour">{{msTime}}场</text>
 						<text class="time-countdown">00:00:00</text>
 					</view>
 				</view>
@@ -172,7 +172,7 @@ export default class Index extends Vue {
 	private getSeckillPage() {
 		getSeckillPage().then(res => {
 			console.log(res)
-			this.msTime = res.data.currentTime;
+			this.msTime = new Date(res.data.currentTime).getHours();
 			this.msProductList = res.data.skuList;
 		})
 	}

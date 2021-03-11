@@ -23,19 +23,22 @@
 			<view class="yt-container">
 				<!-- 时间段 -->
 				<view class="time-wrap">
-					<view class="time-item active">
+					<view class="time-item" :class="{'active' : activeIdx==0}" @click="switchMenu(0)">
 						<view class="hot-title">热卖中</view>
 						<view class="item-text">不能错过</view>
 					</view>
-					<view v-for="i in 5" class="time-item">
-						<view class="item-title">14:00</view>
-						<view class="item-text">即将开始</view>
-					</view>
+					<template v-if="menuList.length > 0">
+						<view v-for="idx in menuList.length-1" class="time-item" :key="idx"
+							:class="{'active' : activeIdx==idx}" @click="switchMenu(idx)">
+							<view class="item-title">{{menuList[idx]}}:00</view>
+							<view class="item-text">即将开始</view>
+						</view>
+					</template>
 				</view>
 				<!-- 商品 -->
 				<view class="product-wrap">
-					<view v-for="i in 10" class="module-bottom">
-						<yt-seckill-product-card></yt-seckill-product-card>
+					<view v-for="product in productList" class="module-bottom">
+						<yt-seckill-product-card :data="product"></yt-seckill-product-card>
 					</view>
 				</view>
 			</view>
@@ -47,9 +50,14 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
+import { getTimeMenu, listByTime } from '@/api/gsc/product.js'
 
 @Component
 export default class Seckill extends Vue {
+	private menuList = [];
+	private activeIdx = 0;
+	private productList = [];
+	
 	private current = 0;
 	private scrollTop = 100;
 	private stickyEnable = true;
@@ -104,14 +112,39 @@ export default class Seckill extends Vue {
 			isDot: false,
 			customIcon: false,
 		}];
-		
+	
+	onLoad() {
+		this.initPage()
+	}
 	onShow() {
 		this.stickyEnable= true
 	}
 	onHide() {
 		this.stickyEnable= false
 	}
-		
+	
+	private initPage() {
+		getTimeMenu().then(res => {
+			this.menuList = []
+			for (const menu of res.data) {
+				this.menuList.push(menu.substring(menu.length-2));
+			}
+			this.appendProductList(this.menuList[0], 1, 10);
+		});
+	}
+	
+	private appendProductList(time, page, size) {
+		listByTime(time, page, size).then(res => {
+			this.productList.push(...res.data);
+		})
+	}
+	
+	private switchMenu(idx) {
+		this.activeIdx = idx;
+		this.productList = [];
+		this.appendProductList(this.menuList[idx], 1, 10);
+	}
+
 }
 </script>
 

@@ -1,8 +1,13 @@
 package com.youngtao.gsc.common.task;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.youngtao.core.result.RpcResult;
+import com.youngtao.gmc.api.model.dto.SpuDTO;
+import com.youngtao.gmc.api.service.SpuFeign;
 import com.youngtao.gsc.common.constant.RedisKey;
 import com.youngtao.gsc.common.util.DateUtils;
+import com.youngtao.gsc.common.util.ProductUtils;
 import com.youngtao.gsc.mapper.SkuMapper;
 import com.youngtao.gsc.model.convert.SkuConvert;
 import com.youngtao.gsc.model.data.SkuData;
@@ -11,6 +16,7 @@ import com.youngtao.web.cache.RedisManager;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -36,6 +42,15 @@ public class ProductPushTask {
     @Autowired
     private SkuConvert skuConvert;
 
+    @Autowired
+    private SpuFeign spuFeign;
+
+    private final Cache<String, SpuDTO> spuCache = Caffeine.newBuilder()
+            .initialCapacity(20)
+            .maximumSize(200)
+            .expireAfterAccess(60, TimeUnit.SECONDS)
+            .build();
+
     /**
      * 每天5-23点，每隔两小时加载下一个不可见菜单秒杀商品
      * 既：now + 1 + 2 * MENU_SIZE
@@ -45,21 +60,29 @@ public class ProductPushTask {
         int span = 1 + DateUtils.MENU_SIZE << 1;
         LocalDateTime startTime = LocalDateTime.now().plusHours(span).withMinute(0).withSecond(0).withNano(0);
         LocalDateTime endTime = startTime.plusHours(2);
+        String menu = DateUtils.formatToMenu(startTime);
 
-        QueryWrapper<SkuDO> wrapper = new QueryWrapper<>();
-        wrapper.eq("status", 1);
-        wrapper.eq("is_marketable", 1);
-        wrapper.gt("residue", 0);
-        wrapper.le("start_time", startTime.toInstant(ZoneOffset.of("+8")).toEpochMilli());
-        wrapper.ge("end_time", endTime.toInstant(ZoneOffset.of("+8")).toEpochMilli());
-
-        List<SkuDO> skuDOList = skuMapper.selectList(wrapper);
+        Set<SkuData> values = redisManager.zvalues(RedisKey.SKU_SET_KEY.format(DateUtils.currentMenu()));
+        Set<String> idSet = values.stream().map(SkuData::getSkuId).collect(Collectors.toSet());
+        List<SkuDO> skuDOList = skuMapper.loadSkuToRedis(Date.from(startTime.toInstant(ZoneOffset.of("+8"))),Date.from(endTime.toInstant(ZoneOffset.of("+8"))), idSet);
         if (CollectionUtils.isEmpty(skuDOList)) {
             return;
         }
+
         // 添加至redis
-        String menu = DateUtils.formatToMenu(startTime);
-        Set<SkuData> skuDataList = skuDOList.stream().map(val -> skuConvert.toSkuData(val)).collect(Collectors.toSet());
+        Set<SkuData> skuDataList = skuDOList.stream().map(val -> {
+            SkuData skuData = skuConvert.toSkuData(val);
+            SpuDTO spuDTO = spuCache.get(val.getSpuId(), k -> {
+                RpcResult<SpuDTO> spuResult = spuFeign.getBySpuId(val.getSpuId());
+                return spuResult.getData();
+            });
+            if (spuDTO == null) {
+                log.warn("spu does not exist, spuId = {}", val.getSpuId());
+            } else {
+                skuData.setTitle(ProductUtils.generateTitle(spuDTO.getSpu(), val.getSku()));
+            }
+            return skuData;
+        }).collect(Collectors.toSet());
         // 添加至zset
         redisManager.zaddAll(RedisKey.SKU_SET_KEY.format(menu), skuDataList, span+3, TimeUnit.HOURS);
         // 添加库存
@@ -68,7 +91,7 @@ public class ProductPushTask {
         }
     }
 
-    //@Scheduled(cron = "0/5 * * * * ?")
+    @Scheduled(cron = "0/10 * * * * ?")
     public void test() {
         List<String> dateMenus = DateUtils.getDateMenus();
         for (int i = 0; i < dateMenus.size() - 1; i++) {
@@ -76,21 +99,27 @@ public class ProductPushTask {
 
             Date startTime = DateUtils.menuToDate(dateMenus.get(i));
             Date endTime = DateUtils.menuToDate(dateMenus.get(i+1));
+            Set<SkuData> values = redisManager.zvalues(RedisKey.SKU_SET_KEY.format(dateMenus.get(i)));
+            Set<String> idSet = values.stream().map(SkuData::getSkuId).collect(Collectors.toSet());
+            List<SkuDO> skuDOList = skuMapper.loadSkuToRedis(startTime, endTime, idSet);
+            if (CollectionUtils.isEmpty(skuDOList)) {
+                continue;
+            }
 
-            QueryWrapper<SkuDO> wrapper = new QueryWrapper<>();
-            wrapper.eq("status", 1);
-            wrapper.eq("is_marketable", 1);
-            wrapper.gt("residue", 0);
-            wrapper.le("start_time", startTime);
-            wrapper.ge("end_time", endTime);
-
-//            Set<SkuData> values = redisManager.zvalues(RedisKey.SKU_SET_KEY.format(dateMenus.get(i)));
-//            Set<String> idSet = values.stream().map(SkuData::getSkuId).collect(Collectors.toSet());
-//            wrapper.notIn("sku_id", idSet);
-
-            List<SkuDO> skuDOList = skuMapper.selectList(wrapper);
             // 添加至redis
-            Set<SkuData> skuDataList = skuDOList.stream().map(val -> skuConvert.toSkuData(val)).collect(Collectors.toSet());
+            Set<SkuData> skuDataList = skuDOList.stream().map(val -> {
+                SkuData skuData = skuConvert.toSkuData(val);
+                SpuDTO spuDTO = spuCache.get(val.getSpuId(), k -> {
+                    RpcResult<SpuDTO> spuResult = spuFeign.getBySpuId(val.getSpuId());
+                    return spuResult.getData();
+                });
+                if (spuDTO == null) {
+                    log.warn("spu does not exist, spuId = {}", val.getSpuId());
+                } else {
+                    skuData.setTitle(ProductUtils.generateTitle(spuDTO.getSpu(), val.getSku()));
+                }
+                return skuData;
+            }).collect(Collectors.toSet());
             // 添加至zset
             redisManager.zaddAll(RedisKey.SKU_SET_KEY.format(dateMenus.get(i)), skuDataList, span+3, TimeUnit.HOURS);
             // 添加库存
