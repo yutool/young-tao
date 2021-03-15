@@ -56,7 +56,7 @@
 		},
 		methods: {
 			onclick() {
-				uni.navigateTo({url: '/pages/product/product'});
+				uni.navigateTo({url: `/pages/product/product?spuId=${this.data.spuId}&skuId=${this.data.skuId}`});
 			}
 		}
 	}

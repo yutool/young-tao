@@ -6,6 +6,7 @@ apply plugin: 'org.springframework.boot'
 dependencies {
     compile libs['rocketmq']
     compile 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
+    compile project(":youngtao-provider-api:youngtao-provider-gsc-api")
     compile project(":youngtao-provider-api:youngtao-provider-gmc-api")
     compile project(":youngtao-provider-api:youngtao-provider-omc-api")
 }

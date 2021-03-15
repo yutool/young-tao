@@ -37,11 +37,12 @@ public class ProductController {
         return productService.getSeckillPage();
     }
 
-    @GetMapping("/listByTime/{time}/{page}/{size}")
-    public Set<SkuData> listByTime(@PathVariable String time, @PathVariable Integer page, @PathVariable Integer size) {
+    @GetMapping("/listByTime/{idx}/{page}/{size}")
+    public Set<SkuData> listByTime(@PathVariable Integer idx, @PathVariable Integer page, @PathVariable Integer size) {
         Preconditions.checkArgument(page > 0, "The page cannot be less than 0");
         Preconditions.checkArgument(size >= 0 && size <= 100, "The size must be between 0 and 100");
-        return productService.listByTime(time, page, size);
+        Preconditions.checkArgument(idx >= 0 && idx < DateUtils.MENU_SIZE, "The idx must be between 0 and 6");
+        return productService.listByTime(DateUtils.getDateMenus().get(idx), page, size);
     }
 
     @GetMapping("/detail/{time}/{skuId}")

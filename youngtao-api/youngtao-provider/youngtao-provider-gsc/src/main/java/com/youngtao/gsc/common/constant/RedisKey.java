@@ -11,7 +11,7 @@ import lombok.Getter;
  */
 public enum RedisKey {
     /**
-     * key: menu + skuId
+     * key: menu + spuId
      */
     SKU_INFO_KEY("youngtao:gsc:sku:info:%s_%s"),
     /**

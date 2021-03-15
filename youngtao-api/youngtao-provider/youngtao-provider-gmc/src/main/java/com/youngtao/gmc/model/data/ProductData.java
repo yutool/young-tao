@@ -2,6 +2,7 @@ package com.youngtao.gmc.model.data;
 
 import com.youngtao.core.lang.JsonList;
 import com.youngtao.core.lang.JsonMap;
+import com.youngtao.gmc.common.constant.ProductType;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -147,5 +148,10 @@ public class ProductData {
         private Integer freezeNum;
 
         private Boolean defaultShow;
+
+        /**
+         * 商品类型
+         */
+        private Integer type = ProductType.ORDINARY;
     }
 }

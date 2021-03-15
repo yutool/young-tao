@@ -123,8 +123,9 @@ public class ProductPushTask {
             // 添加至zset
             redisManager.zaddAll(RedisKey.SKU_SET_KEY.format(dateMenus.get(i)), skuDataList, span+3, TimeUnit.HOURS);
             // 添加库存
-            for (SkuDO skuDO : skuDOList) {
-                redisManager.setNum(RedisKey.SKU_COUNT_KEY.format(dateMenus.get(i), skuDO.getSkuId()), skuDO.getResidue(), span+3, TimeUnit.HOURS);
+            for (SkuData skuData : skuDataList) {
+                redisManager.hput(RedisKey.SKU_INFO_KEY.format(dateMenus.get(i), skuData.getSpuId()), skuData.getSkuId(), skuData, span+3, TimeUnit.HOURS);
+                redisManager.setNum(RedisKey.SKU_COUNT_KEY.format(dateMenus.get(i), skuData.getSkuId()), skuData.getResidue(), span+3, TimeUnit.HOURS);
             }
         }
 

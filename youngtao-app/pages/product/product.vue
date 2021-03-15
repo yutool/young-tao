@@ -241,12 +241,20 @@ export default class Product extends Vue {
 	
 	onLoad(option) {
 		const spuId = option.spuId
-		if (!spuId) return;
+		const skuId = option.skuId
+		if (!spuId) uni.navigateBack()
 		getProduct(spuId).then(res => {
 			if (res == null) return;
 			this.spu = res.data;
-			for (const sku of this.spu.skuList) if (sku.defaultShow) {
-				this.selectedSku = sku;
+			for (const sku of this.spu.skuList) {
+				if (skuId != null) {
+					if (sku.skuId == skuId) {
+						this.selectedSku = sku;
+					}
+				}
+				else if (sku.defaultShow) {
+					this.selectedSku = sku;
+				}
 			}
 		})
 	}

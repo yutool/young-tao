@@ -129,12 +129,12 @@ export default class Seckill extends Vue {
 			for (const menu of res.data) {
 				this.menuList.push(menu.substring(menu.length-2));
 			}
-			this.appendProductList(this.menuList[0], 1, 10);
+			this.appendProductList(0, 1, 10);
 		});
 	}
 	
-	private appendProductList(time, page, size) {
-		listByTime(time, page, size).then(res => {
+	private appendProductList(idx, page, size) {
+		listByTime(idx, page, size).then(res => {
 			this.productList.push(...res.data);
 		})
 	}
@@ -142,7 +142,7 @@ export default class Seckill extends Vue {
 	private switchMenu(idx) {
 		this.activeIdx = idx;
 		this.productList = [];
-		this.appendProductList(this.menuList[idx], 1, 10);
+		this.appendProductList(idx, 1, 10);
 	}
 
 }

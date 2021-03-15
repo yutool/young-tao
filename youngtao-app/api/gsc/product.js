@@ -12,8 +12,8 @@ export function getTimeMenu() {
 	})
 }
 
-export function listByTime(time, page, size) {
+export function listByTime(idx, page, size) {
 	return request.get({
-		url: `/gsc/product/listByTime/${time}/${page}/${size}`
+		url: `/gsc/product/listByTime/${idx}/${page}/${size}`
 	})
 }

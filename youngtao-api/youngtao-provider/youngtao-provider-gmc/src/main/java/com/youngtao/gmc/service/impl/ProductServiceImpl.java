@@ -4,7 +4,10 @@ import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.youngtao.core.lang.JsonList;
+import com.youngtao.core.result.RpcResult;
 import com.youngtao.core.util.BigDecimals;
+import com.youngtao.core.util.RpcResultUtils;
+import com.youngtao.gmc.common.constant.ProductType;
 import com.youngtao.gmc.common.constant.SpuConstant;
 import com.youngtao.gmc.common.util.IdUtils;
 import com.youngtao.gmc.mapper.SkuMapper;
@@ -20,6 +23,8 @@ import com.youngtao.gmc.model.request.AddProductRequest;
 import com.youngtao.gmc.model.request.ConfirmOrderRequest;
 import com.youngtao.gmc.model.response.ConfirmOrderResponse;
 import com.youngtao.gmc.service.ProductService;
+import com.youngtao.gsc.api.model.dto.GscSkuDTO;
+import com.youngtao.gsc.api.service.GscProductFeign;
 import com.youngtao.web.model.PageArg;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +35,7 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -50,6 +56,8 @@ public class ProductServiceImpl implements ProductService {
     private SpuConvert spuConvert;
     @Autowired
     private SkuConvert skuConvert;
+    @Autowired
+    private GscProductFeign gscProductFeign;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -82,7 +90,20 @@ public class ProductServiceImpl implements ProductService {
     public ProductData getBySpuId(String id) {
         SpuDO spuDO = spuMapper.selectBySpuId(id);
         List<SkuDO> skuDOList = skuMapper.listBySpuId(id);
-        return productConvert.toProductDataWithTitle(spuDO, skuDOList);
+        ProductData productData = productConvert.toProductDataWithTitle(spuDO, skuDOList);
+
+        RpcResult<List<GscSkuDTO>> skuResult = gscProductFeign.listBySpuId(id);
+        RpcResultUtils.checkNotNull(skuResult);
+        for (ProductData.Sku sku : productData.getSkuList()) {
+            for (GscSkuDTO dto : skuResult.getData()) {
+                if (Objects.equals(sku.getSkuId(), dto.getSkuId())) {
+                    sku.setPrice(dto.getPrice());
+                    sku.setOldPrice(dto.getOldPrice());
+                    sku.setType(ProductType.SECKILL);
+                }
+            }
+        }
+        return productData;
     }
 
     @Override
