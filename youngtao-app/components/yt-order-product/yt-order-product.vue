@@ -16,7 +16,7 @@
 					<view class="price-box">
 						<view class="price">￥{{sku.price}}</view>
 						<view class="number">
-							<u-number-box v-model="sku.count" :min="1" :max="1000" input-height="30"></u-number-box>
+							<u-number-box v-model="sku.count" :min="1" :max="1000" input-height="30" :disabled="sku.type==1"></u-number-box>
 						</view>
 					</view>
 					<view>支持七天无理由退货</view>

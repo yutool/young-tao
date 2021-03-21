@@ -32,11 +32,6 @@ public class SpuDO extends BaseEntity implements Serializable {
     private String spu;
 
     /**
-     * 商品标题
-     */
-//    private String title;
-
-    /**
      * 商家id
      */
     private String merchantId;

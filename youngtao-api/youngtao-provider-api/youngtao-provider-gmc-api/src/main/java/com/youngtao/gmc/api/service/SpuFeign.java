@@ -33,4 +33,7 @@ public interface SpuFeign {
      */
     @GetMapping("/api/gmc/spu/listBySpuIds")
     RpcResult<List<SpuDTO>> listBySpuIds(@RequestParam("spuIds") Collection<String> spuIds);
+
+    @GetMapping("/api/gmc/getBySkuId/{skuId}")
+    RpcResult<SpuDTO> getBySkuId(@PathVariable("skuId") String skuId);
 }

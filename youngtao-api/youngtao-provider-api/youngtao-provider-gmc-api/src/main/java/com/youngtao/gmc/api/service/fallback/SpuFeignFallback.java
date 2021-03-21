@@ -24,4 +24,9 @@ public class SpuFeignFallback implements SpuFeign {
     public RpcResult<List<SpuDTO>> listBySpuIds(Collection<String> spuIds) {
         return null;
     }
+
+    @Override
+    public RpcResult<SpuDTO> getBySkuId(String skuId) {
+        return null;
+    }
 }

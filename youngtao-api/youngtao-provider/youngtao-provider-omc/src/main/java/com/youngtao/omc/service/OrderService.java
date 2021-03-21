@@ -16,4 +16,6 @@ public interface OrderService extends IService<OrderDO> {
      * @return boolean
      */
     String createOrder(CreateOrderRequest request, String userId);
+
+    Integer queryStatus(String paymentId);
 }

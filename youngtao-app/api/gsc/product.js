@@ -17,3 +17,10 @@ export function listByTime(idx, page, size) {
 		url: `/gsc/product/listByTime/${idx}/${page}/${size}`
 	})
 }
+
+export function gscConfirmOrder(data) {
+	return request.post({
+		url: `/gsc/product/confirmOrder`,
+		data
+	})
+}

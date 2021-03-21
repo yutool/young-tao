@@ -1,6 +1,5 @@
 package com.youngtao.gsc.service;
 
-import com.youngtao.gsc.model.data.OrderQueue;
 import com.youngtao.gsc.model.request.CreateOrderRequest;
 
 /**
@@ -9,10 +8,9 @@ import com.youngtao.gsc.model.request.CreateOrderRequest;
  */
 public interface OrderService {
     /**
-     * 排队
+     * 验证信息
      * @param request request
      * @param userId userId
-     * @return queue
      */
-    OrderQueue createOrder(CreateOrderRequest request, String userId);
+    String createOrder(CreateOrderRequest request, String userId);
 }

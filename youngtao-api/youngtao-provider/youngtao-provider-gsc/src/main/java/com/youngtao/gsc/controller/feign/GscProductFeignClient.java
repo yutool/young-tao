@@ -12,6 +12,7 @@ import com.youngtao.web.cache.RedisManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -26,11 +27,14 @@ public class GscProductFeignClient implements GscProductFeign {
     private SkuConvert skuConvert;
 
     @Override
-    public RpcResult<List<GscSkuDTO>> listBySpuId(String id) {
+    public RpcResult<List<GscSkuDTO>> listByIds(Collection<String> skuIds) {
         List<GscSkuDTO> result = Lists.newArrayList();
-        for (String menu : DateUtils.getDateMenus()) {
-            List<SkuData> skuDataList = redisManager.hashValues(RedisKey.SKU_INFO_KEY.format(menu, id));
-            result.addAll(skuConvert.toSkuDTO(skuDataList));
+        String menu = DateUtils.currentMenu();
+        for (String skuId : skuIds) {
+            SkuData skuData = redisManager.get(RedisKey.SKU_INFO_KEY.format(menu, skuId));
+            if (skuData != null) {
+                result.add(skuConvert.toSkuDTO(skuData));
+            }
         }
         return RpcResult.success(result);
     }

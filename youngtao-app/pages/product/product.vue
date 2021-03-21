@@ -39,7 +39,7 @@
 			<view class="price-box">
 				<view class="price-left">
 					<view class="price">￥{{selectedSku.price}}</view>
-					<view class="old-price">￥{{selectedSku.price}}</view>
+					<view class="old-price">￥{{selectedSku.oldPrice}}</view>
 				</view>
 				<view class="price-right">
 					<view class="item">
@@ -54,7 +54,8 @@
 			</view>
 			<!-- 商品标题 -->
 			<view class="title-box">
-				<u-tag class="title-tag" text="新品" type="success" size="mini" mode="dark" />
+				<u-tag v-if="selectedSku.type==this.$orderType.NORMAL" class="title-tag" text="新品" type="success" size="mini" mode="dark" />
+				<u-tag v-if="selectedSku.type==this.$orderType.SECKILL" class="title-tag" text="活动中" type="error" size="mini" mode="dark" />
 				<text class="title">
 					{{selectedSku.title}}
 				</text>
@@ -242,7 +243,7 @@ export default class Product extends Vue {
 	onLoad(option) {
 		const spuId = option.spuId
 		const skuId = option.skuId
-		if (!spuId) uni.navigateBack()
+		// if (!spuId) uni.navigateBack()
 		getProduct(spuId).then(res => {
 			if (res == null) return;
 			this.spu = res.data;
@@ -270,7 +271,7 @@ export default class Product extends Vue {
 		else if (this.popupType === 1) { // 加入购物车
 
 		} else if (this.popupType === 2) { // 立即购买
-			this.$store.dispatch('global/setConfirmOrder', [{skuId: sku.skuId, count}])
+			this.$store.dispatch('global/setConfirmOrder', [{skuId: sku.skuId, count, type: sku.type}])
 			uni.navigateTo({
 				url: '/pages/order/create'
 			})

@@ -70,4 +70,9 @@
         </foreach>
         and default_show = true
     </select>
+
+    <select id="selectBySkuId" resultMap="BaseResultMap">
+        select * from gmc_sku
+        where sku_id = #{skuId}
+    </select>
 </mapper>

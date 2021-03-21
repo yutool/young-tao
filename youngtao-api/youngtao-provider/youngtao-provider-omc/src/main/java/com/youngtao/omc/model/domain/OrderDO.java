@@ -1,12 +1,12 @@
 package com.youngtao.omc.model.domain;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.youngtao.web.support.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * 订单信息实体类
@@ -16,6 +16,7 @@ import java.util.Date;
  */
 @EqualsAndHashCode(callSuper = false)
 @Data
+@TableName("omc_order")
 public class OrderDO extends BaseEntity implements Serializable {
     private static final long serialVersionUID = -93019552150606160L;
 

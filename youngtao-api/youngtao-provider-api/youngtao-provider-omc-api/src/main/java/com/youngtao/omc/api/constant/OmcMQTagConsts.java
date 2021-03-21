@@ -1,4 +1,4 @@
-package com.youngtao.omc.common.constant;
+package com.youngtao.omc.api.constant;
 
 /**
  * @author ankoye@qq.com

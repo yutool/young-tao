@@ -7,7 +7,7 @@ import com.youngtao.core.lang.JsonList;
 import com.youngtao.core.result.RpcResult;
 import com.youngtao.core.util.BigDecimals;
 import com.youngtao.core.util.RpcResultUtils;
-import com.youngtao.gmc.common.constant.ProductType;
+import com.youngtao.gmc.api.constant.ProductType;
 import com.youngtao.gmc.common.constant.SpuConstant;
 import com.youngtao.gmc.common.util.IdUtils;
 import com.youngtao.gmc.mapper.SkuMapper;
@@ -91,8 +91,9 @@ public class ProductServiceImpl implements ProductService {
         SpuDO spuDO = spuMapper.selectBySpuId(id);
         List<SkuDO> skuDOList = skuMapper.listBySpuId(id);
         ProductData productData = productConvert.toProductDataWithTitle(spuDO, skuDOList);
-
-        RpcResult<List<GscSkuDTO>> skuResult = gscProductFeign.listBySpuId(id);
+        // 替换活动商品的价格
+        List<String> skuIds = skuDOList.stream().map(SkuDO::getSkuId).collect(Collectors.toList());
+        RpcResult<List<GscSkuDTO>> skuResult = gscProductFeign.listByIds(skuIds);
         RpcResultUtils.checkNotNull(skuResult);
         for (ProductData.Sku sku : productData.getSkuList()) {
             for (GscSkuDTO dto : skuResult.getData()) {

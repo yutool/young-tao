@@ -28,6 +28,11 @@ public class SpuDTO implements Serializable {
     private String merchantId;
 
     /**
+     * 店名
+     */
+    private String shopName;
+
+    /**
      * 品牌id
      */
     private String brandId;

@@ -28,6 +28,7 @@ public class DCacheManager<K> {
                 .maximumSize(1000)
                 .build();
         this.redisTimeout = 30;
+        this.redisTemplate = redisTemplate;
     }
 
     public DCacheManager(RedisTemplate redisTemplate, long redisTimeout) {

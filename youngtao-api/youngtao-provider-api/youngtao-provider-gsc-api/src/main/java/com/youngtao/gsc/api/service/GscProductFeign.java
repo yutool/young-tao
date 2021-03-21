@@ -5,8 +5,9 @@ import com.youngtao.gsc.api.model.dto.GscSkuDTO;
 import com.youngtao.gsc.api.service.fallback.GscProductFeignFallback;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -16,6 +17,6 @@ import java.util.List;
 @FeignClient(value = "youngtao-gsc-serve", contextId = "product", fallback = GscProductFeignFallback.class)
 public interface GscProductFeign {
 
-    @GetMapping("/api/gsc/product/listBySpuId/{id}")
-    RpcResult<List<GscSkuDTO>> listBySpuId(@PathVariable("id") String id);
+    @GetMapping("/api/gsc/product/listBySpuId")
+    RpcResult<List<GscSkuDTO>> listByIds(@RequestParam("skuIds") Collection<String> id);
 }

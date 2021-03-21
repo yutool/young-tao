@@ -4,15 +4,15 @@ import com.google.common.base.Preconditions;
 import com.youngtao.gsc.common.util.DateUtils;
 import com.youngtao.gsc.model.data.ProductData;
 import com.youngtao.gsc.model.data.SkuData;
+import com.youngtao.gsc.model.request.ConfirmOrderRequest;
+import com.youngtao.gsc.model.response.ConfirmOrderResponse;
 import com.youngtao.gsc.model.response.GetSeckillPageResponse;
 import com.youngtao.gsc.service.ProductService;
 import com.youngtao.web.support.ResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Set;
 
@@ -48,5 +48,10 @@ public class ProductController {
     @GetMapping("/detail/{time}/{skuId}")
     public ProductData detail(@PathVariable String time, @PathVariable String skuId) {
         return productService.detail(time, skuId);
+    }
+
+    @PostMapping("/confirmOrder")
+    public ConfirmOrderResponse confirmOrder(@Valid @RequestBody ConfirmOrderRequest request) {
+        return productService.confirmOrder(request);
     }
 }

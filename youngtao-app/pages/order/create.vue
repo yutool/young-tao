@@ -35,7 +35,7 @@
 		<!-- 支付栏 -->
 		<view class="paybar-wrap">
 			<view class="money">总计：￥{{totalMoney}}</view>
-			<button class="pay-btn" @click="pay">确认支付</button>
+			<button class="pay-btn" @click="createOrder">确认支付</button>
 		</view>
 	</view>
 </template>
@@ -44,23 +44,40 @@
 import { Vue, Component } from 'vue-property-decorator';
 import { confirmOrder } from '@/api/gmc/product.js';
 import { createOrder } from '@/api/omc/order.js';
+import { queryStatus } from '@/api/omc/order.js';
+import { gscConfirmOrder } from '@/api/gsc/product.js';
+import { gscCreateOrder } from '@/api/gsc/order.js';
 
 @Component
 export default class CreateOrder extends Vue {
 	private merchantList= [];
+	private timer = null;
+	
 	onLoad(option) {
 		if (this.confirmOrder.length == 0) {
 			// ...
+		} else if (this.confirmOrder.length == 1 && this.confirmOrder[0].type == this.$orderType.SECKILL) {
+			// 秒杀订单
+			gscConfirmOrder({skuId: this.confirmOrder[0].skuId}).then(res => {
+				console.log(res)
+				const merchant = res.data;
+				merchant.remark = '';
+				this.merchantList = [merchant];
+			})
+		} else {
+			// 普通订单
+			confirmOrder({skuList: this.confirmOrder}).then(res => {
+				for (const merchant of res.data) {
+					merchant.remark = ''
+				}
+				this.merchantList = res.data
+				console.log(this.merchantList)
+			})
 		}
-		confirmOrder({skuList: this.confirmOrder}).then(res => {
-			for (const merchant of res.data) {
-				merchant.remark = ''
-			}
-			this.merchantList = res.data
-			console.log(this.merchantList)
-		})
 	}
-	private pay() {
+	
+	// 创建订单
+	private createOrder() {
 		const order = []
 		for (const merchant of this.merchantList) {
 			const orderItem = []
@@ -70,12 +87,34 @@ export default class CreateOrder extends Vue {
 			order.push({ orderItem, remark: merchant.remark })
 		}
 		console.log({ data: order, shippingAddressId: '0' })
-		createOrder({ data: order, shippingAddressId: '0' }).then(res => {
-			uni.navigateTo({
-				url: `../pay/pay?payId=${res.data}`
+		
+		if (this.confirmOrder.length == 1 && this.confirmOrder[0].type == this.$orderType.SECKILL) {
+			// 秒杀订单
+			gscCreateOrder({ skuId: order[0].orderItem[0].skuId, shippingAddressId: '0', remark: order[0].remark }).then(res => {
+				this.checkOrderStatus(res.data)
 			})
-		})
+		} else {
+			// 普通订单
+			createOrder({ data: order, shippingAddressId: '0' }).then(res => {
+				this.checkOrderStatus(res.data)
+			})
+		}
 	}
+	
+	// 判断是否生成订单
+	private checkOrderStatus(paymentId: string) {
+		this.timer = setInterval(() => {
+			queryStatus(paymentId).then(res => {
+				if (res.data && res.data == this.$orderStatus.PAYMENT) {
+					if (this.timer) clearInterval(this.timer)
+					uni.navigateTo({
+						url: `../pay/pay?payId=${paymentId}`
+					})
+				}
+			})
+		}, 1000) 
+	}
+	
 	get totalMoney() {
 		var sum = 0;
 		for (const merchant of this.merchantList) {

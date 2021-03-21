@@ -1,17 +1,23 @@
 package com.youngtao.gsc.service.impl;
 
 import com.youngtao.core.exception.CastException;
-import com.youngtao.core.util.RedisLock;
+import com.youngtao.core.result.ResponseCode;
 import com.youngtao.core.util.RocketMQUtils;
+import com.youngtao.gmc.api.service.SpuFeign;
+import com.youngtao.gsc.api.constant.GscMQTagConsts;
+import com.youngtao.gsc.api.model.msg.CreateOrderMsg;
 import com.youngtao.gsc.common.constant.RedisKey;
 import com.youngtao.gsc.common.util.DateUtils;
-import com.youngtao.gsc.manager.ProductManager;
-import com.youngtao.gsc.model.data.OrderQueue;
+import com.youngtao.gsc.common.util.IdUtils;
 import com.youngtao.gsc.model.data.SkuData;
 import com.youngtao.gsc.model.request.CreateOrderRequest;
 import com.youngtao.gsc.service.OrderService;
-import com.youngtao.omc.common.constant.OmcMQTagConsts;
+import com.youngtao.omc.api.constant.OmcRedisKey;
+import com.youngtao.omc.api.constant.OrderStatus;
+import com.youngtao.web.cache.DCacheManager;
 import com.youngtao.web.cache.RedisManager;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,58 +27,53 @@ import org.springframework.stereotype.Service;
  * @author ankoye@qq.com
  * @date 2020/12/27
  */
+@Slf4j
 @Service
 public class OrderServiceImpl implements OrderService {
     @Autowired
     private RedisManager<String> redisManager;
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
+
     @Autowired
-    private ProductManager productManager;
+    private DCacheManager<String> dCacheManager;
+    @Autowired
+    private SpuFeign spuFeign;
+
     @Value("${topic.order}")
     private String orderTopic;
 
     @Override
-    public OrderQueue createOrder(CreateOrderRequest request, String userId) {
-        String menu = request.getMenu();
+    public String createOrder(CreateOrderRequest request, String userId) {
+        String menu = DateUtils.currentMenu();
         String skuId = request.getSkuId();
-        // 1. 分布式用户锁，防止不正确抢购
-        String lockKey = RedisKey.LOCK_ORDER_QUEUE.format(userId, skuId);
-        String lock = RedisLock.tryLock(lockKey, 3000);
-        if (lock == null) {
-            CastException.cast("请勿重复秒杀");
+        String paymentId = IdUtils.orderId();
+        // 扣减库存
+        long count = redisManager.decrement(RedisKey.SKU_COUNT_KEY.format(menu, skuId));
+        if (count < 0) {
+            redisManager.increment(RedisKey.SKU_COUNT_KEY.format(menu, skuId));
         }
-        // 2. 判断是否为当前秒杀产品
-        String currentMenu = DateUtils.currentMenu();
-        if (currentMenu.equals(request.getMenu())) {
-            RedisLock.unlock(lockKey, lock);
-            CastException.cast("不是本场秒杀商品");
+        // 获取sku信息
+        SkuData skuData = redisManager.get(RedisKey.SKU_INFO_KEY.format(menu, skuId));
+        // 发送消息
+        CreateOrderMsg msg = new CreateOrderMsg();
+        msg.setUserId(userId);
+        msg.setPaymentId(paymentId);
+        msg.setRemark(request.getRemark());
+        msg.setSkuId(skuId);
+        msg.setSpuId(skuData.getSpuId());
+        msg.setSku(skuData.getSku());
+        msg.setImage(skuData.getImage());
+        msg.setOldPrice(skuData.getOldPrice());
+        msg.setPrice(skuData.getPrice());
+        msg.setShippingAddressId(request.getShippingAddressId());
+        SendResult sendResult = rocketMQTemplate.syncSendOrderly(RocketMQUtils.withTag(orderTopic, GscMQTagConsts.CREATE_ORDER), msg, skuId);
+        if (sendResult == null) {
+            log.warn("prepareOrder syncSendOrderly fail, data = {}", request);
+            CastException.cast(ResponseCode.SERVICE_ERROR);
         }
-        // 3. 判断是否购买过商品
-        OrderQueue queue = redisManager.hget(RedisKey.ORDER_QUEUE.format(menu), RedisKey.ORDER_QUEUE_KEY.format(userId, skuId));
-        if (queue != null && queue.getStatus() != OrderQueue.CLOSE) {
-            RedisLock.unlock(lockKey, lock);
-            CastException.cast("已购买过该商品");
-        }
-        // 4. 扣减库存
-        long decrement = redisManager.decrement(RedisKey.SKU_COUNT_KEY.format(menu, skuId), request.getNum());
-        if (decrement < 0) {
-            redisManager.decrement(RedisKey.SKU_COUNT_KEY.format(menu, skuId), request.getNum());
-            RedisLock.unlock(lockKey, lock);
-            CastException.cast("已购买过该商品");
-        }
-        // 5. 创建排队信息
-        OrderQueue orderQueue = new OrderQueue();
-        orderQueue.setUserId(userId);
-        orderQueue.setSkuId(request.getSkuId());
-        orderQueue.setNum(request.getNum());
-        orderQueue.setStatus(OrderQueue.QUEUING);
-        orderQueue.setMenu(request.getMenu());
-        redisManager.hput(RedisKey.ORDER_QUEUE.format(menu), RedisKey.ORDER_QUEUE_KEY.format(userId, skuId), orderQueue);
-        // 6. 发送顺序消息，创建订单
-        SkuData skuData = productManager.getSkuData(request.getMenu(), request.getSkuId());
-        rocketMQTemplate.syncSendOrderly(RocketMQUtils.withTag(orderTopic, OmcMQTagConsts.CREATE_GSC_ORDER), skuData, request.getSkuId());
-        RedisLock.unlock(lockKey, lock);
-        return orderQueue;
+        // 设置状态
+        redisManager.set(OmcRedisKey.ORDER_STATUS.format(paymentId), OrderStatus.CREATING);
+        return paymentId;
     }
 }

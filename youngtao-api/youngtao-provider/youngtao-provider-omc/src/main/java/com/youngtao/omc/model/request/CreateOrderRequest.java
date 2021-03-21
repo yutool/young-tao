@@ -6,6 +6,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -21,6 +22,10 @@ public class CreateOrderRequest {
 
     @NotBlank
     private String shippingAddressId;
+
+    private String userId;
+
+    private String paymentId;
 
     @Data
     public static class Order {

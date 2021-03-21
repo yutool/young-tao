@@ -1,4 +1,4 @@
-package com.youngtao.gmc.common.constant;
+package com.youngtao.gmc.api.constant;
 
 /**
  * @author ankoye@qq.com
@@ -8,11 +8,11 @@ public class ProductType {
     /**
      * 普通商品
      */
-    public static final int ORDINARY = 0;
+    public static final int NORMAL = 1;
 
     /**
      * 秒杀商品
      */
-    public static final int SECKILL = 1;
+    public static final int SECKILL = 2;
 
 }

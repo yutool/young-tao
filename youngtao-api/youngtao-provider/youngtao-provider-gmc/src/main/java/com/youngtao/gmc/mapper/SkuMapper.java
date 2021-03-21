@@ -17,6 +17,8 @@ public interface SkuMapper extends BaseMapper<SkuDO> {
 
     Integer batchInset(Collection<SkuDO> skuList);
 
+    SkuDO selectBySkuId(String skuId);
+
     List<SkuDO> listBySpuId(String spuId);
 
     List<SkuDO> listBySpuIds(Collection<String> spuIds);

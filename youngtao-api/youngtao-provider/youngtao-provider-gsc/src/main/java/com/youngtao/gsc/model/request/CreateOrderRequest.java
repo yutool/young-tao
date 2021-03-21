@@ -8,10 +8,9 @@ import lombok.Data;
  */
 @Data
 public class CreateOrderRequest {
-    private String menu;
-
     private String skuId;
 
-    private Integer num;
+    private String shippingAddressId;
 
+    private String remark;
 }

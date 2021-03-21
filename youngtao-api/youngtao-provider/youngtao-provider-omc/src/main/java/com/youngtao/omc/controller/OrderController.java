@@ -1,13 +1,11 @@
 package com.youngtao.omc.controller;
 
+import com.youngtao.core.data.IdArg;
 import com.youngtao.omc.model.request.CreateOrderRequest;
 import com.youngtao.omc.service.OrderService;
 import com.youngtao.web.support.ResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -27,5 +25,10 @@ public class OrderController {
     public String createOrder(@Valid @RequestBody CreateOrderRequest request) {
         String userId = "0";
         return orderService.createOrder(request, userId);
+    }
+
+    @PostMapping("/queryStatus")
+    public Integer queryStatus(@RequestBody IdArg idArg) {
+        return orderService.queryStatus(idArg.getId());
     }
 }

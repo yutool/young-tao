@@ -1,6 +1,7 @@
 package com.youngtao.omc.model.domain;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.youngtao.core.lang.JsonMap;
 import com.youngtao.web.support.BaseEntity;
 import com.youngtao.web.typehandler.JsonMapTypeHandler;
@@ -18,6 +19,7 @@ import java.math.BigDecimal;
  */
 @EqualsAndHashCode(callSuper = false)
 @Data
+@TableName("omc_order_item")
 public class OrderItemDO extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 834445604095061529L;
 

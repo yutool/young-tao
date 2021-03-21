@@ -4,7 +4,9 @@ import com.youngtao.core.result.RpcResult;
 import com.youngtao.core.util.BeanUtils;
 import com.youngtao.gmc.api.model.dto.SpuDTO;
 import com.youngtao.gmc.api.service.SpuFeign;
+import com.youngtao.gmc.mapper.SkuMapper;
 import com.youngtao.gmc.mapper.SpuMapper;
+import com.youngtao.gmc.model.domain.SkuDO;
 import com.youngtao.gmc.model.domain.SpuDO;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,6 +23,8 @@ public class SpuFeignClient implements SpuFeign {
 
     @Resource
     private SpuMapper spuMapper;
+    @Resource
+    private SkuMapper skuMapper;
 
     @Override
     public RpcResult<SpuDTO> getBySpuId(String spuId) {
@@ -34,5 +38,11 @@ public class SpuFeignClient implements SpuFeign {
         List<SpuDO> spuDOList = spuMapper.listBySpuIds(spuIds);
         List<SpuDTO> spuDTOList = BeanUtils.copyList(spuDOList, SpuDTO.class);
         return RpcResult.success(spuDTOList);
+    }
+
+    @Override
+    public RpcResult<SpuDTO> getBySkuId(String skuId) {
+        SkuDO skuDO = skuMapper.selectBySkuId(skuId);
+        return getBySpuId(skuDO.getSpuId());
     }
 }

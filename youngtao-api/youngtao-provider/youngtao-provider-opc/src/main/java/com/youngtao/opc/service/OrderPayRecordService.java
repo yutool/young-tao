@@ -19,5 +19,5 @@ public interface OrderPayRecordService extends IService<OrderPayRecordDO> {
     /**
      * 添加支付记录
      */
-    String addRecord(BigDecimal money);
+    String addRecord(String paymentId, BigDecimal money);
 }

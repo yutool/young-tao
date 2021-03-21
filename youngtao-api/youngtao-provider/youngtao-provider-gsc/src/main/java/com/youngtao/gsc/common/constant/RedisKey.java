@@ -11,7 +11,7 @@ import lombok.Getter;
  */
 public enum RedisKey {
     /**
-     * key: menu + spuId
+     * key: menu + skuId
      */
     SKU_INFO_KEY("youngtao:gsc:sku:info:%s_%s"),
     /**
@@ -23,22 +23,6 @@ public enum RedisKey {
      * key: menu + skuId
      */
     SKU_COUNT_KEY("youngtao:gsc:sku:count:%s_%s"),
-    /**
-     * 预订单队列
-     * key: menu
-     */
-    ORDER_QUEUE("youngtao:gsc:order:queue:%s"),
-    /**
-     * 预订单队列
-     * key userId + skuId
-     */
-    ORDER_QUEUE_KEY("youngtao:gsc:order:queue:%s_%s"),
-    /**
-     * 预订单队列
-     * key userId + skuId
-     */
-    LOCK_ORDER_QUEUE("youngtao:gsc:lock:order:queue:%s_%s")
-
     ;
 
     @Getter

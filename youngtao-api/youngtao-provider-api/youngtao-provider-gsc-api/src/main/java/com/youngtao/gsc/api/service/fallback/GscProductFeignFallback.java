@@ -4,6 +4,7 @@ import com.youngtao.core.result.RpcResult;
 import com.youngtao.gsc.api.model.dto.GscSkuDTO;
 import com.youngtao.gsc.api.service.GscProductFeign;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -12,7 +13,7 @@ import java.util.List;
  */
 public class GscProductFeignFallback implements GscProductFeign {
     @Override
-    public RpcResult<List<GscSkuDTO>> listBySpuId(String id) {
+    public RpcResult<List<GscSkuDTO>> listByIds(Collection<String> id) {
         return null;
     }
 }

@@ -6,3 +6,10 @@ export function createOrder(data) {
 		data
 	})
 }
+
+export function queryStatus(paymentId) {
+	return request.post({
+		url: '/omc/order/queryStatus',
+		data: {id: paymentId}
+	})
+}

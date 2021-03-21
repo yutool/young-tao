@@ -1,7 +1,7 @@
 package com.youngtao.omc.listener;
 
 import com.youngtao.omc.common.constant.MQTagConsts;
-import com.youngtao.omc.common.constant.OrderConsts;
+import com.youngtao.omc.api.constant.OrderStatus;
 import com.youngtao.omc.mapper.OrderMapper;
 import lombok.Data;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
@@ -27,7 +27,7 @@ public class OrderPayListener implements RocketMQListener<OrderPayListener.Messa
 
     @Override
     public void onMessage(Message msg) {
-        orderMapper.updateStatus(msg.getPaymentId(), OrderConsts.DELIVERY_STATUS);
+        orderMapper.updateStatus(msg.getPaymentId(), OrderStatus.DELIVERY);
     }
 
     @Data

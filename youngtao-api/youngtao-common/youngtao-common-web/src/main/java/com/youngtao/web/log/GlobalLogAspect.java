@@ -25,7 +25,8 @@ public class GlobalLogAspect {
 
     @Pointcut("execution(* com.youngtao..controller.*.*(..)) " +
             "|| execution(* com.youngtao..service.*.*(..)) " +
-            "|| execution(* com.youngtao..mapper.*.*(..))")
+            "|| execution(* com.youngtao..mapper.*.*(..))" +
+            "|| execution(* com.youngtao..listener.*.*(..))")
     public void pointcut() {
     }
 
