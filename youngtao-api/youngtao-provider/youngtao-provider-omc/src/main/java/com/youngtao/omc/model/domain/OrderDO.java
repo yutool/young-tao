@@ -10,7 +10,6 @@ import java.math.BigDecimal;
 
 /**
  * 订单信息实体类
- *
  * @author ankoye@qq.com
  * @date 2020/11/29
  */

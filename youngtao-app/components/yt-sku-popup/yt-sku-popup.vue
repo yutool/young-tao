@@ -24,7 +24,7 @@
 			</view>
 			<scroll-view scroll-y="true" class="content-wrap">
 				<!-- sku -->
-				<view class="sku-box" v-for="(value, key) in spu.skuTemplate" :key="key">
+				<view class="sku-box" v-for="(value, key) in product.skuTemplate" :key="key">
 					<view class="box-title">{{key}}</view>
 					<view class="content">
 						<view v-for="item in value" @click="handleChoose(key, item)"
@@ -62,7 +62,7 @@
 
 <script>
 	export default {
-		props: ['visible', 'spu', 'selected', 'type'],
+		props: ['visible', 'product', 'selected', 'type'],
 		data() {
 			return {
 				selectedSku: {},
@@ -79,7 +79,7 @@
 			handleChoose(key, value) {
 				const tmp = JSON.parse(JSON.stringify(this.selectedSku.sku));
 				tmp[key] = value;
-				for (const sku of this.spu.skuList) {
+				for (const sku of this.product.skuList) {
 					if (JSON.stringify(sku.sku) === JSON.stringify(tmp)) {
 						this.selectedSku = sku;
 						return;

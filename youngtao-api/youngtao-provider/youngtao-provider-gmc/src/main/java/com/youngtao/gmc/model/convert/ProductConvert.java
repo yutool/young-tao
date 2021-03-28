@@ -1,6 +1,6 @@
 package com.youngtao.gmc.model.convert;
 
-import com.youngtao.gmc.common.util.ProductUtils;
+import com.youngtao.core.util.ProductUtils;
 import com.youngtao.gmc.model.data.ProductData;
 import com.youngtao.gmc.model.data.SpuSkuData;
 import com.youngtao.gmc.model.domain.SkuDO;
@@ -21,6 +21,7 @@ public interface ProductConvert {
 
     @Named("skuDOToSku")
     @Mapping(target = "title", ignore = true)
+    @Mapping(target = "type", ignore = true)
     ProductData.Sku skuDOToSku(SkuDO skuDO);
 
     @Named("skuDOListToSkuList")
@@ -41,6 +42,6 @@ public interface ProductConvert {
     @Mapping(target = "spuId", source = "spuDO.spuId")
     @Mapping(target = "saleNum", source = "spuDO.saleNum")
     @Mapping(target = "images", source = "skuDO.images")
-    @Mapping(target = "title", expression = "java(com.youngtao.gmc.common.util.ProductUtils.generateTitle(spuDO.getSpu(), skuDO.getSku()))")
+    @Mapping(target = "title", expression = "java(com.youngtao.core.util.ProductUtils.generateTitle(spuDO.getSpu(), skuDO.getSku()))")
     SpuSkuData toSpuSkuData(SpuDO spuDO, SkuDO skuDO);
 }

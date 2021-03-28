@@ -11,6 +11,7 @@ import com.youngtao.gmc.model.query.FreezeInventoryQuery;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -23,7 +24,14 @@ public class SkuFeignClient implements SkuFeign {
     private SkuMapper skuMapper;
 
     @Override
-    public RpcResult<List<SkuDTO>> listBySkuIds(List<String> skuIds) {
+    public RpcResult<SkuDTO> getBySkuId(String skuId) {
+        SkuDO skuDO = skuMapper.selectBySkuId(skuId);
+        SkuDTO skuDTO = BeanUtils.copy(skuDO, SkuDTO.class);
+        return RpcResult.success(skuDTO);
+    }
+
+    @Override
+    public RpcResult<List<SkuDTO>> listBySkuIds(Collection<String> skuIds) {
         List<SkuDO> skuDOList = skuMapper.listBySkuIds(skuIds);
         List<SkuDTO> skuDTOList = BeanUtils.copyList(skuDOList, SkuDTO.class);
         return RpcResult.success(skuDTOList);

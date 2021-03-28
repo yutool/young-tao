@@ -40,4 +40,10 @@
         where payment_id = #{paymentId}
     </update>
 
+    <select id="selectByUserIdAndStatus" resultMap="BaseResultMap">
+        select * from omc_order
+        where user_id = #{userId}
+        and status = #{status}
+    </select>
+
 </mapper>

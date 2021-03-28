@@ -13,3 +13,10 @@ export function queryStatus(paymentId) {
 		data: {id: paymentId}
 	})
 }
+
+export function getUserOrder(data) {
+	return request.post({
+		url: '/omc/order/getUserOrder',
+		data
+	})
+}

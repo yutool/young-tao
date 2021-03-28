@@ -27,6 +27,8 @@ public class OrderPayListener implements RocketMQListener<OrderPayListener.Messa
 
     @Override
     public void onMessage(Message msg) {
+        // 1. 解冻库存
+        // 2. 修改订单信息
         orderMapper.updateStatus(msg.getPaymentId(), OrderStatus.DELIVERY);
     }
 

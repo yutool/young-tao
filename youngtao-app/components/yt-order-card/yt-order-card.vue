@@ -1,32 +1,32 @@
 <template>
 	<view>
-		<view class="yt-order-card" v-for="order in orderList" :key="order.id">
+		<view class="yt-order-card">
 			<view class="shop-box">
 				<view class="shop-name">
 					<u-icon name="home" :size="30" color="rgb(94,94,94)"></u-icon>
-					<view class="name">{{ order.store }}</view>
+					<view class="name">{{ data.shopName || '默认' }}</view>
 					<u-icon name="arrow-right" color="rgb(203,203,203)" :size="26"></u-icon>
 				</view>
-				<view class="order-state">{{ order.deal }}</view>
+				<view class="order-state">{{ data.status }}</view>
 			</view>
-			<view class="item-box" v-for="(item, index) in order.goodsList" :key="index">
-				<view class="image"><image :src="item.goodsUrl" mode="aspectFill"></image></view>
+			<view class="item-box" v-for="(item, index) in data.orderItemList" :key="index">
+				<view class="image"><image :src="item.image" mode="aspectFill"></image></view>
 				<view class="content">
 					<view class="title u-line-2">{{ item.title }}</view>
-					<view class="type">{{ item.type }}</view>
-					<view class="delivery-time">发货时间 {{ item.deliveryTime }}</view>
+					<view class="type">{{ Object.values(item.sku).join("; ") }}</view>
+					<!-- <view class="delivery-time">发货时间 {{ item.deliveryTime }}</view> -->
 				</view>
 				<view class="price-box">
 					<view class="price">
 						￥{{ item.price }}
 					</view>
-					<view class="number">x{{ item.number }}</view>
+					<view class="number">x{{ item.num }}</view>
 				</view>
 			</view>
 			<view class="total-box">
-				共{{ order.goodsList.length }}件商品 合计:
+				共{{ data.orderItemList.length }}件商品 合计:
 				<text class="total-price">
-					￥ 100.00
+					￥ {{data.totalPrice}}
 				</text>
 			</view>
 			<view class="function-box">
@@ -43,7 +43,7 @@
 
 <script>
 	export default {
-		props: ['orderList'],
+		props: ['data'],
 		methods: {
 			// 价格小数
 			priceDecimal() {

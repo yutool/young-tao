@@ -75,6 +75,9 @@ export default class CreateOrder extends Vue {
 			})
 		}
 	}
+	onUnload() {
+		if (this.timer) clearInterval(this.timer)
+	}
 	
 	// 创建订单
 	private createOrder() {

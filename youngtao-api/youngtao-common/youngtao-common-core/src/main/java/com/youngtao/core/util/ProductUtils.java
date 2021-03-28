@@ -1,7 +1,7 @@
-package com.youngtao.gsc.common.util;
+package com.youngtao.core.util;
 
+import com.google.common.base.Preconditions;
 import com.youngtao.core.lang.JsonMap;
-import org.springframework.util.Assert;
 
 /**
  * @author ankoye@qq.com
@@ -9,8 +9,8 @@ import org.springframework.util.Assert;
  */
 public class ProductUtils {
     public static String generateTitle(String spu, JsonMap<String> sku) {
-        Assert.notNull(spu, "the spu cannot be null");
-        Assert.notNull(sku, "the spu cannot be null");
+        Preconditions.checkArgument(spu != null, "the spu cannot be null");
+        Preconditions.checkArgument(sku != null, "the spu cannot be null");
         StringBuilder sb = new StringBuilder(spu);
         sku.forEach((key, value) -> {
             sb.append(" ").append(key).append(" ").append(value);

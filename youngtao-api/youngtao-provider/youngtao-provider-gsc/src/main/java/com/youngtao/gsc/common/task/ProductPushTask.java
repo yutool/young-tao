@@ -7,7 +7,7 @@ import com.youngtao.gmc.api.model.dto.SpuDTO;
 import com.youngtao.gmc.api.service.SpuFeign;
 import com.youngtao.gsc.common.constant.RedisKey;
 import com.youngtao.gsc.common.util.DateUtils;
-import com.youngtao.gsc.common.util.ProductUtils;
+import com.youngtao.core.util.ProductUtils;
 import com.youngtao.gsc.mapper.SkuMapper;
 import com.youngtao.gsc.model.convert.SkuConvert;
 import com.youngtao.gsc.model.data.SkuData;

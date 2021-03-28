@@ -1,6 +1,7 @@
 package com.youngtao.gsc.service.impl;
 
 import com.google.common.collect.Lists;
+import com.youngtao.core.exception.CastException;
 import com.youngtao.core.result.RpcResult;
 import com.youngtao.core.util.RpcResultUtils;
 import com.youngtao.gmc.api.model.dto.ProductDTO;
@@ -94,6 +95,12 @@ public class ProductServiceImpl implements ProductService {
     public ConfirmOrderResponse confirmOrder(ConfirmOrderRequest request) {
         String menu = DateUtils.currentMenu();
         String skuId = request.getSkuId();
+        // 判断是否还有库存
+        long count = redisManager.get(RedisKey.SKU_COUNT_KEY.format(menu, skuId));
+        if (count < 1) {
+            CastException.cast("商品库存不足");
+        }
+
         SpuDTO spuDTO = dCacheManager.get(CacheKey.SPU_KEY.format(menu, skuId), v -> {
             RpcResult<SpuDTO> spuDTOResult = spuFeign.getBySkuId(skuId);
             RpcResultUtils.checkNotNull(spuDTOResult);

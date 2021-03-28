@@ -34,7 +34,7 @@
 		
 		<!-- 商品信息 -->
 		<view class="goods-info-wrap">
-			<u-swiper :list="spu.images" border-radius="0" height="750" mode="number" indicator-pos="bottomRight"></u-swiper>
+			<u-swiper :list="product.images" border-radius="0" height="750" mode="number" indicator-pos="bottomRight"></u-swiper>
 			<!-- 商品价格 -->
 			<view class="price-box">
 				<view class="price-left">
@@ -208,7 +208,7 @@
 			</view>
 		</view>
 		
-		<yt-sku-popup v-if="JSON.stringify(selectedSku) !== '{}'" :spu="spu" :selected="selectedSku" :type="popupType"
+		<yt-sku-popup v-if="JSON.stringify(selectedSku) !== '{}'" :product="product" :selected="selectedSku" :type="popupType"
 		 :visible="show" @close="show = false" @confirm="handleConfirm">
 		</yt-sku-popup>
 		<!-- 工具栏 -->
@@ -221,13 +221,14 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { getProduct } from '@/api/gmc/product.js';
+import { addCart } from '@/api/omc/cart.js';
 
 @Component
 export default class Product extends Vue {
 	private show = false
 	private popupType = 0 // 0 - 切换sku，1 - 加入购物车，2 - 立即购买
 	private tabIndex = 0
-	private spu = {}
+	private product = {}
 	private selectedSku = {}
 	private navbar = {
 		scrollTop: 0,
@@ -246,8 +247,8 @@ export default class Product extends Vue {
 		// if (!spuId) uni.navigateBack()
 		getProduct(spuId).then(res => {
 			if (res == null) return;
-			this.spu = res.data;
-			for (const sku of this.spu.skuList) {
+			this.product = res.data;
+			for (const sku of this.product.skuList) {
 				if (skuId != null) {
 					if (sku.skuId == skuId) {
 						this.selectedSku = sku;
@@ -257,6 +258,7 @@ export default class Product extends Vue {
 					this.selectedSku = sku;
 				}
 			}
+			console.log(this.product, 'fdsfsdfsdf')
 		})
 	}
 	
@@ -269,7 +271,9 @@ export default class Product extends Vue {
 			this.selectedSku = sku;
 		}
 		else if (this.popupType === 1) { // 加入购物车
-
+			addCart({skuId: sku.skuId, num: count}).then(res => {
+				console.log('添加购物车成功');
+			})
 		} else if (this.popupType === 2) { // 立即购买
 			this.$store.dispatch('global/setConfirmOrder', [{skuId: sku.skuId, count, type: sku.type}])
 			uni.navigateTo({

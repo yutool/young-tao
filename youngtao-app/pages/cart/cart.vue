@@ -21,7 +21,9 @@
 		
 		<!-- 内容 -->
 		<view class="cart-wrap">
-			<yt-cart-card class="cart-item" v-for="i in 3" :key="i"></yt-cart-card>
+			<template v-for="cart in cartList" >
+				<yt-cart-card class="cart-item" :data="cart"></yt-cart-card>
+			</template>
 		</view>
 		
 		<!-- 支付栏 -->
@@ -31,32 +33,38 @@
 	</view>
 </template>
 
-<script>
-	export default {
-		data() {
-			return {
-				stickyEnable: true,
-				stickyTop: 0,
-				// #ifdef MP-WEIXIN
-				stickyTop: 130,
-				// #endif
-				list: [
-					'寒雨连江夜入吴',
-					'平明送客楚山孤',
-					'洛阳亲友如相问',
-					'一片冰心在玉壶'
-				]
-			}
-		},
-		onShow() {
-			this.stickyEnable= true
-		},
-		onHide() {
-			this.stickyEnable= false
-		},
-		methods: {
-		}
+<script lang="ts">
+import { Vue, Component } from 'vue-property-decorator';
+import { getUserCart } from '@/api/omc/cart.js';
+
+@Component
+export default class Cart extends Vue {
+	private stickyEnable = true
+	private stickyTop = 0
+	// #ifdef MP-WEIXIN
+	private stickyTop = 130
+	// #endif
+	private list = [
+		'寒雨连江夜入吴',
+		'平明送客楚山孤',
+		'洛阳亲友如相问',
+		'一片冰心在玉壶'
+	]
+	
+	private cartList = [];
+	onShow() {
+		this.stickyEnable= true;
+		this.getUserCart();
 	}
+	onHide() {
+		this.stickyEnable= false
+	}
+	private getUserCart() {
+		getUserCart().then(res => {
+			this.cartList = res.data;
+		})
+	}
+}
 </script>
 
 <style lang="scss" scoped>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youngtao.omc.mapper.CartMapper">
+
+    <resultMap id="BaseResultMap" type="com.youngtao.omc.model.domain.CartDO">
+        <result property="id" column="id" />
+        <result property="skuId" column="sku_id" />
+        <result property="userId" column="user_id" />
+        <result property="title" column="title" />
+        <result property="image" column="image" />
+        <result property="oldPrice" column="old_price" />
+        <result property="num" column="num" />
+        <result property="updateTime" column="update_time" />
+        <result property="createTime" column="create_time" />
+    </resultMap>
+
+    <insert id="insert0" keyProperty="id" useGeneratedKeys="true">
+        insert into youngtao_omc.omc_cart(sku_id, user_id, title, image, old_price, num, update_time, create_time)
+        values (#{skuId}, #{userId}, #{title}, #{image}, #{oldPrice}, #{num}, #{updateTime}, #{createTime})
+    </insert>
+
+    <select id="listByUserId" resultMap="BaseResultMap">
+        select * from omc_cart
+        where user_id = #{userId}
+    </select>
+
+    <select id="selectByUserIdAndSkuId" resultMap="BaseResultMap">
+        select * from omc_cart
+        where user_id = #{userId}
+        and sku_id = #{skuId}
+    </select>
+
+</mapper>

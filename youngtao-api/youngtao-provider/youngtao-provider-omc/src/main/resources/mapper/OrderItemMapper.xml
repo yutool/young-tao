@@ -32,4 +32,10 @@
         </foreach>
     </insert>
 
+    <select id="selectByOrderIds" resultMap="BaseResultMap">
+        select * from omc_order_item
+        where order_id in
+        <foreach collection="orderIds" item="item" open="(" close=")" separator=","> #{item} </foreach>
+    </select>
+
 </mapper>

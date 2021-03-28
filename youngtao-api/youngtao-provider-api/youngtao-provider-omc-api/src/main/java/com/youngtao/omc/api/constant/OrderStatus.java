@@ -12,7 +12,7 @@ public class OrderStatus {
     public static final Integer COMPLETED = 0;
 
     /**
-     * 待付款
+     * 创建中
      */
     public static final Integer CREATING = 1;
 
@@ -27,14 +27,19 @@ public class OrderStatus {
     public static final Integer DELIVERY = 3;
 
     /**
+     * 待收货
+     */
+    public static final Integer RECEIVING = 4;
+
+    /**
      * 待评价
      */
-    public static final Integer COMMENT = 4;
+    public static final Integer COMMENT = 5;
 
     /**
      * 退货中
      */
-    public static final Integer RETURN = 5;
+    public static final Integer RETURN = 6;
 
     /**
      * 关闭
