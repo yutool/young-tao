@@ -2,7 +2,7 @@
 	<view class="content">
 		<!-- 用户信息 -->
 		<view class="user-wrap">
-			<view class="userinfo-box">
+			<view class="userinfo-box" @click="toLogin">
 				<image class="avatar" src="/static/images/missing-face.png"></image>
 				<view>
 					<text class="username">游客</text>
@@ -28,7 +28,7 @@
 			<view class="yt-container">
 				<!-- 用户订单 -->
 				<view class="order-wrap">
-					<view class="order-title" @click="goToOrder">
+					<view class="order-title" @click="toOrder">
 						<u-section :show-line="false" title="我的订单" sub-title="查看全部订单"></u-section>
 					</view>
 					<view class="order-box">
@@ -89,62 +89,70 @@
 	</view>
 </template>
 
-<script>
-	let startY = 0, moveY = 0, pageAtTop = true;
-	export default {
-		data() {
-			return {
-				coverTransform: 'translateY(0px)',
-				coverTransition: '0s',
-				moving: false
-			}
-		},
-		methods: {
-			/**
-			 *  会员卡下拉和回弹
-			 *  1.关闭bounce避免ios端下拉冲突
-			 *  2.由于touchmove事件的缺陷（以前做小程序就遇到，比如20跳到40，h5反而好很多），下拉的时候会有掉帧的感觉
-			 *    transition设置0.1秒延迟，让css来过渡这段空窗期
-			 *  3.回弹效果可修改曲线值来调整效果，推荐一个好用的bezier生成工具 http://cubic-bezier.com/
-			 */
-			coverTouchstart(e) {
-				if (pageAtTop === false) {
-					return;
-				}
-				this.coverTransition = 'transform .1s linear';
-				startY = e.touches[0].clientY;
-			},
-			coverTouchmove(e) {
-				moveY = e.touches[0].clientY;
-				let moveDistance = moveY - startY;
-				if (moveDistance < 0){
-					this.moving = false;
-					return;
-				}
-				this.moving = true;
-				if (moveDistance >= 80 && moveDistance < 100) {
-					moveDistance = 80;
-				}
-					
-				if (moveDistance > 0 && moveDistance <= 80) {
-					this.coverTransform = `translateY(${moveDistance}px)`;
-				}
-			},
-			coverTouchend() {
-				if (this.moving === false) {
-					return;
-				}
-				this.moving = false;
-				this.coverTransition = 'transform 0.3s cubic-bezier(.21,1.93,.53,.64)';
-				this.coverTransform = 'translateY(0px)';
-			},
-			goToOrder() {
-				uni.navigateTo({
-					url: "../order/order"
-				})
-			}
+<script lang="ts">
+import { Vue, Component } from 'vue-property-decorator';
+
+let startY = 0, moveY = 0, pageAtTop = true;
+	
+@Component
+export default class User extends Vue {
+	private coverTransform = 'translateY(0px)'
+	private coverTransition = '0s'
+	private moving = false
+
+	/**
+	 *  会员卡下拉和回弹
+	 *  1.关闭bounce避免ios端下拉冲突
+	 *  2.由于touchmove事件的缺陷（以前做小程序就遇到，比如20跳到40，h5反而好很多），下拉的时候会有掉帧的感觉
+	 *    transition设置0.1秒延迟，让css来过渡这段空窗期
+	 *  3.回弹效果可修改曲线值来调整效果，推荐一个好用的bezier生成工具 http://cubic-bezier.com/
+	 */
+	private coverTouchstart(e) {
+		if (pageAtTop === false) {
+			return;
+		}
+		this.coverTransition = 'transform .1s linear';
+		startY = e.touches[0].clientY;
+	}
+		
+	private coverTouchmove(e) {
+		moveY = e.touches[0].clientY;
+		let moveDistance = moveY - startY;
+		if (moveDistance < 0){
+			this.moving = false;
+			return;
+		}
+		this.moving = true;
+		if (moveDistance >= 80 && moveDistance < 100) {
+			moveDistance = 80;
+		}
+			
+		if (moveDistance > 0 && moveDistance <= 80) {
+			this.coverTransform = `translateY(${moveDistance}px)`;
 		}
 	}
+		
+	private coverTouchend() {
+		if (this.moving === false) {
+			return;
+		}
+		this.moving = false;
+		this.coverTransition = 'transform 0.3s cubic-bezier(.21,1.93,.53,.64)';
+		this.coverTransform = 'translateY(0px)';
+	}
+		
+	private toOrder() {
+		uni.navigateTo({
+			url: "../order/order"
+		})
+	}
+	
+	private toLogin() {
+		uni.navigateTo({
+			url: "./login"
+		})
+	}
+}
 </script>
 
 <style lang="scss">

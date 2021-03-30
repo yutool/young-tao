@@ -1,0 +1,15 @@
+@import './style.scss';
+
+button {
+  outline: none !important;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.login-btn {
+  button {
+    width: 45%;
+  }
+}

@@ -39,27 +39,12 @@
 					}
 				}
 			}
-		}
-      ,{
-            "path" : "pages/product/product",
-            "style" : {}
-        }
-        ,{
-            "path" : "pages/order/order",
-            "style" : {}
-        }
-        ,{
-            "path" : "pages/order/create",
-            "style" : {}
-        }
-        ,{
-            "path" : "pages/pay/pay",
-            "style" : {}
-        }
-        ,{
-            "path" : "pages/seckill/seckill",
-            "style" : {}
-        }
+		},
+		{ "path" : "pages/product/product" },
+		{ "path" : "pages/order/order" },
+		{ "path" : "pages/order/create" },
+		{ "path" : "pages/seckill/seckill" },
+		{ "path" : "pages/user/login" }
     ],
 	"globalStyle": {
 		"navigationBarBackgroundColor": "#FFF",

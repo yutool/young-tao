@@ -1,0 +1,57 @@
+// 主题定制
+.m-theme {
+  background: #F4F5F7;
+  min-height: 100vh;
+  .m-content {
+    background: #fff;
+  }
+}
+// 自定义分栏
+@media (max-width: 1600px) {
+  .m-col {
+    max-width: 20%;
+    padding: 0;
+  }
+}
+@media (max-width: 1200px) {
+  .m-col {
+    max-width: 25%;
+    padding: 0;
+  }
+}
+@media (max-width: 960px) {
+  .m-col {
+    max-width: 33%;
+    padding: 0;
+  }
+}
+.text-over {
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+// 购物车 tab样式 
+.cart-el-tab-pane {
+  .el-tabs__nav-wrap::after {
+    height: 0px;  // 去除下划线
+  }
+  .el-tabs__item {
+    font-size: 20px;
+  }
+}
+// 订单 tab 样式
+.order-el-tab-pane {
+  .el-tabs__item {
+    text-align: left !important;
+  }
+}
+// 弹窗padding设置
+.m-el-dialog {
+  .el-dialog__body {
+    padding: 10px 20px !important;
+  }
+}
+// 导航栏绝对固定导致的登录dialog无法选中
+.v-modal {
+  z-index: 1000 !important;
+}
