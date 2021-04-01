@@ -3,10 +3,13 @@
     <div class="banner-wrap mb-3">
       <el-carousel trigger="click" height="450px">
         <el-carousel-item>
-          <img src="@/assets/1.jpg" alt="">
+          <img src="@/assets/banner1.jpg" alt="">
         </el-carousel-item>
         <el-carousel-item>
-          <img src="@/assets/2.jpg" alt="">
+          <img src="@/assets/banner2.jpg" alt="">
+        </el-carousel-item>
+        <el-carousel-item>
+          <img src="@/assets/banner3.jpg" alt="">
         </el-carousel-item>
       </el-carousel>
     </div>

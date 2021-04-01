@@ -4,7 +4,7 @@
       <!-- 照片墙 -->
       <el-col :md="12">
         <div class="sku-images">
-          <img :src="checkSku.image || spu.picture" alt="">
+          <img :src="checkedSku.images[0] || spu.images[0]" alt="">
         </div>
       </el-col>
       <!-- 选择商品 -->
@@ -12,15 +12,15 @@
         <!-- 标题 -->
         <div class="sku-title">
           <el-tag size="mini">新品</el-tag>
-          {{ spu.title }}
+          {{ checkedSku.title }}
         </div>
         <!-- 价格 -->
         <div class="summary-price-wrap">
           <div class="sku-price">
             <span>
-              优惠价：<span class="price">￥{{ checkSku.price }}</span>
+              优惠价：<span class="price">￥{{ checkedSku.price }}</span>
             </span>
-            <s>原价：￥{{ checkSku.price }} </s>
+            <s>原价：￥{{ checkedSku.price }} </s>
           </div>
           <div class="sku-sales">
             <small class="pr-3">累计评价: {{ spu.commentNum }}</small>
@@ -30,7 +30,7 @@
         <!-- SKU -->
         <el-form ref="form" label-width="80px" label-position="left" class="sku-form">
           <el-form-item v-for="(value, name) in spu.skuTemplate" :key="name"  :label="name" >
-            <el-radio-group v-model="checkList[name]" >
+            <el-radio-group v-model="checkedObj[name]" >
               <el-radio v-for="item in value" :key="item" :label="item" @change="calculate()">
               </el-radio>
             </el-radio-group>
@@ -39,13 +39,11 @@
         <!-- 商品数量 -->
         <div class="sku-amount">
           <span class="pr-3">
-            <span class="sku-form-lable">
-              数量：
-            </span>
-            <el-input-number :min="1" :max="999" :precision="0" size="mini" v-model="checkSku.num">
+            <span class="sku-form-lable"> 数量：</span>
+            <el-input-number :min="1" :max="checkedSku.num" :precision="0" size="mini" v-model="selctedNum">
             </el-input-number>
           </span>
-          <small class="text-muted">剩余库存：{{ checkSku.residue }}</small>
+          <small class="text-muted">剩余库存：{{ checkedSku.num }}</small>
         </div>
         <!-- 操作按钮 -->
         <div class="sku-buy">
@@ -68,7 +66,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { Getter } from 'vuex-class'
-import { getGoods } from '@/api/goods/spu'
+import { getProduct } from '@/api/gmc/product'
 import { addCart } from '@/api/order/cart'
 import { prepareOrder } from '@/api/order/order'
 import { copyOf } from '@/common/utils/ObjectUtil'
@@ -78,103 +76,66 @@ export default class GoodsDetail extends Vue {
   @Getter('userId') private userId: any
   private spu: any = {}
   private skuList: any = []
-  private checkList: any = {}  // 选中的属性
-  private checkSku: any = {
-    id: '',
-    image: '',
-    price: '',  // 显示的价格
-    residue: 0, // 剩余库存个数
-    num: 1      // 选择的个数
-  }
+  private checkedObj: any = {}  // 选中的属性
+  private selctedNum = 1;
+  private checkedSku = {};
  
   // 计算选中的sku
   private calculate() {
-    this.checkSku.residue = 0
-    const cKeys = Object.keys(this.checkList)
-    // 计算剩余库存
-    for (const sku of this.skuList) {
-      const skuVals = Object.values(sku.sku)
-      this.checkSku.residue += sku.num
-      for (const c of cKeys) {
-        if (skuVals.indexOf(this.checkList[c]) !== -1) {
-          continue
-        }
-        this.checkSku.residue -= sku.num
-        break
-      }
-    }
-    // 重置sku部分信息
-    this.checkSku.id = ''
-    this.checkSku.price = this.spu.price
-    this.checkSku.image = this.spu.image
-    // 如果存在sku，则设置信息
-    if (cKeys.length === Object.keys(this.spu.skuTemplate).length) {
-      for (const item of this.skuList) {
-        if (JSON.stringify(this.checkList) === JSON.stringify(item.sku)) {  // 找到选中的sku
-          this.checkSku.image = item.image
-          this.checkSku.price = item.price
-          this.checkSku.id = item.id
-          if (this.checkSku.num > item.num) {
-            this.checkSku.num = item.num
-          }
-          break
-        }
+    console.log(this.checkedObj);
+    for (const item of this.skuList) {
+      if (JSON.stringify(item.sku) === JSON.stringify(this.checkedObj)) {
+        this.checkedSku = item;
       }
     }
   }
- 
+
   // 加入购物车
   private addCart() {
-    if ( this.checkSku.id === '') {
-      this.$message({ type: 'info', message: '暂无该商品' })
-      return
-    }
-    const cartItem = {
-      skuId: this.checkSku.id,
-      userId: this.userId,
-      name: this.spu.title,
-      image: this.checkSku.image,
-      originalPrice: this.checkSku.price,  // 原价
-      num: this.checkSku.num
-    }
-    addCart(cartItem).then((res: any) => {
-      this.$message({ type: 'success', message: '加入购物车成功' })
-      this.$log.info('加购', res)
-    })
+    // if ( this.checkSku.id === '') {
+    //   this.$message({ type: 'info', message: '暂无该商品' })
+    //   return
+    // }
+    // const cartItem = {
+    //   skuId: this.checkSku.id,
+    //   userId: this.userId,
+    //   name: this.spu.title,
+    //   image: this.checkSku.image,
+    //   originalPrice: this.checkSku.price,  // 原价
+    //   num: this.checkSku.num
+    // }
+    // addCart(cartItem).then((res: any) => {
+    //   this.$message({ type: 'success', message: '加入购物车成功' })
+    //   this.$log.info('加购', res)
+    // })
   }
   
   // 购买
   private buy() {
-    if ( this.checkSku.id === '') {
-      this.$message({ type: 'info', message: '暂无该商品' })
-      return
-    }
-    // 获取选中的skuId
-    const orderItem: any = []
-    orderItem.push({ skuId: this.checkSku.id, num: this.checkSku.num })
-    prepareOrder({ userId: this.userId, orderItem }).then((res: any) => {
-      this.$router.push(`/order/buy/${res.data}`)
-    })
+    // if ( this.checkSku.id === '') {
+    //   this.$message({ type: 'info', message: '暂无该商品' })
+    //   return
+    // }
+    // // 获取选中的skuId
+    // const orderItem: any = []
+    // orderItem.push({ skuId: this.checkSku.id, num: this.checkSku.num })
+    // prepareOrder({ userId: this.userId, orderItem }).then((res: any) => {
+    //   this.$router.push(`/order/buy/${res.data}`)
+    // })
   }
    
   // 初始化商品信息
   private initGoods() {
-    getGoods(this.$route.params.id).then((res: any) => {
+    getProduct(this.$route.params.id).then((res: any) => {
       this.$log.info('获取商品', res)
-      const { spu, sku } = res.data
-      this.spu = spu
-      this.spu.skuTemplate = JSON.parse(spu.skuTemplate)
-      this.skuList = sku
-      for (const item of this.skuList) {
-        item.sku = JSON.parse(item.sku)
+      this.spu = res.data
+      this.skuList = res.data.skuList
+      this.checkedSku = this.skuList[0]
+      // 默认选中
+      for (const item of Object.keys(this.spu.skuTemplate)) {
+        this.checkedObj[item] = this.spu.skuTemplate[item][0]
       }
-      // 默认选中，可优化 库存为0跳过
-      for (const item of Object.keys(spu.skuTemplate)) {
-        this.checkList[item] = spu.skuTemplate[item][0]
-      }
-      this.checkList = copyOf(this.checkList)
-      // 计算
-      this.calculate()
+      this.checkedObj = copyOf(this.checkedObj)
       this.$log.info('查询成功', res)
     })
   }

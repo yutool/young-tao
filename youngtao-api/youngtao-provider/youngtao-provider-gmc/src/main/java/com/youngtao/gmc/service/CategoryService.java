@@ -17,4 +17,14 @@ public interface CategoryService extends IService<CategoryDO> {
      * @return Tree directory
      */
     List<CategoryData> getCategory();
+
+    /**
+     * 获取一级目录
+     */
+    List<CategoryData> getMenu();
+
+    /**
+     * 获取推荐菜单
+     */
+    List<CategoryData> getRecommendMenu();
 }

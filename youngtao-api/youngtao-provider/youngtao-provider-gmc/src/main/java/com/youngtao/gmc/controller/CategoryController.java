@@ -29,4 +29,14 @@ public class CategoryController {
         return categoryService.getCategory();
     }
 
+    @GetMapping("/menu")
+    public List<CategoryData> getMenu() {
+        return categoryService.getMenu();
+    }
+
+    @GetMapping("/recommendMenu")
+    public List<CategoryData> getRecommendMenu() {
+        return categoryService.getRecommendMenu();
+    }
+
 }

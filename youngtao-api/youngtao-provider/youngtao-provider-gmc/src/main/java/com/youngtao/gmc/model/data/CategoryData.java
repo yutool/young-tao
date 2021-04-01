@@ -1,5 +1,6 @@
 package com.youngtao.gmc.model.data;
 
+import com.google.common.collect.Lists;
 import lombok.Data;
 
 import java.util.List;
@@ -44,5 +45,5 @@ public class CategoryData {
     /**
      * 子目录
      */
-    private List<CategoryData> children;
+    private List<CategoryData> children = Lists.newArrayList();
 }

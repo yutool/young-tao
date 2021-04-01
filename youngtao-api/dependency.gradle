@@ -16,6 +16,7 @@ ext {
         tlog                : "1.2.0-BETA2",
         rocketmq            : "2.1.0",
         alipay              : "4.9.153.ALL",
+        jjwt                : "0.9.0",
     ]
     libs = [
         "guava"             : "com.google.guava:guava:$version.guava",
@@ -35,5 +36,6 @@ ext {
         "tlog"              : "com.yomahub:tlog-all-spring-boot-starter:$version.tlog",
         "rocketmq"          : "org.apache.rocketmq:rocketmq-spring-boot-starter:$version.rocketmq",
         "alipay"            : "com.alipay.sdk:alipay-sdk-java:$version.alipay",
+        "jjwt"              : "io.jsonwebtoken:jjwt:$version.jjwt",
     ]
 }

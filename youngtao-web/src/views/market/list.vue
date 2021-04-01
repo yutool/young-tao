@@ -5,38 +5,42 @@
       <div class="slideshow">
         <el-carousel trigger="click" height="450px">
           <el-carousel-item>
-            <a href="#"> <img src="@/assets/2.jpg" alt=""> </a>
+            <a href="#"> <img src="@/assets/banner2.jpg" alt=""> </a>
           </el-carousel-item>
           <el-carousel-item>
-            <a href="#"> <img src="@/assets/1.jpg" alt=""> </a>
+            <a href="#"> <img src="@/assets/banner3.jpg" alt=""> </a>
+          </el-carousel-item>
+          <el-carousel-item>
+            <a href="#"> <img src="@/assets/banner1.jpg" alt=""> </a>
           </el-carousel-item>
         </el-carousel>
       </div>
       <!-- 菜单 -->
-      <div class="category">
+      <div v-if="rootMenu.length != 0" class="category">
         <ul class="category-list">
-          <li v-for="root in menu.root" :key="root.id">
-            {{ root.name }}
+          <li v-for="i in 15" :key="i">
+            {{ rootMenu[i-1].name }}
           </li>
         </ul>
       </div>
     </div>
     <!-- 商品列表 -->
     <div class="container">
-      <div v-for="id in contentMenu.menus" :key="id">
+      <div v-for="menu in recommendMenu" :key="menu.cateogryId">
         <!-- 推荐菜单 -->
         <div class="content-menu mt-3">
           <div class="sideIcon" style="background-color: #FFA1B8"></div>
           <ul>
-            <li v-for="item in contentMenu.content[id]" :key="item">
-              {{ item }}
+            <li>{{menu.name}}</li>
+            <li v-for="item in menu.children" :key="item.cateogyrId">
+              {{ item.name }}
             </li>
           </ul>
         </div>
         <!-- 商品 -->
         <div class="row">
-          <div class="m-col" v-for="spu in content[id]" :key="spu.id">
-            <goods-card :spu="spu" />
+          <div class="m-col" v-for="product in productMap" :key="product.spuId">
+            <product-card :spu="product" />
           </div>
         </div>
       </div>
@@ -46,41 +50,45 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import GoodsCard from './components/GoodsCard.vue'
-import { getSpuList } from '@/api/goods/spu'
-import { getMenu, getContentMenu, getContent } from '@/api/goods/home'
+import ProductCard from './components/ProductCard.vue'
+import { getSpuList } from '@/api/gmc/spu'
+import { getMenu, getRecommendMenu } from '@/api/gmc/category'
+import { listRecommendProduct } from '@/api/gmc/product'
 
 @Component({
   components: {
-    GoodsCard
+    ProductCard
   }
 })
 export default class GoodsList extends Vue {
-  private menu = {}
-  private contentMenu: any = {}
-  private content = {}
-  
+  private rootMenu = []
+  private recommendMenu: any = {}
+  private productMap = {}
+
+  private mounted() {
+    this.getMenu()
+    this.getProduct()
+  }
   // 获取
   private getMenu() {
     getMenu().then((res: any) => {
-      this.menu = res.data
+      this.rootMenu = res.data
       this.$log.info('获取菜单', res)
     })
   }
   // 获取首页内容
-  private getContent() {
-    getContentMenu().then((res: any) => {
-      this.contentMenu = res.data
-      this.$log.info('获取推荐菜单', this.contentMenu)
-      getContent(res.data.menus).then((res: any) => {
-        this.content = res.data
-        this.$log.info('获取内容', res)
-      })
+  private getProduct() {
+    getRecommendMenu().then((res: any) => {
+      this.recommendMenu = res.data
+      this.$log.info('获取推荐菜单', this.recommendMenu)
+      this.listRecommendProduct(1, 10);
     })
   }
-  private mounted() {
-    this.getMenu()
-    this.getContent()
+  private listRecommendProduct(page: any, size: any) {
+    listRecommendProduct({page, size}).then((res: any) => {
+      this.productMap = res.data
+      this.$log.info('获取内容', res)
+    })
   }
 }
 </script>

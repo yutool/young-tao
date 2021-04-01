@@ -4,7 +4,7 @@ description = "用户认证中心"
 apply plugin: 'org.springframework.boot'
 
 dependencies {
-
+    compile libs['jjwt']
 }
 
 test {

@@ -1,15 +1,14 @@
 <template>
-  <router-link :to="'detail/'+spu.id" class="goods-card p-3">
-    <div class="goods-image">
-      <img :src="spu.picture" alt="">
+  <router-link :to="'detail/'+spu.spuId" class="product-card p-3">
+    <div class="product-image">
+      <img :src="spu.images[0]" alt="">
     </div>
     <div>
-      <div class="goods-title-spu">
-        <div class="text-over">{{ spu.name }}</div>
+      <div class="product-title-spu">
         <div class="spu-title text-over">{{ spu.title }}</div> 
       </div>
-      <div class="goods-info">
-        <span class="goods-price">￥{{ spu.price }}</span>
+      <div class="product-info">
+        <span class="product-price">￥{{ spu.price }}</span>
         <span class="float-right">已售：{{ spu.saleNum }}</span>
       </div>
     </div>
@@ -20,13 +19,13 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component
-export default class GoodsCard extends Vue {
+export default class ProductCard extends Vue {
   @Prop() private spu: any
 }
 </script>
 
 <style scoped lang="scss">
-.goods-card {
+.product-card {
   display: block;
   border: 1px solid #e5e5e5;
   color: #000;
@@ -36,17 +35,17 @@ export default class GoodsCard extends Vue {
     color: #666;
     font-size: 14px;
   }
-  .goods-info {
+  .product-info {
     position: relative;
     border-top: 1px dashed #e5e5e5;
     margin-top: 12px;
     padding-top: 12px;
     color: #666;
-    .goods-price {
+    .product-price {
       color: #FF4466;
     }
   }
-  .goods-image {
+  .product-image {
     img {
       max-width: 100%;
       height: 200px;

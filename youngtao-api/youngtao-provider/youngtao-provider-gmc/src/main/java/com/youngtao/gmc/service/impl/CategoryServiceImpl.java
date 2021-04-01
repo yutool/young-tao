@@ -1,13 +1,14 @@
 package com.youngtao.gmc.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.youngtao.gmc.mapper.CategoryMapper;
 import com.youngtao.gmc.model.convert.CategoryConvert;
 import com.youngtao.gmc.model.data.CategoryData;
 import com.youngtao.gmc.model.domain.CategoryDO;
 import com.youngtao.gmc.service.CategoryService;
 import com.youngtao.web.support.BaseService;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,5 +56,32 @@ public class CategoryServiceImpl extends BaseService<CategoryDO> implements Cate
             categoryData.getChildren().add(data);
         }
         return map.values().stream().filter(item -> "0".equals(item.getParentId())).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CategoryData> getMenu() {
+        List<CategoryDO> rootMenu = categoryMapper.selectList(new QueryWrapper<CategoryDO>()
+                .eq("parent_id", 0)
+        );
+        return categoryConvert.toCategoryData(rootMenu);
+    }
+
+    @Override
+    public List<CategoryData> getRecommendMenu() {
+        List<CategoryData> result = Lists.newArrayList();
+        List<Long> list = Lists.newArrayList(9927724279L);
+        for (Long rootId : list) {
+            CategoryDO category = categoryMapper.selectOne(new QueryWrapper<CategoryDO>()
+                    .eq("category_id", rootId)
+            );
+            List<CategoryDO> categoryList = categoryMapper.selectList(new QueryWrapper<CategoryDO>()
+                    .eq("parent_id", rootId)
+            );
+            CategoryData categoryData = categoryConvert.toCategoryData(category);
+            List<CategoryData> tmp = categoryConvert.toCategoryData(categoryList);
+            categoryData.getChildren().addAll(tmp);
+            result.add(categoryData);
+        }
+        return result;
     }
 }

@@ -7,7 +7,7 @@ const qs = require('qs')
 
 // 创建实例
 const instance = axios.create({
-  baseURL: '/',
+  baseURL: '/api',
   headers: { 'Content-Type': 'application/json' },
   timeout: 30000,
 });
