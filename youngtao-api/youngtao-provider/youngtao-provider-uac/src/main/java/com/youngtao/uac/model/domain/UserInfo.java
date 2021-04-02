@@ -22,21 +22,6 @@ public class UserInfo implements Serializable {
     private String userId;
 
     /**
-     * 用户名
-     */
-    private String username;
-
-    /**
-     * 昵称
-     */
-    private String nickname;
-
-    /**
-     * 头像
-     */
-    private String avatar;
-
-    /**
      * 邮箱
      */
     private String email;
@@ -47,6 +32,21 @@ public class UserInfo implements Serializable {
     private String telephone;
 
     /**
+     * 用户名
+     */
+    private String username;
+
+    /**
+     * 头像
+     */
+    private String avatar;
+
+    /**
+     * 密码
+     */
+    private String password;
+
+    /**
      * 性别
      */
     private String gender;
@@ -55,16 +55,6 @@ public class UserInfo implements Serializable {
      * 出生日期
      */
     private Date birthday;
-
-    /**
-     * 积分
-     */
-    private Integer points;
-
-    /**
-     * 会员等级
-     */
-    private Integer userLevel;
 
     /**
      * 更新时间

@@ -1,10 +1,9 @@
-package com.youngtao.uac.common.util;
+package com.youngtao.core.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.CompressionCodecs;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.apache.tomcat.util.codec.binary.Base64;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -25,10 +24,9 @@ public class TokenUtils implements Serializable {
     /**
      * 生成token
      */
-    public static String generateToken(String userId, List<String> role) {
+    public static String generateToken(String userId) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", userId);
-        claims.put("role", role);
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userId)
@@ -80,7 +78,7 @@ public class TokenUtils implements Serializable {
      */
     private static SecretKey generalKey(){
         String stringKey = "7786df7fc3a34e26a61c034d5ec8245d";
-        byte[] encodedKey = Base64.decodeBase64(stringKey);
+        byte[] encodedKey = Base64.getDecoder().decode(stringKey);
         SecretKey key = new SecretKeySpec(encodedKey, 0, encodedKey.length, "AES");
         return key;
     }

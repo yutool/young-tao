@@ -7,28 +7,20 @@
         <div class="info-wrap">
           <div class="user-info clearfix">
             <div class="float-left pl-5">
-              <el-avatar :size="70"
-                src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png">
-              </el-avatar>
+              <el-avatar :size="70" :src="user.avatar"> </el-avatar>
             </div>
-            <div class="float-left pl-4">
+            <div class="float-left pl-4 pt-1">
               <div class="username"> {{user.username}} </div>
-              <div>null</div>
+              <div> {{user.email}} </div>
             </div>
           </div>
         </div>
         <!-- 导航栏 -->
         <div class="nav-wrap">
           <ul>
-            <li>
-              <router-link to="info">个人资料</router-link>
-            </li>
-            <li>
-              <router-link to="address">收货地址</router-link>
-            </li>
-            <li>
-              <router-link to="security">安全设置</router-link>
-            </li>
+            <li> <router-link to="info">个人资料</router-link> </li>
+            <li> <router-link to="address">收货地址</router-link> </li>
+            <li> <router-link to="security">安全设置</router-link> </li>
           </ul>
         </div>
       </div>

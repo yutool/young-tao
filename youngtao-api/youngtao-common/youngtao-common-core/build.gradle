@@ -4,6 +4,7 @@ dependencies {
     compile libs['hutool-all']
     compile libs['jackson-databind']
     compile libs['servlet-api']
+    compile libs['jjwt']
 
     implementation libs['jedis']
 }

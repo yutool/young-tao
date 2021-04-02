@@ -14,4 +14,3 @@ export function getProduct(id: any) {
     method: 'get',
   })
 }
-  

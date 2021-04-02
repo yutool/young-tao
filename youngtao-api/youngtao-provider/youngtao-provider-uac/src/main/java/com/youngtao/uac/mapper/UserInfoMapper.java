@@ -3,6 +3,7 @@ package com.youngtao.uac.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.youngtao.uac.model.domain.UserInfo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * @author ankoye@qq.com
@@ -19,4 +20,5 @@ public interface UserInfoMapper extends BaseMapper<UserInfo> {
      */
     int insert0(UserInfo userInfo);
 
+    UserInfo login(@Param("account") String account, @Param("password") String password);
 }

@@ -1,7 +1,7 @@
 package com.youngtao.uac.service;
 
 import com.youngtao.uac.model.data.AuthToken;
-import com.youngtao.uac.model.domain.UserAuth;
+import com.youngtao.uac.model.domain.UserInfo;
 import com.youngtao.uac.model.request.LoginRequest;
 
 /**
@@ -19,5 +19,5 @@ public interface AuthService {
      *
      * @param userId
      */
-    UserAuth getById(String userId);
+    UserInfo getById(String userId);
 }

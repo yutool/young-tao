@@ -5,15 +5,13 @@
     <resultMap id="BaseResultMap" type="com.youngtao.uac.model.domain.UserInfo">
         <result property="id" column="id" />
         <result property="userId" column="user_id" />
-        <result property="username" column="username" />
-        <result property="nickname" column="nickname" />
-        <result property="avatar" column="avatar" />
         <result property="email" column="email" />
         <result property="telephone" column="telephone" />
+        <result property="username" column="username" />
+        <result property="avatar" column="avatar" />
+        <result property="password" column="password" />
         <result property="gender" column="gender" />
         <result property="birthday" column="birthday" />
-        <result property="points" column="points" />
-        <result property="userLevel" column="user_level" />
         <result property="updateTime" column="update_time" />
         <result property="createTime" column="create_time" />
     </resultMap>
@@ -22,4 +20,11 @@
         insert into youngtao_uac.uac_user_info(user_id, username, nickname, avatar, email, telephone, gender, birthday, points, user_level, update_time, create_time)
         values (#{userId}, #{username}, #{nickname}, #{avatar}, #{email}, #{telephone}, #{gender}, #{birthday}, #{points}, #{userLevel}, #{updateTime}, #{createTime})
     </insert>
+
+    <select id="login" resultMap="BaseResultMap">
+        select * from uac_user_info
+        where password = #{password}
+        and (email = #{account} or password = #{account})
+    </select>
+
 </mapper>
