@@ -21,4 +21,9 @@
         values (#{shippingAddrId}, #{userId}, #{consignee}, #{telephone}, #{address}, #{detail}, #{postcode}, #{isDefault}, #{updateTime}, #{createTime})
     </insert>
 
+    <select id="selectByUserId" resultMap="BaseResultMap">
+        select * from uac_shipping_address
+        where user_id = #{userId}
+    </select>
+
 </mapper>

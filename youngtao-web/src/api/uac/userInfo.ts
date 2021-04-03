@@ -1,24 +1,26 @@
 import request from '@/common/utils/request'
 
-export function login(data: any) {
+export function updateUserInfo(data: any) {
   return request({
-    url: 'api/oauth/login',
+    url: 'uac/user/update',
     method: 'post',
     data: JSON.stringify(data)
   })
 }
 
-export function getCurrentUser() {
+export function updatePassword(data: any) {
   return request({
-    url: 'api/user/current',
-    method: 'get'
+    url: 'uac/user/updatePassword',
+    method: 'post',
+    data: JSON.stringify(data)
   })
 }
 
 export function register(data: any) {
   return request({
-    url: 'api/user/register',
+    url: 'uac/user/register',
     method: 'post',
     data: JSON.stringify(data)
   })
 }
+

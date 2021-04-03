@@ -1,5 +1,9 @@
 package com.youngtao.uac.controller;
 
+import com.youngtao.core.context.AuthContext;
+import com.youngtao.core.context.AuthInfo;
+import com.youngtao.uac.model.request.RegisterRequest;
+import com.youngtao.uac.model.request.UpdatePasswordRequest;
 import com.youngtao.uac.model.request.UpdateUserInfoRequest;
 import com.youngtao.uac.service.UserService;
 import com.youngtao.web.support.ResponseWrapper;
@@ -20,9 +24,21 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @RequestMapping("/register")
+    public void register(@RequestBody RegisterRequest request) {
+        userService.register(request);
+    }
+
     @RequestMapping("/update")
     public void updateUserInfo(@RequestBody UpdateUserInfoRequest request) {
-        userService.updateUserInfo(request);
+        AuthInfo authInfo = AuthContext.get();
+        userService.updateUserInfo(authInfo.getId(), request);
+    }
+
+    @RequestMapping("/updatePassword")
+    public void updatePassword(@RequestBody UpdatePasswordRequest request) {
+        AuthInfo authInfo = AuthContext.get();
+        userService.updatePassword(authInfo.getId(), request);
     }
 
 }

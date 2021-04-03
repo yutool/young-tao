@@ -5,6 +5,9 @@ apply plugin: 'org.springframework.boot'
 
 dependencies {
     compile project(":youngtao-provider-api:youngtao-provider-uac-api")
+
+    compile 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
+    compile ("org.springframework.boot:spring-boot-starter-mail")
 }
 
 test {

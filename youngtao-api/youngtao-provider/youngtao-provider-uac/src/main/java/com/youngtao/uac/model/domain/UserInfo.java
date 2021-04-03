@@ -7,10 +7,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 用户信息表(UacUserInfo)实体类
- *
- * @author makejava
- * @since 2021-03-30 15:11:39
+ * 用户信息表
+ * @author ankoye@qq.com
+ * @date 2021/03/30
  */
 @Data
 @TableName("uac_user_info")

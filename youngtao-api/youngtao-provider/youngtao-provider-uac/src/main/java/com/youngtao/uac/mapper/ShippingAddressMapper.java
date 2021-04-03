@@ -1,8 +1,11 @@
 package com.youngtao.uac.mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.youngtao.uac.model.domain.ShippingAddress;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
  * @author ankoye@qq.com
@@ -19,4 +22,5 @@ public interface ShippingAddressMapper extends BaseMapper<ShippingAddress> {
      */
     int insert0(ShippingAddress shippingAddress);
 
+    List<ShippingAddress> selectByUserId(@Param("userId") String userId);
 }

@@ -7,10 +7,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 用户收货地址(UacShippingAddress)实体类
- *
- * @author makejava
- * @since 2021-03-30 15:12:17
+ * 用户收货地址
+ * @author ankoye@qq.com
+ * @date 2021/03/30
  */
 @Data
 @TableName("uac_shipping_address")
@@ -25,16 +24,6 @@ public class ShippingAddress implements Serializable {
      * 用户id
      */
     private String userId;
-
-    /**
-     * 收货人姓名
-     */
-    private String consignee;
-
-    /**
-     * 手机号码
-     */
-    private String telephone;
 
     /**
      * 地址信息
@@ -52,9 +41,19 @@ public class ShippingAddress implements Serializable {
     private String postcode;
 
     /**
+     * 收货人姓名
+     */
+    private String consignee;
+
+    /**
+     * 手机号码
+     */
+    private String telephone;
+
+    /**
      * 是否默认
      */
-    private Integer isDefault;
+    private Boolean isDefault;
 
     /**
      * 更新时间

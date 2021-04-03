@@ -32,7 +32,8 @@
 <script lang="ts">
 import { Component, Vue, Ref, Emit } from 'vue-property-decorator'
 import { Form } from 'element-ui'
-import { register } from '@/api/user/user'
+import { register } from '@/api/uac/userInfo'
+import { sendRegisterCode } from '@/api/uac/email'
 
 @Component
 export default class RegisterForm extends Vue {
@@ -67,7 +68,7 @@ export default class RegisterForm extends Vue {
         console.log(this.registerForm)
         register(this.registerForm).then((res: any) => {
           this.$log.info('注册用户', res)
-          this.$message({type: 'success', message: res.message})
+          this.$message({type: 'success', message: '注册成功'})
           this.goLogin()  // 切换到登录界面
         })
       } else {
@@ -79,23 +80,25 @@ export default class RegisterForm extends Vue {
   private resetForm() {
     this.refRegisterForm.resetFields();
   }
-  private getVerifyCode(e: any) { // 获取验证码
-    // getRegisterEmail(this.registerForm.email).then((res: any) => {
-    //   if (res.code !== this.$resCode.SUCCESS) {
-    //     this.$message({type: 'error', message: res.msg});
-    //   }
-    // });
-    // $('#verifyBtn').prop('disabled', true);
-    // let second = 10;
-    // const interval = setInterval(() => {
-    //   second--;
-    //   this.verifyHint = second + 's重新获取';
-    //   if (second <= 0) {
-    //     window.clearInterval(interval);
-    //     this.verifyHint = '获取验证码';
-    //     $('#verifyBtn').prop('disabled', false);
-    //   }
-    // }, 1000);
+  private getVerifyCode() { // 获取验证码
+    if (!this.registerForm.email) {
+      this.$message({type: 'info', message: '邮箱不能为空'})
+      return
+    }
+    sendRegisterCode({toAddr: this.registerForm.email}).then((res: any) => {
+      this.$message({type: 'success', message: '发送成功，请注意查收'});
+      $('#verifyBtn').prop('disabled', true);
+      let second = 10;
+      const interval = setInterval(() => {
+        second--;
+        this.verifyHint = second + 's重新获取';
+        if (second <= 0) {
+          window.clearInterval(interval);
+          this.verifyHint = '获取验证码';
+          $('#verifyBtn').prop('disabled', false);
+        }
+      }, 1000);
+    });
   }
   // 事件
   @Emit('switch') 

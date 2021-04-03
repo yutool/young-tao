@@ -41,7 +41,7 @@ const routes = [
     ]
   },
   {
-    path: '/user/:id',
+    path: '/user',
     component: () => import('@/views/user/index.vue'),
     meta: { requireAuth: true },
     children: [

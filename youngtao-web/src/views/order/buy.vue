@@ -101,7 +101,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { getPrepareOrder, checkPrepareOrder, createOrder, queryOrderStatus } from '@/api/order/order'
 import { Getter } from 'vuex-class'
-import { getUserAddress } from '@/api/user/address'
+import { getUserAddress } from '@/api/uac/address'
 
 @Component
 export default class Buy extends Vue {
@@ -172,7 +172,7 @@ export default class Buy extends Vue {
   
   // 获取用户收货地址
   private getUserAddress() {
-    getUserAddress(this.userId).then((res: any) => {
+    getUserAddress().then((res: any) => {
       this.$log.info('获取用户收货地址', res)
       this.userAddress = res.data
       // 设置默认地址

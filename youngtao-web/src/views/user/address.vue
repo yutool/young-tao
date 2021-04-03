@@ -30,12 +30,10 @@
               </el-button>
             </td>
             <td>
-              <el-button type="primary" size="mini">
-                编辑
-              </el-button>
-              <el-button type="error" size="mini">
-                删除
-              </el-button>
+              <el-button type="primary" size="mini" class="mr-2"> 编辑 </el-button>
+              <el-popconfirm title="是否确认删除" @onConfirm="deleteAddress(addr.shippingAddrId)" >
+                <el-button type="danger" size="mini" slot="reference">删除</el-button>
+              </el-popconfirm>
             </td>
           </tr>
         </tbody>
@@ -76,7 +74,7 @@
 <script lang="ts">
 import { Component, Vue, Ref } from 'vue-property-decorator'
 import { Form } from 'element-ui'
-import { getUserAddress, addAddress } from '@/api/user/address'
+import { getUserAddress, addAddress, deleteAddress } from '@/api/uac/address'
 import { copyOf } from '@/common/utils/ObjectUtil'
 import { State, Getter } from 'vuex-class'
 
@@ -157,22 +155,26 @@ export default class Address extends Vue {
       if (valid) {
         const form = copyOf(this.addrForm)
         form.address = form.address.join(' ')
-        form.userId = this.userId
-        form.id = 2
+        console.log(form, 'aaaaaaaa')
         addAddress(form).then((res: any) => {
-          this.$log.info('添加收货地址', res)
-          this.userAddress.push(res.data)
+          this.$message({type: 'success', message: '添加成功'})
+          // this.$log.info('添加收货地址', res)
+          // this.userAddress.push(res.data)
         })
       } else {
-        console.log('error submit!!')
         return false;
       }
     })
   }
   // 获取用户收货地址
   private getUserAddress() {
-    getUserAddress(this.$route.params.id).then((res: any) => {
+    getUserAddress().then((res: any) => {
       this.userAddress = res.data
+    })
+  }
+  private deleteAddress(id: string) {
+    deleteAddress({id}).then((res: any) => {
+      this.$message({type: 'success', message: '删除成功'})
     })
   }
   // 初始化函数
@@ -187,6 +189,7 @@ export default class Address extends Vue {
   .addr-form {
     width: 600px;
     padding: 30px 0 10px;
+    margin: 0 auto;
   }
 }
 </style>

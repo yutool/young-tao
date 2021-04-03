@@ -30,6 +30,7 @@
 import { Component, Ref, Vue } from 'vue-property-decorator'
 import { State } from 'vuex-class'
 import { Form } from 'element-ui'
+import { updateUserInfo } from '@/api/uac/userInfo'
 
 @Component
 export default class UserInfo extends Vue {
@@ -51,9 +52,10 @@ export default class UserInfo extends Vue {
   private saveInfo() {
     this.refUserInfo.validate((valid) => {
       if (valid) {
-        alert('submit!');
+        updateUserInfo(this.userInfo).then((res: any) => {
+          this.$message({type: 'success', message: '更新成功'})
+        })
       } else {
-        console.log('error submit!!');
         return false;
       }
     });

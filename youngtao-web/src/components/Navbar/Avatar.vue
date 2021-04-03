@@ -1,6 +1,6 @@
 <template>
   <div style="height: 36px;">
-    <el-dropdown class="pl-3" @command="handleCommand" @click.native="$router.push(`/user/${user.id}`)">
+    <el-dropdown class="pl-3" @command="handleCommand" @click.native="$router.push(`/user`)">
       <el-avatar class="user-avatar" :size="36">
         <img v-if="user" :src="user.avatar"/>
         <span v-else>游客</span>
@@ -8,7 +8,7 @@
       <el-dropdown-menu slot="dropdown" class="user-dropdown">
         <div v-if="JSON.stringify(user) !== '{}'" class="text-center">
           <span>{{user.username}}</span>
-          <el-dropdown-item :command="'user/' + user.id">个人空间</el-dropdown-item>
+          <el-dropdown-item @click.native="$router.push(`/user`)">个人空间</el-dropdown-item>
           <el-dropdown-item @click.native="logout">退出</el-dropdown-item>
         </div>
         <div v-else>
