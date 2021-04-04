@@ -1,10 +1,13 @@
 <template>
   <div>
     <div class="text-center pt-3 pb-3">
-      <router-link :to="'/user/' + user.id">
-        <el-avatar icon="el-icon-user-solid"></el-avatar>
+      <div @click="$router.push('/user')" class="pointer">
+        <el-avatar class="user-avatar" :size="36">
+          <img v-if="user" :src="user.avatar"/>
+          <span v-else>游客</span>
+        </el-avatar>
         <div>{{ user.username }}</div>
-      </router-link>
+      </div>
     </div>
     <div class="menu-wrap">
       <ul>

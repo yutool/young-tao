@@ -1,5 +1,5 @@
 <template>
-  <div v-loading.fullscreen="loading">
+  <div v-loading.fullscreen="loading" class="product-wrap">
     <router-view />
   </div>
 </template>
@@ -15,5 +15,8 @@ export default class Seckill extends Vue {
 </script>
 
 <style scoped lang="scss">
-
+.product-wrap {
+  background-color: #f6f6f6;
+  min-height: 100vh;
+}
 </style>

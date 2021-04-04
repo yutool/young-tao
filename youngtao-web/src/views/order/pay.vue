@@ -52,7 +52,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { getOrder } from '@/api/order/order'
+import { getOrder } from '@/api/omc/order'
 import { weixinPay } from '@/api/pay/pay'
 import VueQrious from 'vue-qrious'
 

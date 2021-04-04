@@ -44,11 +44,11 @@
           </tr>
         </thead>
         <!-- 订单数据 -->
-        <tbody v-for="order in orderList" :key="order.id" >
+        <tbody v-for="order in orderList" :key="order.orderId" >
           <div style="height: 10px"></div>
           <tr class="bg-light">
             <td colspan="8">
-              <span>{{ order.createTime }} 订单编号：{{ order.id }}</span>
+              <span>{{ order.createTime }} 订单编号：{{ order.orderId }}</span>
               <span class="float-right">
                 <el-popconfirm v-if="order.status==0" 
                     title="确认删除订单吗" @onConfirm="deleteOrder(order.id)">
@@ -66,14 +66,14 @@
                 <router-link :to="'/market/detail/' + item.spuId">
                   {{ item.name }}
                 </router-link>
-                <div class="item-sku" v-for="(val, key) in JSON.parse(item.sku)" :key="key">
+                <div class="item-sku" v-for="(val, key) in item.sku" :key="key">
                   {{ key }}：{{ val }}
                 </div>
               </el-col>
             </td>
             <td> 
               <div>￥{{ item.price }}</div>
-              <div class="text-black-50"> <s>￥{{ item.originalPrice }}</s> </div>
+              <div class="text-black-50"> <s>￥{{ item.oldPrice }}</s> </div>
             </td>
             <td>
               {{ item.num }}
@@ -125,7 +125,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { getUserOrder, deleteOrder } from '@/api/order/order'
+import { getUserOrder, deleteOrder } from '@/api/omc/order'
 
 @Component
 export default class List extends Vue {
@@ -140,12 +140,10 @@ export default class List extends Vue {
   
   // 获取用户的订单
   private getUserOrder(page: number, size = this.pageInfo.pageSize) {
-    const userId = this.$route.params.id
-    getUserOrder(userId, page, size).then((res: any) => {
+    getUserOrder({page, size}).then((res: any) => {
       this.$log.info('获取用户订单', res)
-      const {data} = res
-      this.pageInfo = data
-      this.orderList = data.list
+      this.pageInfo = res.data
+      this.orderList = res.data.list
     })
   }
   

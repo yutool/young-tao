@@ -67,8 +67,8 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { Getter } from 'vuex-class'
 import { getProduct } from '@/api/gmc/product'
-import { addCart } from '@/api/order/cart'
-import { prepareOrder } from '@/api/order/order'
+import { addCart } from '@/api/omc/cart'
+import { prepareOrder } from '@/api/omc/order'
 import { copyOf } from '@/common/utils/ObjectUtil'
 
 @Component
@@ -78,7 +78,7 @@ export default class GoodsDetail extends Vue {
   private skuList: any = []
   private checkedObj: any = {}  // 选中的属性
   private selctedNum = 1;
-  private checkedSku = {};
+  private checkedSku: any = {};
  
   // 计算选中的sku
   private calculate() {
@@ -92,36 +92,20 @@ export default class GoodsDetail extends Vue {
 
   // 加入购物车
   private addCart() {
-    // if ( this.checkSku.id === '') {
-    //   this.$message({ type: 'info', message: '暂无该商品' })
-    //   return
-    // }
-    // const cartItem = {
-    //   skuId: this.checkSku.id,
-    //   userId: this.userId,
-    //   name: this.spu.title,
-    //   image: this.checkSku.image,
-    //   originalPrice: this.checkSku.price,  // 原价
-    //   num: this.checkSku.num
-    // }
-    // addCart(cartItem).then((res: any) => {
-    //   this.$message({ type: 'success', message: '加入购物车成功' })
-    //   this.$log.info('加购', res)
-    // })
+    addCart({skuId: this.checkedSku.skuId, num: this.selctedNum}).then((res: any) => {
+      this.$message({ type: 'success', message: '加入购物车成功' })
+      this.$log.info('加购', res)
+    })
   }
   
   // 购买
   private buy() {
-    // if ( this.checkSku.id === '') {
-    //   this.$message({ type: 'info', message: '暂无该商品' })
-    //   return
-    // }
-    // // 获取选中的skuId
-    // const orderItem: any = []
-    // orderItem.push({ skuId: this.checkSku.id, num: this.checkSku.num })
-    // prepareOrder({ userId: this.userId, orderItem }).then((res: any) => {
-    //   this.$router.push(`/order/buy/${res.data}`)
-    // })
+    const order = {
+      type: this.$orderType.NORMAL,
+      skuList: [{ skuId: this.checkedSku.skuId, count: this.selctedNum }]
+    }
+    const key = this.$utils.setOrderItem(order);
+    this.$router.push(`/order/buy/${key}`)
   }
    
   // 初始化商品信息

@@ -33,9 +33,9 @@
     <!-- 商品列表 -->    
     <div class="table-responsive-lg">
       <div style="font-weight: 600" class="mb-2">确认商品信息</div>
-      <div class="pb-3">
-        <table class="table table-borderless">
-          <thead class="bg-light">
+      <div class="pb-1">
+        <table class="table ">
+          <thead>
             <th>商品</th>
             <th>商品信息</th>
             <th>单价(元)</th>
@@ -43,37 +43,34 @@
             <th>优惠</th>
             <th>小计(元)</th>
           </thead>
-          <br />
-          <tbody class="bg-light">
-            <tr v-for="item in order.orderItem" :key="item.id">
+          <div style="height: 10px"></div>
+          <!-- 数据 -->
+          <tbody v-for="merchant in orderList" :key="merchant.merchatId">
+            <tr class="bg-light">
+              <td  colspan="6">{{merchant.shopName}}</td>
+            </tr>
+            <tr v-for="item in merchant.skuList" :key="item.skuId">
               <td> 
                 <img :src="item.image" width="30px" alt="图片"> 
-                {{ item.name }}
+                {{ item.spu }}
               </td>
               <td>
                 <div v-for="key in Object.keys(item.sku)" :key="key">
                   <span class="table-sku">{{ key }}: {{ item.sku[key] }} </span>
                 </div>
               </td>
-              <td>
-                <span> {{ item.price }} </span>
-              </td>
-              <td>
-                <span> x {{ item.num }} </span>
-              </td>
-              <td>
-                无
-              </td>
-              <td>
-                <span> {{ item.price * item.num }} </span>
-              </td>
+              <td> <span> {{ item.price }} </span> </td>
+              <td> <span> x {{ item.count }} </span> </td>
+              <td> 无 </td>
+              <td> <span> {{ item.price * item.count }} </span> </td>
             </tr>
             <tr>
               <td colspan="6">
                 <span class="text-muted">备注：</span>
-                <input class="remark" placeholder="补充填写其他信息，如有快递不到也请留言">
+                <input v-model="merchant.remark" class="remark" placeholder="补充填写其他信息，如有快递不到也请留言">
               </td>
             </tr>
+            <div style="height: 10px"></div>
           </tbody>
         </table>
       </div>
@@ -86,12 +83,12 @@
           返回购物车
         </el-link>
       </div>
-      <div v-if="JSON.stringify(order) !== '{}'" class="float-right">
+      <div class="float-right">
         <span class="pr-3">
-          共有 <span style="color: #ff5777;">{{ order.orderItem.length }}</span> 件商品，
-          共计<span style="color: #ff5777; font-size: 20px">￥{{ order.payMoney }}</span>
+          共有 <span style="color: #ff5777;">{{ skuCount }}</span> 件商品，
+          共计<span style="color: #ff5777; font-size: 20px">￥{{ payMoney }}</span>
         </span>
-        <el-button type="primary" @click="pay">确认并付款</el-button>
+        <el-button type="primary" @click="createOrder">确认并付款</el-button>
       </div>
     </div>
   </div>
@@ -99,8 +96,9 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { getPrepareOrder, checkPrepareOrder, createOrder, queryOrderStatus } from '@/api/order/order'
 import { Getter } from 'vuex-class'
+import { createOrder, queryStatus, queryOrderStatus, checkPrepareOrder } from '@/api/omc/order'
+import { confirmOrder } from '@/api/gmc/product'
 import { getUserAddress } from '@/api/uac/address'
 
 @Component
@@ -111,24 +109,56 @@ export default class Buy extends Vue {
   private queueTimer: any
 
   private userAddress: any = [] // 收货地址
-  private order: any = {} // 显示
+  private orderList: any = []
+  private skuCount = 0
+  private payMoney = 0
+
   private orderModel: any = {
     id: '',
     addressId: null
   }
 
   // 创建订单，在这之前需要添加收货地址
-  private pay() {
+  private createOrder() {
     if (!this.orderModel.addressId) {
       this.$message({ type: 'info', message: '请添加收货地址' })
       return
     }
-    // 创建订单
-    createOrder(this.orderModel).then((res: any) => {
-      this.$log.info('创建订单', res)
-      this.handlerCreateOrder();
-    })
+    const order = []
+
+		for (const merchant of this.orderList) {
+			const orderItem = []
+			for (const sku of merchant.skuList) {
+				orderItem.push({ skuId: sku.skuId, num: sku.count })
+			}
+			order.push({ orderItem, remark: merchant.remark })
+		}
+		console.log({ data: order, shippingAddressId: '0' })
+		
+		if (this.confirmOrder.length == 1 && this.orderList[0].type == this.$orderType.SECKILL) {
+			// 秒杀订单
+			// gscCreateOrder({ skuId: order[0].orderItem[0].skuId, shippingAddressId: '0', remark: order[0].remark }).then(res => {
+			// 	this.checkOrderStatus(res.data)
+			// })
+		} else {
+			// 普通订单
+			createOrder({ data: order, shippingAddressId: '0' }).then(res => {
+				this.checkOrderStatus(res.data)
+			})
+		}
   }
+
+  // 判断是否生成订单
+	private checkOrderStatus(paymentId: string) {
+		this.queueTimer = setInterval(() => {
+			queryStatus(paymentId).then((res: any) => {
+				if (res.data && res.data == this.$orderStatus.PAYMENT) {
+					if (this.queueTimer) clearInterval(this.queueTimer)
+          this.$router.push(`/order/pay/${paymentId}`)
+				}
+			})
+		}, 1500) 
+	}
 
   // 排队成功
   private handlerCreateOrder() {
@@ -156,17 +186,16 @@ export default class Buy extends Vue {
    
   
   // 获取预订单
-  private getPrepareOrder() {
-    getPrepareOrder(this.$route.params.id).then((res: any) => {
+  private confirmOrder() {
+    const order: any = this.$utils.getOrderItem(this.$route.params.id);
+    confirmOrder({skuList: order.skuList}).then((res: any) => {
       if (res.data == null) {
         this.$router.back()
       }
-      this.order = res.data
-      for (const item of this.order.orderItem) {
-        item.sku = JSON.parse(item.sku)
+      this.orderList = res.data
+      for (const merchant of this.orderList) {
+        merchant.remark = ''
       }
-      this.orderModel.id = this.order.id
-      this.$log.info('收到订单', this.order)
     })
   }
   
@@ -202,12 +231,8 @@ export default class Buy extends Vue {
   }
   
   private mounted() {
-    this.getPrepareOrder()
+    this.confirmOrder()
     this.getUserAddress()
-  }
-  private beforeDestroy() {
-    // 判断预生产的订单是否需要删除
-    checkPrepareOrder(this.order.id)
   }
 }
 </script>
@@ -230,6 +255,8 @@ export default class Buy extends Vue {
     font-size: 14px;
     width: 360px;
     color: #666;
+    border: none;
+    outline: none;
   }
 }
 .addr-card {

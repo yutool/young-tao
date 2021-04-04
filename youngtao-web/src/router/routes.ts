@@ -24,7 +24,7 @@ const routes = [
     meta: { requireAuth: true },
     children: [
       { path: '/', redirect: {name: 'cart'} },
-      { path: 'cart/:id', name: 'cart', component: () => import('@/views/order/cart.vue') },
+      { path: 'cart', name: 'cart', component: () => import('@/views/order/cart.vue') },
       { path: 'buy/:id', name: 'buy' , component: () => import('@/views/order/buy.vue') },
       { path: 'pay/:id', name: 'pay', component: () => import('@/views/order/pay.vue') },
       { path: 'pay_success', name: 'pay_success', component: () => import('@/views/order/pay_success.vue') },
@@ -32,7 +32,7 @@ const routes = [
     ]
   },
   {
-    path: '/center/:id',
+    path: '/center',
     component: () => import('@/views/center/index.vue'),
     meta: { requireAuth: true },
     children: [

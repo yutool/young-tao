@@ -1,9 +1,11 @@
 package com.youngtao.omc.model.data;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.common.collect.Lists;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -42,5 +44,8 @@ public class OrderData {
 
     private Integer payType;
 
-    List<OrderItemData> orderItemList = Lists.newArrayList();
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
+
+    List<OrderItemData> orderItem = Lists.newArrayList();
 }

@@ -1,6 +1,7 @@
 package com.youngtao.omc.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.youngtao.core.util.RocketMQUtils;
@@ -78,12 +79,12 @@ public class OrderServiceImpl extends BaseService<OrderDO> implements OrderServi
     }
 
     @Override
-    public List<OrderData> getUserOrder(GetUserOrderRequest request, String userId) {
+    public PageInfo<OrderData> getUserOrder(GetUserOrderRequest request, String userId) {
         // 获取数据
         PageHelper.startPage(request.getPage(), request.getSize());
         List<OrderDO> orderDOList = orderMapper.selectByUserIdAndStatus(userId, request.getStatus());
         if (CollectionUtils.isEmpty(orderDOList)) {
-            return Lists.newArrayList();
+            return PageInfo.of(Lists.newArrayList());
         }
         Set<String> orderIds = orderDOList.stream().map(OrderDO::getOrderId).collect(Collectors.toSet());
         List<OrderItemDO> orderItemDOList = orderItemMapper.selectByOrderIds(orderIds);
@@ -98,8 +99,8 @@ public class OrderServiceImpl extends BaseService<OrderDO> implements OrderServi
         for (OrderData orderData : orderDataList) {
             List<OrderItemDO> list = orderItemMap.get(orderData.getOrderId());
             List<OrderItemData> orderItemData = orderItemConvert.toOrderItemData(list);
-            orderData.setOrderItemList(orderItemData);
+            orderData.setOrderItem(orderItemData);
         }
-        return orderDataList;
+        return PageInfo.of(orderDataList);
     }
 }

@@ -20,4 +20,10 @@ public interface CartService {
      * @param userId userId
      */
     List<CartResponse> listByUserId(String userId);
+
+    /**
+     * 删除购物车
+     * @param id id
+     */
+    void deleteCart(String id);
 }

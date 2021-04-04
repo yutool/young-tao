@@ -2,37 +2,38 @@ import request from '@/common/utils/request'
 
 export function addCart(data: any) {
   return request({
-    url: 'api/cart',
+    url: 'omc/cart/add',
     method: 'post',
     data: JSON.stringify(data)
   })
 }
 
-export function getCart(id: string) {
+export function getUserCart() {
   return request({
-    url: `api/cart/user/${id}`,
+    url: `omc/cart/getUserCart`,
     method: 'get'
   })
 }
 
 export function updateNum(data: any) {
   return request({
-    url: `api/cart`,
+    url: `omc/cart`,
     method: 'put',
     data: JSON.stringify(data)
   })
 }
 
-export function deleteCart(id: number) {
+export function deleteCart(data: any) {
   return request({
-    url: `api/cart/${id}`,
-    method: 'delete'
+    url: `omc/cart/delete`,
+    method: 'post',
+    data: JSON.stringify(data)
   })
 }
 
 export function batchDelete(ids: any) {
   return request({
-    url: `api/cart/batch`,
+    url: `omc/cart/batch`,
     method: 'delete',
     data: { ids }
   })

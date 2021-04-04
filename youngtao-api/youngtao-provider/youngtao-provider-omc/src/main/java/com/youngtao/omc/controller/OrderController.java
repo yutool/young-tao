@@ -1,5 +1,8 @@
 package com.youngtao.omc.controller;
 
+import com.github.pagehelper.PageInfo;
+import com.youngtao.core.context.AuthContext;
+import com.youngtao.core.context.AuthInfo;
 import com.youngtao.core.data.IdArg;
 import com.youngtao.omc.model.data.OrderData;
 import com.youngtao.omc.model.request.CreateOrderRequest;
@@ -7,10 +10,12 @@ import com.youngtao.omc.model.request.GetUserOrderRequest;
 import com.youngtao.omc.service.OrderService;
 import com.youngtao.web.support.ResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * @author ankoye@qq.com
@@ -36,8 +41,8 @@ public class OrderController {
     }
 
     @PostMapping("/getUserOrder")
-    public List<OrderData> getUserOrder(@RequestBody GetUserOrderRequest request) {
-        String userId = "0";
-        return orderService.getUserOrder(request, userId);
+    public PageInfo<OrderData> getUserOrder(@RequestBody GetUserOrderRequest request) {
+        AuthInfo authInfo = AuthContext.get();
+        return orderService.getUserOrder(request, authInfo.getUserId());
     }
 }

@@ -1,5 +1,8 @@
 package com.youngtao.omc.controller;
 
+import com.youngtao.core.context.AuthContext;
+import com.youngtao.core.context.AuthInfo;
+import com.youngtao.core.data.IdArg;
 import com.youngtao.omc.model.request.AddCartRequest;
 import com.youngtao.omc.model.response.CartResponse;
 import com.youngtao.omc.service.CartService;
@@ -21,16 +24,21 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
-    @PostMapping("/add")
-    public void addCart(@RequestBody AddCartRequest request) {
-        String userId = "0";
-        cartService.addCart(request, userId);
-    }
-
     @GetMapping("/getUserCart")
     public List<CartResponse> getUserCart() {
-        String userId = "0";
-        return cartService.listByUserId(userId);
+        AuthInfo authInfo = AuthContext.get();
+        return cartService.listByUserId(authInfo.getUserId());
+    }
+
+    @PostMapping("/add")
+    public void addCart(@RequestBody AddCartRequest request) {
+        AuthInfo authInfo = AuthContext.get();
+        cartService.addCart(request, authInfo.getUserId());
+    }
+
+    @PostMapping("/delete")
+    public void deleteCart(@RequestBody IdArg arg) {
+        cartService.deleteCart(arg.getId());
     }
 
 }

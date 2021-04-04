@@ -58,8 +58,8 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { Getter } from 'vuex-class'
-import { getGoods, prepare, queryQueue } from '@/api/seckill/seckill'
-import { getOrder } from '@/api/order/order'
+import { getGoods, prepare, queryQueue } from '@/api/gsc/product'
+import { getOrder } from '@/api/omc/order'
 import { copyOf } from '@/common/utils/ObjectUtil'
 
 @Component

@@ -26,14 +26,22 @@
             </tr>
           </thead>
           <br />
-          <tbody>
-            <tr class="border" v-for="cart in cartList" :key="cart.id">
+          <tbody v-for="merchant in cartList" :key="merchant.merchantId">
+            <tr class="border mt-3 bg-light">
+              <th scope="row">
+                <el-checkbox @change="handlerChange"></el-checkbox>
+              </th>
+              <td colspan="6">
+                {{merchant.shopName}}
+              </td>
+            </tr>
+            <tr class="border" v-for="cart in merchant.skuList" :key="cart.id">
               <th scope="row">
                 <el-checkbox v-model="checkObj.check[cart.id]" @change="handlerChange"></el-checkbox>
               </th>
               <td> 
                 <img :src="cart.image" width="60px" alt=""> 
-                {{ cart.name }}
+                {{ cart.spu }}
               </td>
               <td>
                 <div v-for="key in Object.keys(cart.sku)" :key="key">
@@ -42,7 +50,7 @@
               </td>
               <td>
                 <div> ￥{{ cart.price }} </div>
-                <div> <s class="text-muted">￥{{ cart.originalPrice }}</s>  </div>
+                <div> <s class="text-muted">￥{{ cart.oldPrice }}</s>  </div>
               </td>
               <td>
                 <el-input-number
@@ -60,6 +68,7 @@
                 <el-link type="primary">移入收藏夹</el-link>
               </td>
             </tr>
+            <div style="height: 10px"></div>
           </tbody>
         </table>
       </div>
@@ -84,15 +93,14 @@
     <div v-else class="text-center pt-5">
       购物车空空如也~~~
     </div>
-    
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { Getter, State } from 'vuex-class'
-import { getCart, updateNum, deleteCart, batchDelete } from '@/api/order/cart'
-import { prepareOrder } from '@/api/order/order'
+import { getUserCart, updateNum, deleteCart, batchDelete } from '@/api/omc/cart'
+import { prepareOrder } from '@/api/omc/order'
 
 @Component
 export default class Cart extends Vue {
@@ -150,13 +158,8 @@ export default class Cart extends Vue {
 
   // 删除购物车商品
   private deleteCart(id: number) {
-    deleteCart(id).then((res: any) => {
-      for (let i = 0; i < this.cartList.length; i++) {
-        if (this.cartList[i].id === id) {
-          this.cartList.splice(i, 1);
-          break;
-        }
-      }
+    deleteCart({id}).then((res: any) => {
+      this.getUserCart()
     })
   }
 
@@ -169,7 +172,7 @@ export default class Cart extends Vue {
       }
     }
     batchDelete(cartIds).then((res: any) => {
-      this.getCart()
+      this.getUserCart()
     })
   }
   
@@ -192,19 +195,15 @@ export default class Cart extends Vue {
   }
   
   // 获取购物车
-  private getCart() {
-    const userId = this.$route.params.id
-    getCart(userId).then((res: any) => {
+  private getUserCart() {
+    getUserCart().then((res: any) => {
       this.cartList = res.data
-      for (const cart of this.cartList) {
-        cart.sku = JSON.parse(cart.sku)
-      }
       this.$log.info('查询购物车', this.cartList)
     })
   }
   
   private mounted() {
-    this.getCart()
+    this.getUserCart()
   }
 }
 </script>

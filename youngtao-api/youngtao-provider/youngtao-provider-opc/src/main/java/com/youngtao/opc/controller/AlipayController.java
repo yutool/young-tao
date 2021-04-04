@@ -1,5 +1,6 @@
 package com.youngtao.opc.controller;
 
+import com.alipay.api.AlipayClient;
 import com.youngtao.opc.common.util.AlipayUtils;
 import com.youngtao.opc.model.request.AlipayAppCheckRequest;
 import com.youngtao.opc.model.request.AlipayAppRequest;
@@ -7,12 +8,10 @@ import com.youngtao.opc.service.AlipayService;
 import com.youngtao.web.support.NoWrapper;
 import com.youngtao.web.support.ResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
@@ -33,13 +32,22 @@ public class AlipayController {
         return alipayService.appPay(request);
     }
 
+    @Autowired
+    private AlipayClient alipay;
+
+    @GetMapping("/web")
+    @NoWrapper
+    public void webPay(HttpServletResponse response) {
+        alipayService.webPay(response);
+    }
+
     @PostMapping("/check")
     public boolean check(@RequestBody AlipayAppCheckRequest request) {
         return alipayService.check(request);
     }
 
     @NoWrapper
-    @PostMapping("/notify")
+    @RequestMapping("/notify")
     public String notify(HttpServletRequest request) {
         Map<String, String> resultMap = alipayUtils.parseToMap(request);
         // 内容验签，防止黑客篡改参数

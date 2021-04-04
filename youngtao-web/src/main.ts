@@ -18,11 +18,21 @@ import '@/style/index.scss'
 
 // 日志
 import logger from '@/common/utils/logger'
+import Utils from '@/common/utils/utils'
+import orderType from '@/common/constant/OrderType'
+import orderStatus from '@/common/constant/OrderStatus'
 
-Vue.prototype.$log = logger;
+Vue.prototype.$log = logger
+Vue.prototype.$utils = Utils
+Vue.prototype.$orderType = orderType
+Vue.prototype.$orderStatus = orderStatus
+
 declare module 'vue/types/vue' {
   interface Vue {
-    $log: any
+    $log: any,
+    $utils: any,
+    $orderType: any,
+    $orderStatus: any
   }
 }
 

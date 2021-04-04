@@ -1,7 +1,7 @@
 <template>
   <el-dropdown>
     <div class="el-dropdown-link" style="">
-      <router-link :to="'/center/'+userId" class="nav-router-link">
+      <router-link to="/center" class="nav-router-link">
         订单中心
       </router-link>
     </div>

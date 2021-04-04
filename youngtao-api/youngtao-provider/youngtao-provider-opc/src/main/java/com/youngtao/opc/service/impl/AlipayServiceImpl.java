@@ -3,8 +3,10 @@ package com.youngtao.opc.service.impl;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
+import com.alipay.api.domain.AlipayTradePagePayModel;
 import com.alipay.api.domain.AlipayTradeQueryModel;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
+import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
@@ -26,6 +28,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
 
@@ -71,6 +75,32 @@ public class AlipayServiceImpl implements AlipayService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public void webPay(HttpServletResponse response) {
+        AlipayTradePagePayModel model = new AlipayTradePagePayModel();
+        model.setOutTradeNo(System.currentTimeMillis()+"");
+        model.setSubject("bbbbbbbbb");
+        model.setBody("ccccccccccc");
+        model.setProductCode("FAST_INSTANT_TRADE_PAY");
+        // model.setTotalAmount(BigDecimals.round(record.getMoney()));
+        model.setTotalAmount("0.01");
+        model.setTimeoutExpress("30m");
+        AlipayTradePagePayRequest payRequest = new AlipayTradePagePayRequest();
+        payRequest.setBizModel(model);
+        payRequest.setNotifyUrl(config.getNotifyUrl());
+        try {
+            String body = alipay.pageExecute(payRequest).getBody();
+            response.setContentType("text/html;charset=utf-8");
+            response.getWriter().write(body);
+            response.getWriter().flush();
+            response.getWriter().close();
+        } catch (AlipayApiException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -1,11 +1,11 @@
 <template>
-  <div class="container">
-    <ul class="hoursMenu clearfix">
-      <li v-for="(menu, i) in menus" :key="menu" @click="changeMenu(i)"
+  <div class="container product-wrap">
+    <ul v-if="menus.length != 0" class="hoursMenu shadow-sm clearfix">
+      <li v-for="(n, i)  in 5" :key="i" @click="changeMenu(i)"
         :class="{active: i==0}">
         <div class="clearfix">
           <el-col :span="10" class="menu-time">
-            {{menu.substring(8)}} : 00
+            {{menus[i].substring(8)}} : 00
           </el-col>
           <el-col :span="14" v-if="active == i" class="menu-show">
             <div v-if="i == 0">
@@ -29,9 +29,9 @@
       </li>
     </ul>
     <el-row :gutter="20">
-      <el-col v-for="goods in goodsList" :key="goods.spu.id" :md="6">
+      <el-col v-for="product in productList" :key="product.spuId" :md="6">
         <!-- 首页显示第一个sku -->
-        <goods-card :goods="goods" :time="menus[active]" />
+        <product-card :product="product" :time="menus[active]" />
       </el-col>
     </el-row>
   </div>
@@ -39,23 +39,23 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import GoodsCard from './components/GoodsCard.vue'
-import { getDateMenu, getGoodsList } from '@/api/seckill/seckill'
+import ProductCard from './components/ProductCard.vue'
+import { getTimeMenu, getProductList } from '@/api/gsc/product'
 
 @Component({
   components: {
-    GoodsCard
+    ProductCard
   }
 })
 export default class SeckillList extends Vue {
   private active = 0
   private menus: any = []
-  private goodsList: any = []
+  private productList: any = []
   
   // 切换菜单
   private changeMenu(index: number) {
     this.active = index
-    this.getGoods(this.menus[index]);
+    this.getProduct(index, 1, 10);
     $('.hoursMenu li').each((i: any, e: any) => {
       if (i !== index) {
         e.classList.remove('active')
@@ -66,24 +66,24 @@ export default class SeckillList extends Vue {
   }
   
   // 获取秒杀菜单
-  private getDateMenu() {
-    getDateMenu().then((res: any) => {
+  private getTimeMenu() {
+    getTimeMenu().then((res: any) => {
       this.menus = res.data
-      this.getGoods(this.menus[0])
+      this.getProduct(0, 1, 10)
       this.$log.info('获取菜单', res.data)
     })
   }
   
   // 获取菜单对应的秒杀商品
-  private getGoods(menu: string) {
-    getGoodsList(menu).then((res: any) => {
-      this.goodsList = res.data
+  private getProduct(idx: any, page: any, size: any) {
+    getProductList(idx, page, size).then((res: any) => {
+      this.productList = res.data
       this.$log.info('秒杀商品', res.data)
     })
   }
   
   private mounted() {
-    this.getDateMenu()
+    this.getTimeMenu()
   }
 }
 </script>
@@ -91,7 +91,7 @@ export default class SeckillList extends Vue {
 <style scoped lang="scss">
 .hoursMenu {
   padding: 0;
-  box-shadow: 1px 1px 1px 1px #666;
+  background-color: #fff;
   li {
     float: left;
     list-style: none;

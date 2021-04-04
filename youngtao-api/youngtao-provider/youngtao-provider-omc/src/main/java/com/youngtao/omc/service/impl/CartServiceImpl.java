@@ -1,5 +1,6 @@
 package com.youngtao.omc.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.youngtao.core.result.RpcResult;
@@ -108,5 +109,12 @@ public class CartServiceImpl implements CartService {
             cartResponse.getSkuList().add(cartData);
         }
         return Lists.newArrayList(responseMap.values());
+    }
+
+    @Override
+    public void deleteCart(String id) {
+        cartMapper.delete(new UpdateWrapper<CartDO>()
+            .eq("id", id)
+        );
     }
 }
