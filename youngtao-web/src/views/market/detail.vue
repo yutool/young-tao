@@ -11,7 +11,8 @@
       <el-col :md="12">
         <!-- 标题 -->
         <div class="sku-title">
-          <el-tag size="mini">新品</el-tag>
+          <el-tag v-if="checkedSku.type == 2" type="danger" size="mini">活动中</el-tag>
+          <el-tag v-else size="mini">新品</el-tag>
           {{ checkedSku.title }}
         </div>
         <!-- 价格 -->
@@ -20,7 +21,7 @@
             <span>
               优惠价：<span class="price">￥{{ checkedSku.price }}</span>
             </span>
-            <s>原价：￥{{ checkedSku.price }} </s>
+            <s>原价：￥{{ checkedSku.oldPrice }} </s>
           </div>
           <div class="sku-sales">
             <small class="pr-3">累计评价: {{ spu.commentNum }}</small>
@@ -48,7 +49,7 @@
         <!-- 操作按钮 -->
         <div class="sku-buy">
           <el-button type="success" @click="buy" plain>立即购买</el-button>
-          <el-button type="primary" @click="addCart" plain>加入购物车</el-button>
+          <el-button type="primary" @click="addCart" plain :disabled="checkedSku.type == 2">加入购物车</el-button>
         </div>
         <div class="sku-serve">
           <span class="sku-form-lable">服务说明：</span>
@@ -69,7 +70,6 @@ import { Getter } from 'vuex-class'
 import { getProduct } from '@/api/gmc/product'
 import { addCart } from '@/api/omc/cart'
 import { prepareOrder } from '@/api/omc/order'
-import { copyOf } from '@/common/utils/ObjectUtil'
 
 @Component
 export default class GoodsDetail extends Vue {
@@ -119,7 +119,7 @@ export default class GoodsDetail extends Vue {
       for (const item of Object.keys(this.spu.skuTemplate)) {
         this.checkedObj[item] = this.spu.skuTemplate[item][0]
       }
-      this.checkedObj = copyOf(this.checkedObj)
+      this.checkedObj = this.$utils.copyOf(this.checkedObj)
       this.$log.info('查询成功', res)
     })
   }

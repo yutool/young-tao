@@ -31,8 +31,8 @@ public class OrderController {
 
     @PostMapping("/create")
     public String createOrder(@Valid @RequestBody CreateOrderRequest request) {
-        String userId = "0";
-        return orderService.createOrder(request, userId);
+        AuthInfo authInfo = AuthContext.get();
+        return orderService.createOrder(request, authInfo.getUserId());
     }
 
     @PostMapping("/queryStatus")

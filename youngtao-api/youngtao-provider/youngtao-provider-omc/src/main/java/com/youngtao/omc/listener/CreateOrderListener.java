@@ -21,6 +21,7 @@ import com.youngtao.omc.model.request.CreateOrderRequest;
 import com.youngtao.opc.api.model.arg.AddPayRecordArg;
 import com.youngtao.opc.api.service.OrderPayRecordFeign;
 import com.youngtao.web.cache.RedisManager;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,7 @@ import java.util.stream.Collectors;
  * @author ankoye@qq.com
  * @date 2020/12/13
  */
+@Slf4j
 @Component
 @RocketMQMessageListener(
         topic = "${order-topic}",

@@ -1,6 +1,4 @@
 package com.youngtao.uac.mapper;
-import org.apache.ibatis.annotations.Param;
-
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.youngtao.uac.model.domain.ShippingAddress;
 import org.apache.ibatis.annotations.Mapper;
@@ -22,5 +20,14 @@ public interface ShippingAddressMapper extends BaseMapper<ShippingAddress> {
      */
     int insert0(ShippingAddress shippingAddress);
 
-    List<ShippingAddress> selectByUserId(@Param("userId") String userId);
+    List<ShippingAddress> selectByUserId(String userId);
+
+    int cancelDefault(String userId);
+
+    int setDefault(String saId);
+
+    /**
+     * 设置一条默认的
+     */
+    int resetDefault(String userId);
 }

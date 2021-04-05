@@ -1,9 +1,8 @@
 package com.youngtao.opc.controller;
 
-import com.alipay.api.AlipayClient;
 import com.youngtao.opc.common.util.AlipayUtils;
 import com.youngtao.opc.model.request.AlipayAppCheckRequest;
-import com.youngtao.opc.model.request.AlipayAppRequest;
+import com.youngtao.opc.model.request.AlipayRequest;
 import com.youngtao.opc.service.AlipayService;
 import com.youngtao.web.support.NoWrapper;
 import com.youngtao.web.support.ResponseWrapper;
@@ -11,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 
 /**
  * @author ankoye@qq.com
@@ -28,17 +25,13 @@ public class AlipayController {
     private AlipayUtils alipayUtils;
 
     @PostMapping("/app")
-    public String appPay(@RequestBody AlipayAppRequest request) {
+    public String appPay(@RequestBody AlipayRequest request) {
         return alipayService.appPay(request);
     }
 
-    @Autowired
-    private AlipayClient alipay;
-
-    @GetMapping("/web")
-    @NoWrapper
-    public void webPay(HttpServletResponse response) {
-        alipayService.webPay(response);
+    @PostMapping("/web")
+    public String webPay(@RequestBody AlipayRequest request) {
+        return alipayService.webPay(request);
     }
 
     @PostMapping("/check")
@@ -49,11 +42,12 @@ public class AlipayController {
     @NoWrapper
     @RequestMapping("/notify")
     public String notify(HttpServletRequest request) {
-        Map<String, String> resultMap = alipayUtils.parseToMap(request);
-        // 内容验签，防止黑客篡改参数
-        if (alipayUtils.rsaCheck(resultMap)) {
-            return alipayService.payNotify(resultMap);
-        }
-        return "failure";
+        return "success";
+//        Map<String, String> resultMap = alipayUtils.parseToMap(request);
+//        // 内容验签，防止黑客篡改参数
+//        if (alipayUtils.rsaCheck(resultMap)) {
+//            return alipayService.payNotify(resultMap);
+//        }
+//        return "failure";
     }
 }

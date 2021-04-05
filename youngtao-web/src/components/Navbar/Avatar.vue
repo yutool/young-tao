@@ -1,14 +1,16 @@
 <template>
   <div style="height: 36px;">
-    <el-dropdown class="pl-3" @command="handleCommand" @click.native="$router.push(`/user`)">
-      <el-avatar class="user-avatar" :size="36">
-        <img v-if="user" :src="user.avatar"/>
+    <el-dropdown class="pl-3" @click.native="$router.push(`/user`)">
+      <!-- 头像 -->
+      <el-avatar class="pointer" :size="36">
+        <img v-if="JSON.stringify(userInfo) !== '{}'" :src="userInfo.avatar"/>
         <span v-else>游客</span>
       </el-avatar>
+      <!-- 下拉菜单 -->
       <el-dropdown-menu slot="dropdown" class="user-dropdown">
-        <div v-if="JSON.stringify(user) !== '{}'" class="text-center">
-          <span>{{user.username}}</span>
-          <el-dropdown-item @click.native="$router.push(`/user`)">个人空间</el-dropdown-item>
+        <div v-if="JSON.stringify(userInfo) !== '{}'" class="text-center">
+          <el-dropdown-item @click.native="$router.push('/user')">{{userInfo.username}}</el-dropdown-item>
+          <el-dropdown-item @click.native="$router.push('/user/security')">安全设置</el-dropdown-item>
           <el-dropdown-item @click.native="logout">退出</el-dropdown-item>
         </div>
         <div v-else>
@@ -16,6 +18,7 @@
         </div>
       </el-dropdown-menu>
     </el-dropdown>
+    <!-- 登录窗 -->
     <login-dialog />
   </div>
 </template>
@@ -31,19 +34,9 @@ import LoginDialog from './components/LoginDialog.vue';
   },
 })
 export default class Avatar extends Vue {
-  @State((state: any) => state.account.user) private user: any
+  @State((state: any) => state.account.user) private userInfo: any
   @Action('app/openLoginDialog') private openLoginDialog: any
   
-  // data
-  private dialogVisible = false;
-  // method
-  private handleCommand(command: string) {
-    if (command === undefined) {
-      return ;
-    }
-    this.$message('click on item ' + command);
-    this.$router.push(`/${command}`);
-  }
   private logout() {
     this.$store.dispatch('account/logout');
   }
@@ -51,7 +44,5 @@ export default class Avatar extends Vue {
 </script>
 
 <style scoped lang="scss">
-.user-avatar {
-  cursor: pointer;
-}
+
 </style>

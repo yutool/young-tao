@@ -98,6 +98,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { Getter } from 'vuex-class'
 import { createOrder, queryStatus, queryOrderStatus, checkPrepareOrder } from '@/api/omc/order'
+import { gscCreateOrder } from '@/api/gsc/order'
 import { confirmOrder } from '@/api/gmc/product'
 import { getUserAddress } from '@/api/uac/address'
 
@@ -126,39 +127,44 @@ export default class Buy extends Vue {
     }
     const order = []
 
-		for (const merchant of this.orderList) {
-			const orderItem = []
-			for (const sku of merchant.skuList) {
-				orderItem.push({ skuId: sku.skuId, num: sku.count })
-			}
-			order.push({ orderItem, remark: merchant.remark })
-		}
-		console.log({ data: order, shippingAddressId: '0' })
-		
-		if (this.confirmOrder.length == 1 && this.orderList[0].type == this.$orderType.SECKILL) {
-			// 秒杀订单
-			// gscCreateOrder({ skuId: order[0].orderItem[0].skuId, shippingAddressId: '0', remark: order[0].remark }).then(res => {
-			// 	this.checkOrderStatus(res.data)
-			// })
-		} else {
-			// 普通订单
-			createOrder({ data: order, shippingAddressId: '0' }).then(res => {
-				this.checkOrderStatus(res.data)
-			})
-		}
+    for (const merchant of this.orderList) {
+      const orderItem = []
+      for (const sku of merchant.skuList) {
+        orderItem.push({ skuId: sku.skuId, num: sku.count })
+      }
+      order.push({ orderItem, remark: merchant.remark })
+    }
+    console.log({ data: order, shippingAddressId: '0' })
+
+    if (this.confirmOrder.length === 1 && this.orderList[0].type === this.$orderType.SECKILL) {
+      // 秒杀订单
+      gscCreateOrder({ skuId: order[0].orderItem[0].skuId, shippingAddressId: '0', remark: order[0].remark })
+      .then((res: any) => {
+        this.checkOrderStatus(res.data)
+      })
+    } else {
+      // 普通订单
+      createOrder({ data: order, shippingAddressId: '0' }).then((res: any) => {
+        this.checkOrderStatus(res.data)
+      })
+    }
   }
 
   // 判断是否生成订单
-	private checkOrderStatus(paymentId: string) {
-		this.queueTimer = setInterval(() => {
-			queryStatus(paymentId).then((res: any) => {
-				if (res.data && res.data == this.$orderStatus.PAYMENT) {
-					if (this.queueTimer) clearInterval(this.queueTimer)
-          this.$router.push(`/order/pay/${paymentId}`)
-				}
-			})
-		}, 1500) 
-	}
+  private checkOrderStatus(paymentId: string) {
+    this.loading = true
+    this.queueTimer = setInterval(() => {
+      queryStatus(paymentId).then((res: any) => {
+      if (res.data && res.data === this.$orderStatus.PAYMENT) {
+        this.loading = false
+        if (this.queueTimer) {
+          clearInterval(this.queueTimer)
+        }
+        this.$router.push(`/order/pay/${paymentId}`)
+      }
+    });
+    }, 2000)
+  }
 
   // 排队成功
   private handlerCreateOrder() {
@@ -184,8 +190,7 @@ export default class Buy extends Vue {
     }), 1500)
   }
    
-  
-  // 获取预订单
+  // 确认订单
   private confirmOrder() {
     const order: any = this.$utils.getOrderItem(this.$route.params.id);
     confirmOrder({skuList: order.skuList}).then((res: any) => {

@@ -1,9 +1,12 @@
 <template>
-  <div class="product-card shadow-sm" @click="productDetail(product.spuId)">
+  <div class="product-card shadow-sm" @click="productDetail(product.spuId, product.skuId)">
     <div class="product-img">
       <img :src="product.image" alt="">
     </div>
-    <div class="product-title">{{ product.title }}</div>
+    <div class="product-title">
+      <el-tag type="danger" size="mini">活动中</el-tag>
+      {{ product.title }}
+    </div>
     <el-row>
       <el-col :span="15">
         <div class="product-price-box">
@@ -12,7 +15,7 @@
         </div>
       </el-col>
       <el-col :span="9">
-        <el-button size="small" type="primary" @click="productDetail(product.spuId)" class="float-right">
+        <el-button size="small" type="primary" @click="productDetail(product.spuId, product.skuId)" class="float-right">
           立即抢购
         </el-button>
       </el-col>
@@ -31,11 +34,8 @@ export default class ProductCard extends Vue {
   @Prop() private product: any
   @Prop() private time: any
   
-  private productDetail(id: string) {
-    this.$router.push(`/seckill/detail/${this.time}/${id}`)
-  }
-  
-  private mounted() {
+  private productDetail(spuId: string, skuId: string) {
+    this.$router.push(`/market/detail/${spuId}?skuId=${skuId}`)
   }
 }
 </script>

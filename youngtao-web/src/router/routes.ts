@@ -15,7 +15,6 @@ const routes = [
     children: [
       { path: '/', redirect: 'list' },
       { path: 'list', component: () => import('@/views/seckill/list.vue') },
-      { path: 'detail/:time/:id', component: () => import('@/views/seckill/detail.vue') },
     ]
   },
   {

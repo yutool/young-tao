@@ -21,6 +21,25 @@
         values (#{shippingAddrId}, #{userId}, #{consignee}, #{telephone}, #{address}, #{detail}, #{postcode}, #{isDefault}, #{updateTime}, #{createTime})
     </insert>
 
+    <update id="cancelDefault">
+        update uac_shipping_address
+        set is_default = false
+        where user_id = #{userId}
+    </update>
+
+    <update id="setDefault">
+        update uac_shipping_address
+        set is_default = true
+        where shipping_addr_id = #{saId}
+    </update>
+
+    <update id="resetDefault">
+        update uac_shipping_address
+        set is_default = true
+        where user_id = #{userId}
+        limit 1
+    </update>
+
     <select id="selectByUserId" resultMap="BaseResultMap">
         select * from uac_shipping_address
         where user_id = #{userId}

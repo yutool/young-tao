@@ -12,6 +12,11 @@ class Utils {
     const data: any = Cookies.get(randKey);
     return JSON.parse(data);
   }
+
+  // 拷贝对象
+  private copyOf(obj: any) {
+    return JSON.parse(JSON.stringify(obj))
+  }
 }
 
 export default new Utils();

@@ -45,6 +45,12 @@
     text-align: left !important;
   }
 }
+// tag取消padding
+.m-tab-content {
+  .el-tabs__content {
+    padding: 0 !important;
+  }
+}
 // 弹窗padding设置
 .m-el-dialog {
   .el-dialog__body {

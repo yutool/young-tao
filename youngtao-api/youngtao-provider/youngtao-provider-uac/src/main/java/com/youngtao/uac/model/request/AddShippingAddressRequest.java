@@ -8,6 +8,8 @@ import lombok.Data;
  */
 @Data
 public class AddShippingAddressRequest {
+    private String shippingAddrId;
+
     private String address;
 
     private String detail;
@@ -24,5 +26,5 @@ public class AddShippingAddressRequest {
 
     private String telephone;
 
-    private Boolean isDefault;
+    private Boolean isDefault = false;
 }

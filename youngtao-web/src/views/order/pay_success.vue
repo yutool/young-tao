@@ -10,10 +10,10 @@
     
     <div class="text-center border p-5">
       <p>恭喜你，支付成功啦！</p>
-      <p>支付方式：微信</p>
+      <p>支付方式：xx</p>
       <p>支付金额：xxx</p>
       <div>
-        <el-button type="primary" @click="$router.push(`/center/${userId}/order`)">查看订单</el-button>
+        <el-button type="primary" @click="$router.push('/center/order')">查看订单</el-button>
         <el-button @click="$router.push('/market/list')">继续购物</el-button>
       </div>
     </div>

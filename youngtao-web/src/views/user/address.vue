@@ -22,15 +22,11 @@
             <td> {{addr.telephone}} </td>
             <td> {{addr.postcode}} </td>
             <td>
-              <span v-if="addr.isDefault">
-                默认地址
-              </span>
-              <el-button v-else type="primary" size="mini">
-                设置为默认
-              </el-button>
+              <span v-if="addr.isDefault"> 默认地址 </span>
+              <el-button v-else type="primary" size="mini" @click="setDefault(addr.shippingAddrId)"> 设置为默认 </el-button>
             </td>
             <td>
-              <el-button type="primary" size="mini" class="mr-2"> 编辑 </el-button>
+              <el-button type="primary" size="mini" class="mr-2" @click="editAddress(addr)"> 编辑 </el-button>
               <el-popconfirm title="是否确认删除" @onConfirm="deleteAddress(addr.shippingAddrId)" >
                 <el-button type="danger" size="mini" slot="reference">删除</el-button>
               </el-popconfirm>
@@ -51,7 +47,7 @@
         <el-form-item label="详细地址" prop="detail">
           <el-input type="textarea" v-model="addrForm.detail"></el-input>
         </el-form-item>
-        <el-form-item label="邮政编码">
+        <el-form-item label="邮政编码" prop="postcode">
           <el-input v-model="addrForm.postcode"></el-input>
         </el-form-item>
         <el-form-item label="收货人姓名" prop="consignee">
@@ -64,7 +60,8 @@
           <el-checkbox label="设置为默认地址" v-model="addrForm.isDefault"></el-checkbox>
         </div>
         <el-form-item label="">
-          <el-button type="primary" @click="submitForm">保存</el-button>
+          <el-button type="primary" @click="submitForm">保存地址</el-button>
+          <el-button type="info" @click="resetForm">清空表单</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -74,8 +71,7 @@
 <script lang="ts">
 import { Component, Vue, Ref } from 'vue-property-decorator'
 import { Form } from 'element-ui'
-import { getUserAddress, addAddress, deleteAddress } from '@/api/uac/address'
-import { copyOf } from '@/common/utils/ObjectUtil'
+import { getUserAddress, addOrUpdateAddress, setDefault, deleteAddress } from '@/api/uac/address'
 import { State, Getter } from 'vuex-class'
 
 @Component
@@ -153,13 +149,12 @@ export default class Address extends Vue {
   private submitForm() {
     this.refAddrForm.validate((valid: any) => {
       if (valid) {
-        const form = copyOf(this.addrForm)
+        const form = this.$utils.copyOf(this.addrForm)
         form.address = form.address.join(' ')
-        console.log(form, 'aaaaaaaa')
-        addAddress(form).then((res: any) => {
+        addOrUpdateAddress(form).then((res: any) => {
           this.$message({type: 'success', message: '添加成功'})
-          // this.$log.info('添加收货地址', res)
-          // this.userAddress.push(res.data)
+          this.resetForm()
+          this.getUserAddress()
         })
       } else {
         return false;
@@ -172,10 +167,27 @@ export default class Address extends Vue {
       this.userAddress = res.data
     })
   }
+  // 设置默认地址
+  private setDefault(id: string) {
+    setDefault({id}).then((res: any) => {
+      this.getUserAddress()
+    })
+  }
+  // 编辑地址
+  private editAddress(data: any) {
+    this.addrForm = this.$utils.copyOf(data)
+    this.addrForm.address = data.address.split(' ')
+  }
+  // 删除地址
   private deleteAddress(id: string) {
     deleteAddress({id}).then((res: any) => {
       this.$message({type: 'success', message: '删除成功'})
+      this.getUserAddress()
     })
+  }
+  // 清空表单
+  private resetForm() {
+    this.refAddrForm.resetFields()
   }
   // 初始化函数
   private mounted() {

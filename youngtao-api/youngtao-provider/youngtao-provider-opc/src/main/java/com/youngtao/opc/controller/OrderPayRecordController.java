@@ -21,7 +21,7 @@ public class OrderPayRecordController {
     @Autowired
     private OrderPayRecordService orderPayRecordService;
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     public OrderPayRecordData getByPaymentId(@PathVariable String id) {
         return orderPayRecordService.getByPaymentId(id);
     }

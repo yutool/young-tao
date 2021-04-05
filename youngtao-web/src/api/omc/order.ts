@@ -1,5 +1,21 @@
 import request from '@/common/utils/request'
 
+export function createOrder(data: any) {
+  return request({
+    url: 'omc/order/create',
+    method: 'post',
+    data: JSON.stringify(data)
+  })
+}
+
+export function queryStatus(paymentId: any) {
+  return request({
+    url: '/omc/order/queryStatus',
+    method: 'post',
+    data: {id: paymentId}
+  })
+}
+
 export function queryOrderStatus(id: string) {
   return request({
     url: `omc/order/queryOrderStatus/${id}`,
@@ -42,22 +58,6 @@ export function checkPrepareOrder(id: string) {
     url: `omc/order/prepare/${id}`,
     method: 'delete',
   })
-}
-
-export function createOrder(data: any) {
-  return request({
-    url: 'omc/order/create',
-    method: 'post',
-    data: JSON.stringify(data)
-  })
-}
-
-export function queryStatus(paymentId: any) {
-	return request({
-    url: '/omc/order/queryStatus',
-    method: 'post',
-		data: {id: paymentId}
-	})
 }
 
 export function deleteOrder(id: string) {

@@ -7,9 +7,17 @@ export function getUserAddress() {
   })
 }
 
-export function addAddress(data: any) {
+export function addOrUpdateAddress(data: any) {
   return request({
-    url: `uac/shippingAddress/add`,
+    url: `uac/shippingAddress/addOrUpdate`,
+    method: 'post',
+    data: JSON.stringify(data)
+  })
+}
+
+export function setDefault(data: any) {
+  return request({
+    url: `uac/shippingAddress/setDefault`,
     method: 'post',
     data: JSON.stringify(data)
   })

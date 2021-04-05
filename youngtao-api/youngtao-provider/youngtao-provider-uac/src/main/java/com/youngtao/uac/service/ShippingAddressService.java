@@ -22,7 +22,14 @@ public interface ShippingAddressService extends IService<ShippingAddress> {
     /**
      * 添加收货地址
      */
-    void addAddress(AddShippingAddressRequest request, String userId);
+    void addOrUpdateAddress(AddShippingAddressRequest request, String userId);
+
+    /**
+     * 设置为默认地址
+     * @param saId
+     * @param userId
+     */
+    void setDefault(String saId, String userId);
 
     /**
      * 删除收货地址

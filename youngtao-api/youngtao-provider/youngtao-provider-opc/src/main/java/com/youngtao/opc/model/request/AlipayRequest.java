@@ -8,8 +8,14 @@ import lombok.Data;
  * @date 2021/01/30
  */
 @Data
-public class AlipayAppRequest {
+public class AlipayRequest {
     private String paymentId;
+    /**
+     * 商品名称
+     */
     private String subject;
+    /**
+     * 商品描述
+     */
     private String body;
 }

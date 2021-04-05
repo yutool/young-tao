@@ -8,8 +8,9 @@ import com.alipay.api.domain.AlipayTradeQueryModel;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.alipay.api.request.AlipayTradeQueryRequest;
-import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
+import com.youngtao.core.exception.CastException;
+import com.youngtao.core.util.BigDecimals;
 import com.youngtao.core.util.RocketMQUtils;
 import com.youngtao.opc.common.constant.AlipayEnum;
 import com.youngtao.opc.common.constant.MQTagConsts;
@@ -19,7 +20,7 @@ import com.youngtao.opc.mapper.OrderPayRecordMapper;
 import com.youngtao.opc.model.domain.OrderPayRecordDO;
 import com.youngtao.opc.model.msg.OrderPayMsg;
 import com.youngtao.opc.model.request.AlipayAppCheckRequest;
-import com.youngtao.opc.model.request.AlipayAppRequest;
+import com.youngtao.opc.model.request.AlipayRequest;
 import com.youngtao.opc.service.AlipayService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
@@ -28,8 +29,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
 
@@ -52,55 +51,61 @@ public class AlipayServiceImpl implements AlipayService {
     private String payTopic;
 
     @Override
-    public String appPay(AlipayAppRequest request) {
+    public String appPay(AlipayRequest request) {
         OrderPayRecordDO record = recordMapper.selectByPaymentId(request.getPaymentId());
         if (record == null) {
-            return null;
+            CastException.cast("订单不存在");
+        }
+        if (record.getStatus() == 1) {
+            CastException.cast("订单已完成支付");
         }
 
         AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
         model.setOutTradeNo(request.getPaymentId());
         model.setSubject(request.getSubject());
         model.setBody(request.getBody());
-        // model.setTotalAmount(BigDecimals.round(record.getMoney()));
-        model.setTotalAmount("0.01");
+        model.setTotalAmount(BigDecimals.round(record.getMoney()));
         model.setTimeoutExpress("30m");
         AlipayTradeAppPayRequest payRequest = new AlipayTradeAppPayRequest();
         payRequest.setBizModel(model);
         payRequest.setNotifyUrl(config.getNotifyUrl());
         try {
-            AlipayTradeAppPayResponse response = alipay.sdkExecute(payRequest);
-            return response.getBody();
+            return alipay.sdkExecute(payRequest).getBody();
         } catch (AlipayApiException e) {
             e.printStackTrace();
+            CastException.cast("申请支付失败，请稍后重试");
         }
         return null;
     }
 
     @Override
-    public void webPay(HttpServletResponse response) {
+    public String webPay(AlipayRequest request) {
+        OrderPayRecordDO record = recordMapper.selectByPaymentId(request.getPaymentId());
+        if (record == null) {
+            CastException.cast("订单不存在");
+        }
+        if (record.getStatus() == 1) {
+            CastException.cast("订单已完成支付");
+        }
+
         AlipayTradePagePayModel model = new AlipayTradePagePayModel();
-        model.setOutTradeNo(System.currentTimeMillis()+"");
-        model.setSubject("bbbbbbbbb");
-        model.setBody("ccccccccccc");
+        model.setOutTradeNo(request.getPaymentId());
+        model.setSubject(request.getSubject());
+        model.setBody(request.getBody());
         model.setProductCode("FAST_INSTANT_TRADE_PAY");
-        // model.setTotalAmount(BigDecimals.round(record.getMoney()));
-        model.setTotalAmount("0.01");
+        model.setTotalAmount(BigDecimals.round(record.getMoney()));
         model.setTimeoutExpress("30m");
         AlipayTradePagePayRequest payRequest = new AlipayTradePagePayRequest();
         payRequest.setBizModel(model);
         payRequest.setNotifyUrl(config.getNotifyUrl());
+        payRequest.setReturnUrl("http://www.baidu.com");
         try {
-            String body = alipay.pageExecute(payRequest).getBody();
-            response.setContentType("text/html;charset=utf-8");
-            response.getWriter().write(body);
-            response.getWriter().flush();
-            response.getWriter().close();
+            return alipay.pageExecute(payRequest).getBody();
         } catch (AlipayApiException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            CastException.cast("申请支付失败，请稍后重试");
         }
+        return null;
     }
 
     @Override

@@ -28,16 +28,6 @@ export default class Security extends Vue {
     checkPass: '',
   }
   @Ref('passwordForm') private refPasswordForm: any
-  
-  private validatePass2 = (rule: any, value: any, callback: any) => {
-    if (value === '') {
-      callback(new Error('请再次输入密码'));
-    } else if (value !== this.passwordForm.password) {
-      callback(new Error('两次输入密码不一致!'));
-    } else {
-      callback();
-    }
-  }
 
   private rules = {
     password: [
@@ -46,7 +36,15 @@ export default class Security extends Vue {
     ],
     checkPass: [
       { required: true, message: '请再次输入密码', trigger: 'blur' },
-      { validator: this.validatePass2, trigger: 'blur' },
+      { validator: (rule: any, value: any, callback: any) => {
+          if (value === '') {
+            callback(new Error('请再次输入密码'));
+          } else if (value !== this.passwordForm.password) {
+            callback(new Error('两次输入密码不一致!'));
+          } else {
+            callback();
+          }
+        }, trigger: 'blur' },
     ],
   }
 

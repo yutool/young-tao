@@ -1,9 +1,8 @@
 package com.youngtao.opc.service;
 
 import com.youngtao.opc.model.request.AlipayAppCheckRequest;
-import com.youngtao.opc.model.request.AlipayAppRequest;
+import com.youngtao.opc.model.request.AlipayRequest;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
@@ -11,11 +10,11 @@ import java.util.Map;
  * @date 2021/01/30
  */
 public interface AlipayService {
-    String appPay(AlipayAppRequest request);
+    String appPay(AlipayRequest request);
 
     String payNotify(Map<String, String> resultMap);
 
     boolean check(AlipayAppCheckRequest request);
 
-    void webPay(HttpServletResponse response);
+    String webPay(AlipayRequest request);
 }

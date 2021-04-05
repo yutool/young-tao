@@ -30,10 +30,16 @@ public class ShippingAddressController {
         return shippingAddressService.getByUserId(authInfo.getUserId());
     }
 
-    @PostMapping("/add")
-    public void addAddress(@RequestBody AddShippingAddressRequest request) {
+    @PostMapping("/addOrUpdate")
+    public void addOrUpdateAddress(@RequestBody AddShippingAddressRequest request) {
         AuthInfo authInfo = AuthContext.get();
-        shippingAddressService.addAddress(request, authInfo.getUserId());
+        shippingAddressService.addOrUpdateAddress(request, authInfo.getUserId());
+    }
+
+    @PostMapping("/setDefault")
+    public void setDefault(@RequestBody IdArg arg) {
+        AuthInfo authInfo = AuthContext.get();
+        shippingAddressService.setDefault(arg.getId(), authInfo.getUserId());
     }
 
     @PostMapping("/delete")
