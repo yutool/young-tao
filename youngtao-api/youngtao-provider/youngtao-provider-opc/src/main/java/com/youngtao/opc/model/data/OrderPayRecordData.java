@@ -19,6 +19,11 @@ public class OrderPayRecordData implements Serializable {
     private String paymentId;
 
     /**
+     * 用户id
+     */
+    private String userId;
+
+    /**
      * 1-支付宝 2-微信 3-他人代付
      */
     private Integer payType;

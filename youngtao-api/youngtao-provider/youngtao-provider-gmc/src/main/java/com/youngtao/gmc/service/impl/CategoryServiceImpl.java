@@ -65,23 +65,4 @@ public class CategoryServiceImpl extends BaseService<CategoryDO> implements Cate
         );
         return categoryConvert.toCategoryData(rootMenu);
     }
-
-    @Override
-    public List<CategoryData> getRecommendMenu() {
-        List<CategoryData> result = Lists.newArrayList();
-        List<Long> list = Lists.newArrayList(9927724279L);
-        for (Long rootId : list) {
-            CategoryDO category = categoryMapper.selectOne(new QueryWrapper<CategoryDO>()
-                    .eq("category_id", rootId)
-            );
-            List<CategoryDO> categoryList = categoryMapper.selectList(new QueryWrapper<CategoryDO>()
-                    .eq("parent_id", rootId)
-            );
-            CategoryData categoryData = categoryConvert.toCategoryData(category);
-            List<CategoryData> tmp = categoryConvert.toCategoryData(categoryList);
-            categoryData.getChildren().addAll(tmp);
-            result.add(categoryData);
-        }
-        return result;
-    }
 }

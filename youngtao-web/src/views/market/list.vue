@@ -26,20 +26,20 @@
     </div>
     <!-- 商品列表 -->
     <div class="container">
-      <div v-for="menu in recommendMenu" :key="menu.cateogryId">
+      <div v-for="(recommend, idx) in recommendList" :key="idx">
         <!-- 推荐菜单 -->
         <div class="content-menu mt-3">
           <div class="sideIcon" style="background-color: #FFA1B8"></div>
           <ul>
-            <li>{{menu.name}}</li>
-            <li v-for="item in menu.children" :key="item.cateogyrId">
+            <li>{{recommend.category.name}}</li>
+            <li v-for="item in recommend.category.children" :key="item.cateogyrId">
               {{ item.name }}
             </li>
           </ul>
         </div>
         <!-- 商品 -->
         <div class="row">
-          <div class="m-col" v-for="product in productMap" :key="product.spuId">
+          <div class="m-col" v-for="product in recommend.productList" :key="product.spuId">
             <product-card :spu="product" />
           </div>
         </div>
@@ -51,9 +51,8 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import ProductCard from './components/ProductCard.vue'
-import { getSpuList } from '@/api/gmc/spu'
-import { getMenu, getRecommendMenu } from '@/api/gmc/category'
-import { listRecommendProduct } from '@/api/gmc/product'
+import { getMenu } from '@/api/gmc/category'
+import { getRecommendProduct } from '@/api/gmc/recommend'
 
 @Component({
   components: {
@@ -62,12 +61,11 @@ import { listRecommendProduct } from '@/api/gmc/product'
 })
 export default class GoodsList extends Vue {
   private rootMenu = []
-  private recommendMenu: any = {}
-  private productMap = {}
+  private recommendList = []
 
   private mounted() {
     this.getMenu()
-    this.getProduct()
+    this.getRecommendProduct()
   }
   // 获取
   private getMenu() {
@@ -76,17 +74,10 @@ export default class GoodsList extends Vue {
       this.$log.info('获取菜单', res)
     })
   }
-  // 获取首页内容
-  private getProduct() {
-    getRecommendMenu().then((res: any) => {
-      this.recommendMenu = res.data
-      this.$log.info('获取推荐菜单', this.recommendMenu)
-      this.listRecommendProduct(1, 10);
-    })
-  }
-  private listRecommendProduct(page: any, size: any) {
-    listRecommendProduct({page, size}).then((res: any) => {
-      this.productMap = res.data
+  // 获取推荐内容
+  private getRecommendProduct() {
+    getRecommendProduct().then((res: any) => {
+      this.recommendList = res.data
       this.$log.info('获取内容', res)
     })
   }

@@ -12,5 +12,7 @@ import java.math.BigDecimal;
 public class AddPayRecordArg {
     private String paymentId;
 
+    private String userId;
+
     private BigDecimal money;
 }

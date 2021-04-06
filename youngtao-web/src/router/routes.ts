@@ -24,7 +24,7 @@ const routes = [
     children: [
       { path: '/', redirect: {name: 'cart'} },
       { path: 'cart', name: 'cart', component: () => import('@/views/order/cart.vue') },
-      { path: 'buy/:id', name: 'buy' , component: () => import('@/views/order/buy.vue') },
+      { path: 'confirm/:id', name: 'confirm' , component: () => import('@/views/order/confirm.vue') },
       { path: 'pay/:id', name: 'pay', component: () => import('@/views/order/pay.vue') },
       { path: 'pay_success', name: 'pay_success', component: () => import('@/views/order/pay_success.vue') },
       { path: 'pay_fail', name: 'pay_fail', component: () => import('@/views/order/pay_fail.vue') },

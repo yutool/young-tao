@@ -6,7 +6,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -15,10 +14,9 @@ import java.util.List;
  */
 @Data
 public class CreateOrderRequest {
-
     @Valid
     @NotEmpty
-    private List<Order> data;
+    private List<Order> orderList;
 
     @NotBlank
     private String shippingAddressId;
@@ -43,6 +41,6 @@ public class CreateOrderRequest {
         private String skuId;
 
         @Min(value = 1)
-        private Integer num;
+        private Integer count;
     }
 }

@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  */
 @SpringBootApplication
 @EnableScheduling
-@EnableFeignClients(basePackages = {"com.youngtao.gmc.api.service"})
+@EnableFeignClients(basePackages = {"com.youngtao.gmc.api.service", "com.youngtao.uac.api.service"})
 public class GscApplication {
     static  {
         AspectLogEnhance.enhance();

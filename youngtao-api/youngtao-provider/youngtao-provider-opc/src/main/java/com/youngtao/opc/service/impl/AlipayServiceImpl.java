@@ -11,10 +11,12 @@ import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.youngtao.core.exception.CastException;
 import com.youngtao.core.util.BigDecimals;
+import com.youngtao.core.util.DateTimeUtils;
 import com.youngtao.core.util.RocketMQUtils;
+import com.youngtao.opc.api.model.constant.PayRecordStatus;
 import com.youngtao.opc.common.constant.AlipayEnum;
 import com.youngtao.opc.common.constant.MQTagConsts;
-import com.youngtao.opc.common.constant.PayRecordConsts;
+import com.youngtao.opc.common.constant.PayRecordType;
 import com.youngtao.opc.config.AlipayConfig;
 import com.youngtao.opc.mapper.OrderPayRecordMapper;
 import com.youngtao.opc.model.domain.OrderPayRecordDO;
@@ -29,7 +31,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -98,7 +99,7 @@ public class AlipayServiceImpl implements AlipayService {
         AlipayTradePagePayRequest payRequest = new AlipayTradePagePayRequest();
         payRequest.setBizModel(model);
         payRequest.setNotifyUrl(config.getNotifyUrl());
-        payRequest.setReturnUrl("http://www.baidu.com");
+        payRequest.setReturnUrl("http://localhost:9000/center/order");
         try {
             return alipay.pageExecute(payRequest).getBody();
         } catch (AlipayApiException e) {
@@ -122,8 +123,8 @@ public class AlipayServiceImpl implements AlipayService {
                 rocketMQTemplate.convertAndSend(RocketMQUtils.withTag(payTopic, MQTagConsts.PAY_SUCCESS), msg);
                 // 更新数据库
                 OrderPayRecordDO record = recordMapper.selectByPaymentId(request.getPaymentId());
-                record.setPayType(PayRecordConsts.ALIPAY_TYPE);
-                record.setStatus(PayRecordConsts.PAID);
+                record.setPayType(PayRecordType.ALIPAY_TYPE);
+                record.setStatus(PayRecordStatus.PAID);
                 record.setPayTime(result.getSendPayDate());
                 record.setTransactionId(result.getTradeNo());
                 recordMapper.updateById(record);
@@ -146,17 +147,19 @@ public class AlipayServiceImpl implements AlipayService {
                 log.warn("alipay notify exception: record is null");
                 return "failure";
             }
-            if (record.getStatus() == PayRecordConsts.PAID) {
+            if (record.getStatus() == PayRecordStatus.PAID) {
                 return "success";
             }
-            OrderPayMsg msg = new OrderPayMsg();
-            msg.setPaymentId(paymentId);
-            // rocketMQTemplate.convertAndSend(RocketMQUtils.withTag(payTopic, MQTagConsts.PAY_SUCCESS), msg);
-            record.setPayType(PayRecordConsts.ALIPAY_TYPE);
-            record.setStatus(PayRecordConsts.PAID);
-            record.setPayTime(new Date());
+            // 更新记录
+            record.setPayType(PayRecordType.ALIPAY_TYPE);
+            record.setStatus(PayRecordStatus.PAID);
+            record.setPayTime(DateTimeUtils.formatDateTime(resultMap.get("gmt_payment")));
             record.setTransactionId(resultMap.get("trade_no"));
             recordMapper.updateById(record);
+            // 发送MQ
+            OrderPayMsg msg = new OrderPayMsg();
+            msg.setPaymentId(paymentId);
+            rocketMQTemplate.convertAndSend(RocketMQUtils.withTag(payTopic, MQTagConsts.PAY_SUCCESS), msg);
         }
         return "success";
     }

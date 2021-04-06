@@ -1,6 +1,6 @@
 package com.youngtao.gmc.service.impl;
 
-import com.github.pagehelper.PageHelper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.youngtao.core.lang.JsonList;
@@ -15,8 +15,10 @@ import com.youngtao.gmc.mapper.SpuMapper;
 import com.youngtao.gmc.model.convert.ProductConvert;
 import com.youngtao.gmc.model.convert.SkuConvert;
 import com.youngtao.gmc.model.convert.SpuConvert;
+import com.youngtao.gmc.model.data.CategoryData;
 import com.youngtao.gmc.model.data.ProductData;
-import com.youngtao.gmc.model.data.SpuSkuData;
+import com.youngtao.gmc.model.data.RecommendProductData;
+import com.youngtao.gmc.model.domain.CategoryDO;
 import com.youngtao.gmc.model.domain.SkuDO;
 import com.youngtao.gmc.model.domain.SpuDO;
 import com.youngtao.gmc.model.request.AddProductRequest;
@@ -25,7 +27,6 @@ import com.youngtao.gmc.model.response.ConfirmOrderResponse;
 import com.youngtao.gmc.service.ProductService;
 import com.youngtao.gsc.api.model.dto.GscSkuDTO;
 import com.youngtao.gsc.api.service.GscProductFeign;
-import com.youngtao.web.model.PageArg;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -150,15 +151,4 @@ public class ProductServiceImpl implements ProductService {
         return Lists.newArrayList(responseMap.values());
     }
 
-    @Override
-    public List<SpuSkuData> listRecommendProduct(PageArg arg) {
-        // 获取数据
-        PageHelper.startPage(arg.getPage(), arg.getSize());
-        List<SpuDO> spuList = spuMapper.selectList(null);
-        Set<String> spuIds = spuList.stream().map(SpuDO::getSpuId).collect(Collectors.toSet());
-        List<SkuDO> skuList = skuMapper.listDefaultBySpuId(spuIds);
-        // 整理数据
-        Map<String, SkuDO> spuIdMap = skuList.stream().collect(Collectors.toMap(SkuDO::getSpuId, val -> val));
-        return spuList.stream().map(val -> productConvert.toSpuSkuData(val, spuIdMap.get(val.getSpuId()))).collect(Collectors.toList());
-    }
 }

@@ -4,28 +4,33 @@
       <!-- 照片墙 -->
       <el-col :md="12">
         <div class="sku-images">
-          <img :src="checkedSku.images[0] || spu.images[0]" alt="">
+          <el-carousel height="450px">
+            <el-carousel-item v-for="item in checkedSku.images" :key="item">
+              <img :src="item" alt="">
+            </el-carousel-item>
+          </el-carousel>
         </div>
       </el-col>
       <!-- 选择商品 -->
       <el-col :md="12">
         <!-- 标题 -->
         <div class="sku-title">
+          <el-tag v-if="checkedSku.type == 0" type="info" size="mini">缺货中</el-tag>
+          <el-tag v-if="checkedSku.type == 1" size="mini">新品</el-tag>
           <el-tag v-if="checkedSku.type == 2" type="danger" size="mini">活动中</el-tag>
-          <el-tag v-else size="mini">新品</el-tag>
-          {{ checkedSku.title }}
+          {{ checkedSku.title || '赶紧让掌柜补货吧' }}
         </div>
         <!-- 价格 -->
         <div class="summary-price-wrap">
           <div class="sku-price">
             <span>
-              优惠价：<span class="price">￥{{ checkedSku.price }}</span>
+              优惠价：<span class="price">￥{{ checkedSku.price || 0 }}</span>
             </span>
-            <s>原价：￥{{ checkedSku.oldPrice }} </s>
+            <s>原价：￥{{ checkedSku.oldPrice || 0 }} </s>
           </div>
           <div class="sku-sales">
-            <small class="pr-3">累计评价: {{ spu.commentNum }}</small>
-            <small>累计销售：{{ spu.saleNum }}</small>
+            <small class="pr-3">累计评价: {{ spu.commentNum || 0 }}</small>
+            <small>累计销售：{{ spu.saleNum || 0 }}</small>
           </div>
         </div>
         <!-- SKU -->
@@ -41,10 +46,10 @@
         <div class="sku-amount">
           <span class="pr-3">
             <span class="sku-form-lable"> 数量：</span>
-            <el-input-number :min="1" :max="checkedSku.num" :precision="0" size="mini" v-model="selctedNum">
+            <el-input-number :min="1" :max="checkedSku.num || 0" :precision="0" size="mini" v-model="selctedNum">
             </el-input-number>
           </span>
-          <small class="text-muted">剩余库存：{{ checkedSku.num }}</small>
+          <small class="text-muted">剩余库存：{{ checkedSku.num || 0 }}</small>
         </div>
         <!-- 操作按钮 -->
         <div class="sku-buy">
@@ -73,59 +78,76 @@ import { prepareOrder } from '@/api/omc/order'
 
 @Component
 export default class GoodsDetail extends Vue {
-  @Getter('userId') private userId: any
   private spu: any = {}
   private skuList: any = []
   private checkedObj: any = {}  // 选中的属性
   private selctedNum = 1;
   private checkedSku: any = {};
- 
-  // 计算选中的sku
-  private calculate() {
-    console.log(this.checkedObj);
-    for (const item of this.skuList) {
-      if (JSON.stringify(item.sku) === JSON.stringify(this.checkedObj)) {
-        this.checkedSku = item;
-      }
-    }
+
+  private mounted() {
+    this.getProduct()
   }
 
+  // 初始化商品信息
+  private getProduct() {
+    getProduct(this.$route.params.id).then((res: any) => {
+      this.$log.info('获取商品', res)
+      this.spu = res.data
+      this.skuList = res.data.skuList
+      // 默认选中
+      const skuId = this.$route.query.skuId;
+      if (skuId) { for (const item of this.skuList) {
+        if (item.skuId === skuId) {
+          this.checkedSku = item
+          break;
+        }
+      }}
+      if (JSON.stringify(this.checkedSku) === '{}') {
+        this.checkedSku = this.skuList[0]
+      }
+      this.checkedObj = this.$utils.copyOf(this.checkedSku.sku)
+    })
+  }
+ 
   // 加入购物车
   private addCart() {
+    if (!this.checkedSku.skuId) {
+      this.$message({type: 'info', message: '暂无该商品，换个吧'})
+      return;
+    }
     addCart({skuId: this.checkedSku.skuId, num: this.selctedNum}).then((res: any) => {
       this.$message({ type: 'success', message: '加入购物车成功' })
       this.$log.info('加购', res)
     })
   }
-  
   // 购买
   private buy() {
+    if (!this.checkedSku.skuId) {
+      this.$message({type: 'info', message: '暂无该商品，换个吧'})
+      return;
+    }
+    // 存入cookie
     const order = {
-      type: this.$orderType.NORMAL,
+      type: this.checkedSku.type,
       skuList: [{ skuId: this.checkedSku.skuId, count: this.selctedNum }]
     }
     const key = this.$utils.setOrderItem(order);
-    this.$router.push(`/order/buy/${key}`)
+    this.$router.push(`/order/confirm/${key}`)
   }
-   
-  // 初始化商品信息
-  private initGoods() {
-    getProduct(this.$route.params.id).then((res: any) => {
-      this.$log.info('获取商品', res)
-      this.spu = res.data
-      this.skuList = res.data.skuList
-      this.checkedSku = this.skuList[0]
-      // 默认选中
-      for (const item of Object.keys(this.spu.skuTemplate)) {
-        this.checkedObj[item] = this.spu.skuTemplate[item][0]
+
+  // 计算选中的sku
+  private calculate() {
+    for (const item of this.skuList) {
+      if (JSON.stringify(item.sku) === JSON.stringify(this.checkedObj)) {
+        this.checkedSku = item;
+        return
       }
-      this.checkedObj = this.$utils.copyOf(this.checkedObj)
-      this.$log.info('查询成功', res)
-    })
-  }
-  
-  private mounted() {
-    this.initGoods()
+    }
+    // 没有库存
+    this.checkedSku = {
+      images: this.spu.images,
+      type: 0
+    }
   }
 }
 </script>
@@ -133,7 +155,7 @@ export default class GoodsDetail extends Vue {
 <style scoped lang="scss">
 .sku-images {
   text-align: center;
-  padding: 10px;
+  padding: 10px 30px;
   img {
     width: 90%;
   }

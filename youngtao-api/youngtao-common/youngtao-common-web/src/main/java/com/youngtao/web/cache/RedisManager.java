@@ -42,8 +42,9 @@ public class RedisManager<K> {
         redisTemplate.opsForValue().set(key, value, timeout, timeUnit);
     }
 
-    public <V> V getNum(String key) {
-        return (V) stringRedisTemplate.opsForValue().get(key);
+    public Integer getNum(String key) {
+        String num = stringRedisTemplate.opsForValue().get(key);
+        return num == null ? null : Integer.valueOf(num);
     }
 
     public void setNum(String key, Number num) {

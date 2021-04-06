@@ -14,24 +14,10 @@ export function getProductList(idx: any, page: any, size: any) {
   })
 }
 
-export function getGoods(menu: string, spuId: string) {
+export function gscConfirmOrder(data: any) {
   return request({
-    url: `gsc/seckill/goods/${menu}/${spuId}`,
-    method: 'get'
-  })
-}
-
-export function prepare(data: any) {
-  return request({
-    url: 'gsc/seckill/order/prepare',
+    url: `gsc/product/confirmOrder`,
     method: 'post',
     data: JSON.stringify(data)
-  })
-}
-
-export function queryQueue(userId: string, goodsId: string) {
-  return request({
-    url: `gsc/seckill/order/queue/${userId}/${goodsId}`,
-    method: 'get'
   })
 }

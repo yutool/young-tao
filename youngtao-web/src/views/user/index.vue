@@ -58,7 +58,8 @@ export default class User extends Vue {
   border-bottom-right-radius: 5px;
   .info-wrap {
     padding-top: 100px;
-    background: url("../../assets/h-user.jpg");
+    background: url("../../assets/h-user.jpg") no-repeat;
+    background-size: 100% auto;
     .user-info {
       background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .3));
       .username {

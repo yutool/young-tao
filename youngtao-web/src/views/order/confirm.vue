@@ -78,9 +78,8 @@
     <!-- 确认购买 -->
     <div class="buy-paybar clearfix">
       <div class="float-left">
-        <el-link style="line-height: 40px">
-          <i class="el-icon-arrow-left pl-2"></i>
-          返回购物车
+        <el-link style="line-height: 40px" @click="$router.go(-1)">
+          <i class="el-icon-arrow-left pl-2"></i> 返回
         </el-link>
       </div>
       <div class="float-right">
@@ -97,60 +96,111 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { Getter } from 'vuex-class'
-import { createOrder, queryStatus, queryOrderStatus, checkPrepareOrder } from '@/api/omc/order'
+import { createOrder, queryStatus } from '@/api/omc/order'
 import { gscCreateOrder } from '@/api/gsc/order'
+import { gscConfirmOrder } from '@/api/gsc/product'
 import { confirmOrder } from '@/api/gmc/product'
 import { getUserAddress } from '@/api/uac/address'
 
 @Component
 export default class Buy extends Vue {
-  @Getter('userId') private userId!: string
-  
   private loading = false
   private queueTimer: any
+  private currentOrder: any = {} // 当前订单信息
 
   private userAddress: any = [] // 收货地址
+  private checkedAddress: any   // 选中的收货地址
+
   private orderList: any = []
   private skuCount = 0
   private payMoney = 0
 
-  private orderModel: any = {
-    id: '',
-    addressId: null
+  // 确认订单
+  private confirmOrder() {
+    this.currentOrder = this.$utils.getOrderItem(this.$route.params.id);
+    if (this.currentOrder.type === this.$orderType.NORMAL) {
+      confirmOrder({skuList: this.currentOrder.skuList}).then((res: any) => {
+        if (res.data == null) {
+          this.$router.back()
+        }
+        // 设置备注属性
+        this.orderList = res.data
+        this.calculate()
+      })
+    } else {
+      gscConfirmOrder({skuId: this.currentOrder.skuList[0].skuId}).then((res) => {
+        const merchant = res.data
+        this.orderList = [merchant]
+        this.calculate()
+      })
+    }
+  }
+  // 计算
+  private calculate() {
+    for (const merchant of this.orderList) {
+      merchant.remark = ''
+    }
+    // 计算价格
+    for (const merchant of this.orderList) {
+      for (const sku of merchant.skuList) {
+        this.skuCount++;
+        this.payMoney = this.payMoney + sku.price
+      }
+    }
+  }
+  // 获取用户收货地址
+  private getUserAddress() {
+    getUserAddress().then((res: any) => {
+      this.$log.info('获取用户收货地址', res)
+      this.userAddress = res.data
+      // 设置默认地址
+      for (const addr of this.userAddress) {
+        if (addr.isDefault) {
+          this.checkedAddress = addr.id
+          break
+        }
+      }
+    })
+  }
+  private mounted() {
+    this.confirmOrder()
+    this.getUserAddress()
   }
 
   // 创建订单，在这之前需要添加收货地址
   private createOrder() {
-    if (!this.orderModel.addressId) {
+    if (!this.checkedAddress) {
       this.$message({ type: 'info', message: '请添加收货地址' })
       return
     }
-    const order = []
-
-    for (const merchant of this.orderList) {
-      const orderItem = []
-      for (const sku of merchant.skuList) {
-        orderItem.push({ skuId: sku.skuId, num: sku.count })
+    
+    // 创建订单
+    if (this.currentOrder.type === this.$orderType.NORMAL) {
+      // 普通订单
+      const orderList = []
+      for (const merchant of this.orderList) {
+        const orderItem = []
+        for (const sku of merchant.skuList) {
+          orderItem.push({ skuId: sku.skuId, count: sku.count })
+        }
+        orderList.push({ orderItem, remark: merchant.remark })
       }
-      order.push({ orderItem, remark: merchant.remark })
-    }
-    console.log({ data: order, shippingAddressId: '0' })
-
-    if (this.confirmOrder.length === 1 && this.orderList[0].type === this.$orderType.SECKILL) {
-      // 秒杀订单
-      gscCreateOrder({ skuId: order[0].orderItem[0].skuId, shippingAddressId: '0', remark: order[0].remark })
-      .then((res: any) => {
+      createOrder({ orderList, shippingAddressId: this.checkedAddress }).then((res: any) => {
         this.checkOrderStatus(res.data)
       })
     } else {
-      // 普通订单
-      createOrder({ data: order, shippingAddressId: '0' }).then((res: any) => {
+      // 秒杀订单
+      const data = {
+        skuId: this.orderList[0].skuList[0].skuId,
+        remark: this.orderList[0].remark,
+        shippingAddressId: this.checkedAddress
+      }
+      gscCreateOrder(data).then((res: any) => {
         this.checkOrderStatus(res.data)
       })
     }
   }
-
-  // 判断是否生成订单
+  // 判断是否生成了订单
   private checkOrderStatus(paymentId: string) {
     this.loading = true
     this.queueTimer = setInterval(() => {
@@ -161,64 +211,17 @@ export default class Buy extends Vue {
           clearInterval(this.queueTimer)
         }
         this.$router.push(`/order/pay/${paymentId}`)
+      } else if (res.data && res.data === this.$orderStatus.FAILED) {
+        this.$message({type: 'info', message: '订单创建失败'})
+        this.loading = false
+        if (this.queueTimer) {
+          clearInterval(this.queueTimer)
+        }
       }
     });
     }, 2000)
   }
 
-  // 排队成功
-  private handlerCreateOrder() {
-    this.loading = true
-    this.queueTimer = setInterval(() => queryOrderStatus(this.orderModel.id).then((res: any) => {
-      if (res.code !== 0) {
-        this.loading = false
-        window.clearInterval(this.queueTimer)
-      } else if (!res.data) {
-        this.loading = false
-        window.clearInterval(this.queueTimer)
-        this.$message({type: 'info', message: '订单不存在'})
-      } else if (res.data.status === 1) {
-        this.loading = false
-        window.clearInterval(this.queueTimer)
-        // 创建订单成功，申请微信支付
-        this.$router.push(`/order/pay/${res.data.id}`)
-      } else if (res.data.status === 2) {
-        this.loading = false
-        window.clearInterval(this.queueTimer)
-        this.$message({type: 'info', message: '商品已被抢光了'})
-      }
-    }), 1500)
-  }
-   
-  // 确认订单
-  private confirmOrder() {
-    const order: any = this.$utils.getOrderItem(this.$route.params.id);
-    confirmOrder({skuList: order.skuList}).then((res: any) => {
-      if (res.data == null) {
-        this.$router.back()
-      }
-      this.orderList = res.data
-      for (const merchant of this.orderList) {
-        merchant.remark = ''
-      }
-    })
-  }
-  
-  // 获取用户收货地址
-  private getUserAddress() {
-    getUserAddress().then((res: any) => {
-      this.$log.info('获取用户收货地址', res)
-      this.userAddress = res.data
-      // 设置默认地址
-      for (const addr of this.userAddress) {
-        if (addr.isDefault) {
-          this.orderModel.addressId = addr.id
-          break
-        }
-      }
-    })
-  }
-  
   // 选择收货地址
   private changeAddr(id: string, e: any) {
     // 调整类
@@ -226,18 +229,12 @@ export default class Buy extends Vue {
     $('.addr-card').removeClass('active')
     $addr.addClass('active')
     // 设置收货地址
-    this.orderModel.addressId = id
+    this.checkedAddress = id
   }
-  
   // 前往设置地址页
   private goAddAddr() {
-    const routes = this.$router.resolve(`/user/${this.userId}/address`)
+    const routes = this.$router.resolve(`/user/address`)
     window.open(routes.href, '_blank')
-  }
-  
-  private mounted() {
-    this.confirmOrder()
-    this.getUserAddress()
   }
 }
 </script>
@@ -265,7 +262,7 @@ export default class Buy extends Vue {
   }
 }
 .addr-card {
-  box-shadow: 1px 1px 1px 1px #666;
+  box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
   border-radius: 5px;
   padding: 10px;
   height: 160px;
@@ -289,6 +286,6 @@ export default class Buy extends Vue {
   font-size: 30px;
 }
 .active {
-  background: pink
+  background: rgb(255, 219, 225)
 }
 </style>

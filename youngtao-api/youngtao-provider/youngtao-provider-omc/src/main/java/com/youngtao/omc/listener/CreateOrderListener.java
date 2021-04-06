@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.youngtao.core.result.RpcResult;
 import com.youngtao.core.util.BigDecimals;
 import com.youngtao.core.util.RpcResultUtils;
+import com.youngtao.gmc.api.model.arg.UpdateStockArg;
 import com.youngtao.gmc.api.model.dto.SkuDTO;
 import com.youngtao.gmc.api.model.dto.SpuDTO;
 import com.youngtao.gmc.api.service.SkuFeign;
@@ -22,9 +23,13 @@ import com.youngtao.opc.api.model.arg.AddPayRecordArg;
 import com.youngtao.opc.api.service.OrderPayRecordFeign;
 import com.youngtao.web.cache.RedisManager;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +41,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
+ * 创建订单消息
  * @author ankoye@qq.com
  * @date 2020/12/13
  */
@@ -61,14 +67,37 @@ public class CreateOrderListener implements RocketMQListener<CreateOrderRequest>
     @Autowired
     private OrderPayRecordFeign orderPayRecordFeign;
 
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
+
+    @Value("${order-topic}")
+    private String orderTopic;
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void onMessage(CreateOrderRequest message) {
-        // 1 冻结库存
+        log.info("创建订单中, data = {}", message);
 
-        // get skuDTO map
+        // 1 冻结库存
+        List<UpdateStockArg> argList = Lists.newArrayList();
+        for (CreateOrderRequest.Order order : message.getOrderList()) {
+            for (CreateOrderRequest.OrderItem orderItem : order.getOrderItem()) {
+                UpdateStockArg arg = new UpdateStockArg();
+                arg.setSkuId(orderItem.getSkuId());
+                arg.setNum(orderItem.getCount());
+                argList.add(arg);
+            }
+        }
+        RpcResult<Boolean> freezeResult = skuFeign.batchFreezeScore(argList);
+        if (!freezeResult.isSuccess()) {
+            // 订单创建失败
+            redisManager.set(OmcRedisKey.ORDER_STATUS.format(message.getPaymentId()), OrderStatus.FAILED);
+            return;
+        }
+
+        // 2 创建订单信息
         List<String> skuIds = Lists.newArrayList();
-        for (CreateOrderRequest.Order order : message.getData()) {
+        for (CreateOrderRequest.Order order : message.getOrderList()) {
             for (CreateOrderRequest.OrderItem item : order.getOrderItem()) {
                 skuIds.add(item.getSkuId());
             }
@@ -85,7 +114,7 @@ public class CreateOrderListener implements RocketMQListener<CreateOrderRequest>
         List<OrderItemDO> orderItemDOList = Lists.newArrayList();
         List<OrderDO> orderDOList = Lists.newArrayList();
         BigDecimal payMoney = BigDecimal.ZERO;
-        for (CreateOrderRequest.Order order : message.getData()) {
+        for (CreateOrderRequest.Order order : message.getOrderList()) {
             String orderId = IdUtils.orderId();
             // sku
             BigDecimal totalPrice = BigDecimal.ZERO;
@@ -103,8 +132,8 @@ public class CreateOrderListener implements RocketMQListener<CreateOrderRequest>
                 orderItemDO.setImage(skuDTO.getImages().get(0));
                 orderItemDO.setOldPrice(skuDTO.getPrice());
                 orderItemDO.setPrice(skuDTO.getPrice());
-                orderItemDO.setNum(item.getNum());
-                BigDecimal price = BigDecimals.multiRound(skuDTO.getPrice(), item.getNum());
+                orderItemDO.setNum(item.getCount());
+                BigDecimal price = BigDecimals.multiRound(skuDTO.getPrice(), item.getCount());
                 orderItemDO.setTotalPrice(price);
                 orderItemDOList.add(orderItemDO);
 
@@ -128,17 +157,33 @@ public class CreateOrderListener implements RocketMQListener<CreateOrderRequest>
             orderDOList.add(orderDO);
             payMoney = payMoney.add(totalPrice);
         }
-        // 添加支付记录
-        AddPayRecordArg addArg = new AddPayRecordArg();
-        addArg.setPaymentId(message.getPaymentId());
-        addArg.setMoney(payMoney);
-        RpcResult<String> paymentResult = orderPayRecordFeign.addRecord(addArg);
-        RpcResultUtils.checkNotNull(paymentResult);
+
+        // 3 保存至数据库
         for (OrderDO orderDO : orderDOList) {
             orderDO.setPaymentId(message.getPaymentId());
         }
         orderMapper.batchInsert(orderDOList);
         orderItemMapper.batchInsert(orderItemDOList);
+
+        // 4 添加支付记录
+        AddPayRecordArg addArg = new AddPayRecordArg();
+        addArg.setPaymentId(message.getPaymentId());
+        addArg.setUserId(message.getUserId());
+        addArg.setMoney(payMoney);
+        RpcResult<String> paymentResult = orderPayRecordFeign.addRecord(addArg);
+        RpcResultUtils.checkNotNull(paymentResult);
+
+        // 5 修改订单状态为已创建
         redisManager.set(OmcRedisKey.ORDER_STATUS.format(message.getPaymentId()), OrderStatus.PAYMENT);
+
+        // 6 发送延迟MQ回查订单
+        try {
+            DefaultMQProducer producer = rocketMQTemplate.getProducer();
+            Message msg = new Message(orderTopic, MQTagConsts.CHECK_ORDER, message.getPaymentId().getBytes());
+            msg.setDelayTimeLevel(16);
+            producer.send(msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

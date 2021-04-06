@@ -5,6 +5,7 @@
     <resultMap id="BaseResultMap" type="com.youngtao.opc.model.domain.OrderPayRecordDO">
         <result property="id" column="id" />
         <result property="paymentId" column="payment_id" />
+        <result property="userId" column="user_id" />
         <result property="payType" column="pay_type" />
         <result property="money" column="money" />
         <result property="remark" column="remark" />
@@ -16,8 +17,8 @@
     </resultMap>
 
     <insert id="save" keyProperty="id" useGeneratedKeys="true">
-        insert into youngtao_opc.opc_order_pay_record(payment_id, pay_type, money, remark, status, update_time, create_time)
-        values (#{paymentId}, #{payType}, #{money}, #{remark}, #{status}, #{updateTime}, #{createTime})
+        insert into youngtao_opc.opc_order_pay_record(payment_id, payment_id, pay_type, money, remark, status, update_time, create_time)
+        values (#{paymentId}, #{userId}, #{payType}, #{money}, #{remark}, #{status}, #{updateTime}, #{createTime})
     </insert>
 
     <select id="selectByPaymentId" resultMap="BaseResultMap">

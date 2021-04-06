@@ -4,8 +4,6 @@ import com.youngtao.opc.model.data.OrderPayRecordData;
 import com.youngtao.opc.model.domain.OrderPayRecordDO;
 import com.youngtao.web.support.IService;
 
-import java.math.BigDecimal;
-
 /**
  * @author ankoye@qq.com
  * @date 2021/01/17
@@ -19,5 +17,5 @@ public interface OrderPayRecordService extends IService<OrderPayRecordDO> {
     /**
      * 添加支付记录
      */
-    String addRecord(String paymentId, BigDecimal money);
+    String addRecord(OrderPayRecordDO record);
 }

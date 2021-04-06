@@ -1,6 +1,6 @@
 package com.youngtao.opc.service.impl;
 
-import com.youngtao.opc.common.constant.PayRecordConsts;
+import com.youngtao.opc.api.model.constant.PayRecordStatus;
 import com.youngtao.opc.mapper.OrderPayRecordMapper;
 import com.youngtao.opc.model.convert.OrderPayRecordConvert;
 import com.youngtao.opc.model.data.OrderPayRecordData;
@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
 
 /**
  * @author ankoye@qq.com
@@ -31,12 +30,9 @@ public class OrderPayRecordServiceImpl extends BaseService<OrderPayRecordDO> imp
     }
 
     @Override
-    public String addRecord(String paymentId, BigDecimal money) {
-        OrderPayRecordDO record = new OrderPayRecordDO();
-        record.setPaymentId(paymentId);
-        record.setMoney(money);
-        record.setStatus(PayRecordConsts.UNPAID);
+    public String addRecord(OrderPayRecordDO record) {
+        record.setStatus(PayRecordStatus.UNPAID);
         orderPayRecordMapper.insert(record);
-        return paymentId;
+        return record.getPaymentId();
     }
 }

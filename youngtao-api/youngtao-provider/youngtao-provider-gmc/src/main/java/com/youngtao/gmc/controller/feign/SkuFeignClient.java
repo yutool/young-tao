@@ -2,12 +2,12 @@ package com.youngtao.gmc.controller.feign;
 
 import com.youngtao.core.result.RpcResult;
 import com.youngtao.core.util.BeanUtils;
-import com.youngtao.gmc.api.model.arg.FreezeInventoryArg;
+import com.youngtao.gmc.api.model.arg.UpdateStockArg;
 import com.youngtao.gmc.api.model.dto.SkuDTO;
 import com.youngtao.gmc.api.service.SkuFeign;
 import com.youngtao.gmc.mapper.SkuMapper;
 import com.youngtao.gmc.model.domain.SkuDO;
-import com.youngtao.gmc.model.query.FreezeInventoryQuery;
+import com.youngtao.gmc.model.query.UpdateStockQuery;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -38,9 +38,23 @@ public class SkuFeignClient implements SkuFeign {
     }
 
     @Override
-    public RpcResult<Boolean> batchFreezeInventory(List<FreezeInventoryArg> args) {
-        List<FreezeInventoryQuery> query = BeanUtils.copyList(args, FreezeInventoryQuery.class);
-        boolean result = skuMapper.batchFreezeInventory(query) > 0;
+    public RpcResult<Boolean> batchFreezeScore(List<UpdateStockArg> args) {
+        List<UpdateStockQuery> query = BeanUtils.copyList(args, UpdateStockQuery.class);
+        boolean result = skuMapper.batchFreezeScore(query) > 0;
+        return RpcResult.success(result);
+    }
+
+    @Override
+    public RpcResult<Boolean> batchUnfreezeScore(List<UpdateStockArg> args) {
+        List<UpdateStockQuery> query = BeanUtils.copyList(args, UpdateStockQuery.class);
+        boolean result = skuMapper.batchUnfreezeScore(query) > 0;
+        return RpcResult.success(result);
+    }
+
+    @Override
+    public RpcResult<Boolean> batchDecreaseScore(List<UpdateStockArg> args) {
+        List<UpdateStockQuery> query = BeanUtils.copyList(args, UpdateStockQuery.class);
+        boolean result = skuMapper.batchDecreaseScore(query) > 0;
         return RpcResult.success(result);
     }
 }

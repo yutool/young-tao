@@ -9,6 +9,7 @@ dependencies {
     compile project(":youngtao-provider-api:youngtao-provider-gsc-api")
     compile project(":youngtao-provider-api:youngtao-provider-gmc-api")
     compile project(":youngtao-provider-api:youngtao-provider-omc-api")
+    compile project(":youngtao-provider-api:youngtao-provider-uac-api")
 }
 
 test {

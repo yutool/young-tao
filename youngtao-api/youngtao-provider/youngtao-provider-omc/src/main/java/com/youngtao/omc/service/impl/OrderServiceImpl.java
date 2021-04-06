@@ -65,11 +65,14 @@ public class OrderServiceImpl extends BaseService<OrderDO> implements OrderServi
         request.setUserId(userId);
         String paymentId = IdUtils.orderId();
         request.setPaymentId(paymentId);
+        // 1 设置当前订单创建中
+        redisManager.set(OmcRedisKey.ORDER_STATUS.format(paymentId), OrderStatus.CREATING);
+
+        // 2 发送MQ，进行扣减库存
         SendResult sendResult = rocketMQTemplate.syncSend(RocketMQUtils.withTag(orderTopic, MQTagConsts.CREATE_ORDER), request);
         if (sendResult == null) {
             log.warn("createOrder syncSend fail, data = {}", request);
         }
-        redisManager.set(OmcRedisKey.ORDER_STATUS.format(paymentId), OrderStatus.CREATING);
         return paymentId;
     }
 

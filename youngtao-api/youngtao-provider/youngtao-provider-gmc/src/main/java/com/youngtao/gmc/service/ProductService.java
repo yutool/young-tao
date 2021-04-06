@@ -1,11 +1,10 @@
 package com.youngtao.gmc.service;
 
 import com.youngtao.gmc.model.data.ProductData;
-import com.youngtao.gmc.model.data.SpuSkuData;
+import com.youngtao.gmc.model.data.RecommendProductData;
 import com.youngtao.gmc.model.request.AddProductRequest;
 import com.youngtao.gmc.model.request.ConfirmOrderRequest;
 import com.youngtao.gmc.model.response.ConfirmOrderResponse;
-import com.youngtao.web.model.PageArg;
 
 import java.util.List;
 
@@ -35,6 +34,4 @@ public interface ProductService {
      * @return list
      */
     List<ConfirmOrderResponse> confirmOrder(ConfirmOrderRequest request);
-
-    List<SpuSkuData>  listRecommendProduct(PageArg arg);
 }

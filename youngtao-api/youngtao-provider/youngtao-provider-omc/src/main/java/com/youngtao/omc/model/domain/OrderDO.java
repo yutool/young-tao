@@ -84,9 +84,4 @@ public class OrderDO extends BaseEntity implements Serializable {
      */
     private String paymentId;
 
-    /**
-     * 支付方式
-     */
-    private Integer payType;
-
 }

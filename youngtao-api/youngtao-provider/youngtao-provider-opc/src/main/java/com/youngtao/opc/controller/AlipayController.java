@@ -7,9 +7,13 @@ import com.youngtao.opc.service.AlipayService;
 import com.youngtao.web.support.NoWrapper;
 import com.youngtao.web.support.ResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * @author ankoye@qq.com
@@ -42,12 +46,11 @@ public class AlipayController {
     @NoWrapper
     @RequestMapping("/notify")
     public String notify(HttpServletRequest request) {
-        return "success";
-//        Map<String, String> resultMap = alipayUtils.parseToMap(request);
-//        // 内容验签，防止黑客篡改参数
-//        if (alipayUtils.rsaCheck(resultMap)) {
-//            return alipayService.payNotify(resultMap);
-//        }
-//        return "failure";
+        Map<String, String> resultMap = alipayUtils.parseToMap(request);
+        // 内容验签，防止黑客篡改参数
+        if (alipayUtils.rsaCheck(resultMap)) {
+            return alipayService.payNotify(resultMap);
+        }
+        return "failure";
     }
 }

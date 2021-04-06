@@ -23,8 +23,4 @@ public interface CategoryService extends IService<CategoryDO> {
      */
     List<CategoryData> getMenu();
 
-    /**
-     * 获取推荐菜单
-     */
-    List<CategoryData> getRecommendMenu();
 }

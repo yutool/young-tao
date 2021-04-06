@@ -10,7 +10,6 @@ public interface OrderService {
     /**
      * 验证信息
      * @param request request
-     * @param userId userId
      */
-    String createOrder(CreateOrderRequest request, String userId);
+    String createOrder(CreateOrderRequest request);
 }

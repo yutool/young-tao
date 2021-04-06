@@ -96,8 +96,8 @@ public class ProductServiceImpl implements ProductService {
         String menu = DateUtils.currentMenu();
         String skuId = request.getSkuId();
         // 判断是否还有库存
-        long count = redisManager.get(RedisKey.SKU_COUNT_KEY.format(menu, skuId));
-        if (count < 1) {
+        Integer count = redisManager.getNum(RedisKey.SKU_COUNT_KEY.format(menu, skuId));
+        if (count == null || count < 1) {
             CastException.cast("商品库存不足");
         }
 

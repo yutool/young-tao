@@ -33,10 +33,4 @@ public class CategoryController {
     public List<CategoryData> getMenu() {
         return categoryService.getMenu();
     }
-
-    @GetMapping("/recommendMenu")
-    public List<CategoryData> getRecommendMenu() {
-        return categoryService.getRecommendMenu();
-    }
-
 }

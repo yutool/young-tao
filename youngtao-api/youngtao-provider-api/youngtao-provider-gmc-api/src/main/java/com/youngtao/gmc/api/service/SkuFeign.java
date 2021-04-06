@@ -1,14 +1,11 @@
 package com.youngtao.gmc.api.service;
 
 import com.youngtao.core.result.RpcResult;
-import com.youngtao.gmc.api.model.arg.FreezeInventoryArg;
+import com.youngtao.gmc.api.model.arg.UpdateStockArg;
 import com.youngtao.gmc.api.model.dto.SkuDTO;
 import com.youngtao.gmc.api.service.fallback.SkuFeignFallback;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.List;
@@ -36,6 +33,22 @@ public interface SkuFeign {
      * @param args args
      * @return bool
      */
-    @PostMapping("/api/gmc/sku/batchFreezeInventory")
-    RpcResult<Boolean> batchFreezeInventory(@RequestParam("skus") List<FreezeInventoryArg> args);
+    @PostMapping("/api/gmc/sku/batchFreezeScore")
+    RpcResult<Boolean> batchFreezeScore(@RequestBody List<UpdateStockArg> args);
+
+    /**
+     * 批量冻结库存
+     * @param args args
+     * @return bool
+     */
+    @PostMapping("/api/gmc/sku/batchUnfreezeScore")
+    RpcResult<Boolean> batchUnfreezeScore(@RequestBody List<UpdateStockArg> args);
+
+    /**
+     * 批量冻结库存
+     * @param args args
+     * @return bool
+     */
+    @PostMapping("/api/gmc/sku/batchDecreaseScore")
+    RpcResult<Boolean> batchDecreaseScore(@RequestBody List<UpdateStockArg> args);
 }

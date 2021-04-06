@@ -33,10 +33,16 @@ const COMMENT = 5;
  */
 const RETURN = 6;
 
+
+/**
+ * 创建失败
+ */
+const FAILED = 9;
+
 /**
  * 关闭
  */
-const CLOSE = 9;
+const CLOSE = 10;
 
 export default {
 	COMPLETED,
@@ -46,5 +52,6 @@ export default {
 	DELIVERY,
 	COMMENT,
 	RETURN,
+	FAILED,
 	CLOSE
 }

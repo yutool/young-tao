@@ -33,11 +33,27 @@
         </foreach>
     </insert>
 
-    <update id="batchFreezeInventory" parameterType="freezeInventoryQuery">
+    <update id="batchFreezeScore" parameterType="updateStockQuery">
         <foreach collection="skuList" item="item" close=";">
             update gmc_sku
             set num = num - #{item.num}, freeze_num = freeze_num + #{item.num}
-            where sku_id = #{item.skuId}
+            where sku_id = #{item.skuId} and num >= #{item.num}
+        </foreach>
+    </update>
+
+    <update id="batchUnfreezeScore" parameterType="updateStockQuery">
+        <foreach collection="skuList" item="item" close=";">
+            update gmc_sku
+            set num = num + #{item.num}, freeze_num = freeze_num - #{item.num}
+            where sku_id = #{item.skuId} and freeze_num >= #{item.num}
+        </foreach>
+    </update>
+
+    <update id="batchDecreaseScore" parameterType="updateStockQuery">
+        <foreach collection="skuList" item="item" close=";">
+            update gmc_sku
+            set freeze_num = freeze_num - #{item.num}
+            where sku_id = #{item.skuId} and freeze_num >= #{item.num}
         </foreach>
     </update>
 

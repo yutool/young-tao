@@ -1,13 +1,15 @@
-package com.youngtao.gmc.model.query;
+package com.youngtao.gmc.api.model.arg;
 
 import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * @author ankoye@qq.com
  * @date 2020/12/13
  */
 @Data
-public class FreezeInventoryQuery {
+public class UpdateStockArg implements Serializable {
 
     private String skuId;
 

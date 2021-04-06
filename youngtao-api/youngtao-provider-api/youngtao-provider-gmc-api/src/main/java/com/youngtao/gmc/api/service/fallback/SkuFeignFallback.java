@@ -1,7 +1,7 @@
 package com.youngtao.gmc.api.service.fallback;
 
 import com.youngtao.core.result.RpcResult;
-import com.youngtao.gmc.api.model.arg.FreezeInventoryArg;
+import com.youngtao.gmc.api.model.arg.UpdateStockArg;
 import com.youngtao.gmc.api.model.dto.SkuDTO;
 import com.youngtao.gmc.api.service.SkuFeign;
 
@@ -24,7 +24,17 @@ public class SkuFeignFallback implements SkuFeign {
     }
 
     @Override
-    public RpcResult<Boolean> batchFreezeInventory(List<FreezeInventoryArg> args) {
+    public RpcResult<Boolean> batchFreezeScore(List<UpdateStockArg> args) {
+        return null;
+    }
+
+    @Override
+    public RpcResult<Boolean> batchUnfreezeScore(List<UpdateStockArg> args) {
+        return null;
+    }
+
+    @Override
+    public RpcResult<Boolean> batchDecreaseScore(List<UpdateStockArg> args) {
         return null;
     }
 }

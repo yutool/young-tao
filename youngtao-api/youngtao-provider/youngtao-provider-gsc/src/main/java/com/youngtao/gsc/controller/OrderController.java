@@ -22,7 +22,6 @@ public class OrderController {
 
     @RequestMapping("/create")
     public String createOrder(@RequestBody CreateOrderRequest request) {
-        String userId = "0";
-        return orderService.createOrder(request, userId);
+        return orderService.createOrder(request);
     }
 }
