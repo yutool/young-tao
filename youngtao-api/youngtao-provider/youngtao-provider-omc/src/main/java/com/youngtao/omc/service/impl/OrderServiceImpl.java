@@ -1,12 +1,17 @@
 package com.youngtao.omc.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.youngtao.core.context.AuthContext;
+import com.youngtao.core.exception.CastException;
+import com.youngtao.core.result.RpcResult;
 import com.youngtao.core.util.RocketMQUtils;
 import com.youngtao.omc.api.constant.OmcRedisKey;
 import com.youngtao.omc.api.constant.OrderStatus;
+import com.youngtao.omc.api.constant.PayType;
 import com.youngtao.omc.api.utils.IdUtils;
 import com.youngtao.omc.common.constant.MQTagConsts;
 import com.youngtao.omc.mapper.OrderItemMapper;
@@ -19,9 +24,15 @@ import com.youngtao.omc.model.domain.OrderDO;
 import com.youngtao.omc.model.domain.OrderItemDO;
 import com.youngtao.omc.model.request.CreateOrderRequest;
 import com.youngtao.omc.model.request.GetUserOrderRequest;
+import com.youngtao.omc.model.request.OrderRefundRequest;
 import com.youngtao.omc.service.OrderService;
+import com.youngtao.opc.api.model.arg.TradeRefundArg;
+import com.youngtao.opc.api.model.dto.AlipayTradeRefundDTO;
+import com.youngtao.opc.api.service.AlipayFeign;
+import com.youngtao.opc.api.service.OrderPayRecordFeign;
 import com.youngtao.web.cache.RedisManager;
 import com.youngtao.web.support.BaseService;
+import com.youngtao.web.util.PageUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.rocketmq.client.producer.SendResult;
@@ -57,12 +68,17 @@ public class OrderServiceImpl extends BaseService<OrderDO> implements OrderServi
     @Autowired
     private OrderItemConvert orderItemConvert;
 
+    @Autowired
+    private AlipayFeign alipayFeign;
+    @Autowired
+    private OrderPayRecordFeign orderPayRecordFeign;
+
     @Value("${order-topic}")
     private String orderTopic;
 
     @Override
-    public String createOrder(CreateOrderRequest request, String userId) {
-        request.setUserId(userId);
+    public String createOrder(CreateOrderRequest request) {
+        request.setUserId(AuthContext.get().getUserId());
         String paymentId = IdUtils.orderId();
         request.setPaymentId(paymentId);
         // 1 设置当前订单创建中
@@ -85,10 +101,11 @@ public class OrderServiceImpl extends BaseService<OrderDO> implements OrderServi
     public PageInfo<OrderData> getUserOrder(GetUserOrderRequest request, String userId) {
         // 获取数据
         PageHelper.startPage(request.getPage(), request.getSize());
-        List<OrderDO> orderDOList = orderMapper.selectByUserIdAndStatus(userId, request.getStatus());
+        List<OrderDO> orderDOList = orderMapper.selectByUserIdAndStatus(userId, request.getStatus(), request.getIsDelete());
         if (CollectionUtils.isEmpty(orderDOList)) {
             return PageInfo.of(Lists.newArrayList());
         }
+        PageInfo<OrderDO> pageInfo = PageInfo.of(orderDOList);
         Set<String> orderIds = orderDOList.stream().map(OrderDO::getOrderId).collect(Collectors.toSet());
         List<OrderItemDO> orderItemDOList = orderItemMapper.selectByOrderIds(orderIds);
         Map<String, List<OrderItemDO>> orderItemMap = Maps.newHashMap();
@@ -104,6 +121,49 @@ public class OrderServiceImpl extends BaseService<OrderDO> implements OrderServi
             List<OrderItemData> orderItemData = orderItemConvert.toOrderItemData(list);
             orderData.setOrderItem(orderItemData);
         }
-        return PageInfo.of(orderDataList);
+        return PageUtils.convert(pageInfo, orderDataList);
+    }
+
+    @Override
+    public void orderRefund(OrderRefundRequest request) {
+        // 1 查询订单
+        OrderDO orderDO = orderMapper.selectOne(new QueryWrapper<OrderDO>()
+                .eq("order_id", request.getOrderId())
+                .eq("user_id", AuthContext.get().getUserId())
+        );
+        if (orderDO == null) {
+            CastException.cast("订单不存在");
+        }
+        if (orderDO.getStatus() != OrderStatus.DELIVERY) {
+            // 先支持代发货的退款
+            CastException.cast("目前只支持代发货的退款");
+        }
+        // 2 退款
+        if (orderDO.getPayType() == PayType.ALIPAY) {
+            TradeRefundArg arg = new TradeRefundArg();
+            arg.setOutTradeNo(orderDO.getPaymentId());
+            arg.setRefundAmount(orderDO.getPayMoney());
+            arg.setRefundReason(request.getRefundReason());
+            arg.setOutRequestNo(orderDO.getOrderId());
+            RpcResult<AlipayTradeRefundDTO> refundResult = alipayFeign.tradeRefund(arg);
+            if (!refundResult.isSuccess()) {
+                CastException.cast("退款失败");
+            }
+            // 3 更新为已退款
+            orderDO.setStatus(OrderStatus.REFUND);
+            orderMapper.updateById(orderDO);
+        } else {
+            CastException.cast("未知支付方式");
+        }
+    }
+
+    @Override
+    public void deleteOrder(String orderId) {
+        orderMapper.deleteOrder(orderId);
+    }
+
+    @Override
+    public void recoverOrder(String orderId) {
+        orderMapper.recoverOrder(orderId);
     }
 }

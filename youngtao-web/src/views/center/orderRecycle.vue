@@ -26,14 +26,7 @@
           <div style="height: 10px"></div>
           <tr class="bg-light">
             <td colspan="8">
-              <span class="mr-3">{{ order.createTime }}</span>
-              <span>订单编号：{{ order.orderId }}</span>
-              <span class="float-right">
-                <el-popconfirm v-if="order.status==0 || order.status==100" 
-                    title="确认删除订单吗" @onConfirm="deleteOrder(order.orderId)">
-                  <i class="el-icon-delete pointer" slot="reference"></i>
-                </el-popconfirm>
-              </span>
+              <span>{{ order.createTime }} 订单编号：{{ order.orderId }}</span>
             </td>
           </tr>
           <tr v-for="(item, index) in order.orderItem" :key="item.skuId">
@@ -55,7 +48,6 @@
               {{ item.num }}
             </td>
             <td v-if="index == 0" :rowspan="item.length">
-              <div class="pb-1 pointer" v-if="order.status==3" @click="orderRefund(order.orderId)">退款</div>
               <div class="pb-1 pointer">投诉卖家</div>
             </td>
             <td v-if="index == 0" :rowspan="item.length">
@@ -69,16 +61,13 @@
                 <span v-if="order.status==4">待收货</span>
                 <span v-if="order.status==5">待评价</span>
                 <span v-if="order.status==12">已退款</span>
-                <span v-if="order.status==100">交易关闭</span>
+                <span v-if="order.status==100">关闭</span>
               </div>
               <div class="pb-1"><a href="#">订单详情</a></div>
               <div><a href="#">查看物流</a></div>
             </td>
             <td v-if="index == 0" :rowspan="item.length">
-              <el-button v-if="order.status==2" type="danger" size="mini" @click="$router.push(`/order/pay/${order.paymentId}`)">去付款</el-button>
-              <el-button v-if="order.status==3" type="primary" size="mini">提醒发货</el-button>
-              <el-button v-if="order.status==4" type="primary" size="mini">确认收货</el-button>
-              <el-button v-if="order.status==0 || order.status==100" type="info" size="mini" @click="$router.push(`/market/detail/${item.spuId}`)">再来一单</el-button>
+              <el-button type="primary" size="mini" @click="recoverOrder(order.orderId)">恢复订单</el-button>
             </td>
           </tr>
         </tbody>
@@ -98,14 +87,14 @@
     
     <!-- 无订单显示 -->
     <div v-else class="text-center pt-5">
-      你还没有购买过商品哦~~~
+      回收站空空如也~~~
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { getUserOrder, orderRefund, deleteOrder } from '@/api/omc/order'
+import { getUserOrder, recoverOrder } from '@/api/omc/order'
 
 @Component
 export default class List extends Vue {
@@ -123,7 +112,7 @@ export default class List extends Vue {
   
   // 获取用户的订单
   private getUserOrder(page: number, size = this.pageInfo.pageSize) {
-    getUserOrder({page, size, status: this.selectedStatus}).then((res: any) => {
+    getUserOrder({page, size, status: this.selectedStatus, isDelete: true}).then((res: any) => {
       this.$log.info('获取用户订单', res)
       this.pageInfo = res.data
       this.orderList = res.data.list
@@ -141,17 +130,10 @@ export default class List extends Vue {
   private handleChange() {
     this.getUserOrder(0, 10)
   }
-  // 退款
-  private orderRefund(orderId: string) {
-    orderRefund({orderId, refundReason: '退款'}).then((res: any) => {
+  // 回收订单
+  private recoverOrder(id: string) {
+    recoverOrder({id}).then((res: any) => {
       this.$message({type: 'success', message: '退款成功'})
-      this.getUserOrder(this.pageInfo.pageNum, this.pageInfo.size)
-    })
-  }
-  // 删除订单
-  private deleteOrder(id: string) {
-    deleteOrder({id}).then((res: any) => {
-      this.$log.info('删除订单：', res)
       this.getUserOrder(this.pageInfo.pageNum, this.pageInfo.size)
     })
   }

@@ -21,6 +21,8 @@ public class CreateOrderRequest {
     @NotBlank
     private String shippingAddressId;
 
+    private Boolean isCart;
+
     private String userId;
 
     private String paymentId;

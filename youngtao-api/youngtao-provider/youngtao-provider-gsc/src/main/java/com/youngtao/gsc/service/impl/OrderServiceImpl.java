@@ -70,6 +70,7 @@ public class OrderServiceImpl implements OrderService {
         msg.setRemark(request.getRemark());
         msg.setSkuId(skuId);
         msg.setShippingAddressId(request.getShippingAddressId());
+        msg.setIsCart(request.getIsCart());
         msg.setSkuDTO(BeanUtils.copy(skuData, GscSkuDTO.class));
         SendResult sendResult = rocketMQTemplate.syncSendOrderly(RocketMQUtils.withTag(orderTopic, GscMQTagConsts.CREATE_ORDER), msg, skuId);
         if (sendResult == null) {

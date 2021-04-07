@@ -1,9 +1,8 @@
 package com.youngtao.omc.mapper;
-import org.apache.ibatis.annotations.Param;
-
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.youngtao.omc.model.domain.CartDO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -25,4 +24,13 @@ public interface CartMapper extends BaseMapper<CartDO> {
     CartDO selectByUserIdAndSkuId(@Param("userId") String userId, @Param("skuId") String skuId);
 
     List<CartDO> listByUserId(String userId);
+
+    /**
+     * 批量删除购物车
+     */
+    int batchDelete(@Param("userId") String userId, @Param("skuIds") List<String> skuIds);
+
+    int deleteBySkuId(@Param("userId") String userId, @Param("skuId") String skuId);
+
+    int updateNum(@Param("id") String id, @Param("num") String num);
 }

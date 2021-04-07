@@ -1,6 +1,5 @@
 package com.youngtao.gmc.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.youngtao.core.lang.JsonList;
@@ -15,12 +14,11 @@ import com.youngtao.gmc.mapper.SpuMapper;
 import com.youngtao.gmc.model.convert.ProductConvert;
 import com.youngtao.gmc.model.convert.SkuConvert;
 import com.youngtao.gmc.model.convert.SpuConvert;
-import com.youngtao.gmc.model.data.CategoryData;
 import com.youngtao.gmc.model.data.ProductData;
-import com.youngtao.gmc.model.data.RecommendProductData;
-import com.youngtao.gmc.model.domain.CategoryDO;
 import com.youngtao.gmc.model.domain.SkuDO;
 import com.youngtao.gmc.model.domain.SpuDO;
+import com.youngtao.gmc.model.query.UpdateSaleQuery;
+import com.youngtao.gmc.model.query.UpdateStockQuery;
 import com.youngtao.gmc.model.request.AddProductRequest;
 import com.youngtao.gmc.model.request.ConfirmOrderRequest;
 import com.youngtao.gmc.model.response.ConfirmOrderResponse;
@@ -151,4 +149,28 @@ public class ProductServiceImpl implements ProductService {
         return Lists.newArrayList(responseMap.values());
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void paySuccess(List<UpdateStockQuery> query) {
+        skuMapper.paySuccess(query);
+        // 计算spu对应的个数
+        Set<String> skuIds = query.stream().map(UpdateStockQuery::getSkuId).collect(Collectors.toSet());
+        List<SkuDO> skuDOList = skuMapper.listBySkuIds(skuIds);
+        Map<String, String> map = skuDOList.stream().collect(Collectors.toMap(SkuDO::getSkuId, SkuDO::getSpuId));
+
+        Map<String, UpdateSaleQuery> spuMap = Maps.newHashMap();
+        for (UpdateStockQuery item : query) {
+            String spuId = map.get(item.getSkuId());
+            UpdateSaleQuery saleQuery = spuMap.get(spuId);
+            if (saleQuery == null) {
+                saleQuery = new UpdateSaleQuery();
+                saleQuery.setNum(item.getNum());
+                saleQuery.setSpuId(spuId);
+                spuMap.put(spuId, saleQuery);
+            } else {
+                saleQuery.setNum(saleQuery.getNum() + item.getNum());
+            }
+        }
+        spuMapper.paySuccess(spuMap.values());
+    }
 }

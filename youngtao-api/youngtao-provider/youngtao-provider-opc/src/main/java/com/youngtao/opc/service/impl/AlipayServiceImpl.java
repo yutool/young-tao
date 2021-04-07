@@ -5,10 +5,13 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.domain.AlipayTradePagePayModel;
 import com.alipay.api.domain.AlipayTradeQueryModel;
+import com.alipay.api.domain.AlipayTradeRefundModel;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.alipay.api.request.AlipayTradeQueryRequest;
+import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayTradeQueryResponse;
+import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.youngtao.core.exception.CastException;
 import com.youngtao.core.util.BigDecimals;
 import com.youngtao.core.util.DateTimeUtils;
@@ -23,6 +26,8 @@ import com.youngtao.opc.model.domain.OrderPayRecordDO;
 import com.youngtao.opc.model.msg.OrderPayMsg;
 import com.youngtao.opc.model.request.AlipayAppCheckRequest;
 import com.youngtao.opc.model.request.AlipayRequest;
+import com.youngtao.opc.model.request.TradeRefundRequest;
+import com.youngtao.opc.model.response.TradeRefundResponse;
 import com.youngtao.opc.service.AlipayService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
@@ -31,6 +36,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.Map;
 
 /**
@@ -50,6 +56,8 @@ public class AlipayServiceImpl implements AlipayService {
     private RocketMQTemplate rocketMQTemplate;
     @Value("${order-pay-topic}")
     private String payTopic;
+
+    private static final String SUCCESS_CODE = "10000";
 
     @Override
     public String appPay(AlipayRequest request) {
@@ -137,6 +145,35 @@ public class AlipayServiceImpl implements AlipayService {
     }
 
     @Override
+    public TradeRefundResponse tradeRefund(TradeRefundRequest refundRequest) {
+        AlipayTradeRefundModel mode = new AlipayTradeRefundModel();
+        mode.setOutTradeNo(refundRequest.getOutTradeNo());
+        mode.setTradeNo(refundRequest.getTradeNo());
+        mode.setRefundAmount(BigDecimals.round(refundRequest.getRefundAmount()));
+        mode.setOutRequestNo(refundRequest.getOutRequestNo());
+        mode.setRefundReason(refundRequest.getRefundReason());
+
+        AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
+        request.setBizModel(mode);
+        try {
+            AlipayTradeRefundResponse response = alipay.execute(request);
+            if (SUCCESS_CODE.equals(response.getCode())) {
+                TradeRefundResponse result = new TradeRefundResponse();
+                result.setOutTradeNo(response.getOutTradeNo());
+                result.setTradeNo(response.getTradeNo());
+                result.setRefundFee(new BigDecimal(response.getRefundFee()));
+                return result;
+            } else {
+                log.info("tradeRefund fail, response = {}", refundRequest);
+                return null;
+            }
+        } catch (AlipayApiException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
     public String payNotify(Map<String, String> resultMap) {
         String tradeStatus = resultMap.get("trade_status");
         String paymentId = resultMap.get("out_trade_no");
@@ -159,6 +196,7 @@ public class AlipayServiceImpl implements AlipayService {
             // 发送MQ
             OrderPayMsg msg = new OrderPayMsg();
             msg.setPaymentId(paymentId);
+            msg.setPayType(1);
             rocketMQTemplate.convertAndSend(RocketMQUtils.withTag(payTopic, MQTagConsts.PAY_SUCCESS), msg);
         }
         return "success";

@@ -44,7 +44,7 @@ public class AlipayController {
     }
 
     @NoWrapper
-    @RequestMapping("/notify")
+    @PostMapping("/notify")
     public String notify(HttpServletRequest request) {
         Map<String, String> resultMap = alipayUtils.parseToMap(request);
         // 内容验签，防止黑客篡改参数

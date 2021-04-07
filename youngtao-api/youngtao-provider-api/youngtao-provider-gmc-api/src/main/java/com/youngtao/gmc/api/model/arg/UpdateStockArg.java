@@ -2,15 +2,12 @@ package com.youngtao.gmc.api.model.arg;
 
 import lombok.Data;
 
-import java.io.Serializable;
-
 /**
  * @author ankoye@qq.com
- * @date 2020/12/13
+ * @date 2021/04/06
  */
 @Data
-public class UpdateStockArg implements Serializable {
-
+public class UpdateStockArg {
     private String skuId;
 
     private Integer num;

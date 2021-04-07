@@ -16,20 +16,6 @@ export function queryStatus(paymentId: any) {
   })
 }
 
-export function queryOrderStatus(id: string) {
-  return request({
-    url: `omc/order/queryOrderStatus/${id}`,
-    method: 'get'
-  })
-}
-
-export function getOrder(id: string) {
-  return request({
-    url: `omc/order/${id}`,
-    method: 'get'
-  })
-}
-
 export function getUserOrder(data: any) {
   return request({
     url: `omc/order/getUserOrder`,
@@ -38,31 +24,26 @@ export function getUserOrder(data: any) {
   })
 }
 
-export function prepareOrder(data: any) {
+export function orderRefund(data: any) {
   return request({
-    url: 'omc/order/prepare',
+    url: `omc/order/orderRefund`,
     method: 'post',
     data: JSON.stringify(data)
   })
 }
 
-export function getPrepareOrder(id: string) {
+export function deleteOrder(data: any) {
   return request({
-    url: `omc/order/prepare/${id}`,
-    method: 'get',
+    url: 'omc/order/delete',
+    method: 'post',
+    data: JSON.stringify(data)
   })
 }
 
-export function checkPrepareOrder(id: string) {
+export function recoverOrder(data: any) {
   return request({
-    url: `omc/order/prepare/${id}`,
-    method: 'delete',
-  })
-}
-
-export function deleteOrder(id: string) {
-  return request({
-    url: `omc/order/${id}`,
-    method: 'delete',
+    url: 'omc/order/recover',
+    method: 'post',
+    data: JSON.stringify(data)
   })
 }

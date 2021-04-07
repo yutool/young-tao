@@ -14,6 +14,7 @@ import com.youngtao.omc.api.constant.OrderStatus;
 import com.youngtao.omc.api.constant.OrderType;
 import com.youngtao.omc.common.constant.MQTagConsts;
 import com.youngtao.omc.common.util.IdUtils;
+import com.youngtao.omc.mapper.CartMapper;
 import com.youngtao.omc.mapper.OrderItemMapper;
 import com.youngtao.omc.mapper.OrderMapper;
 import com.youngtao.omc.model.domain.OrderDO;
@@ -49,11 +50,12 @@ import java.math.BigDecimal;
         consumeMode = ConsumeMode.ORDERLY
 )
 public class CreateGscOrderListener implements RocketMQListener<CreateOrderMessage> {
-
     @Resource
     private OrderMapper orderMapper;
     @Resource
     private OrderItemMapper orderItemMapper;
+    @Resource
+    private CartMapper cartMapper;
 
     @Autowired
     private SkuFeign skuFeign;
@@ -120,6 +122,11 @@ public class CreateGscOrderListener implements RocketMQListener<CreateOrderMessa
         // 3 保存至数据库
         orderMapper.insert(orderDO);
         orderItemMapper.insert(orderItemDO);
+
+        // 4 删除购物车
+        if (message.getIsCart()) {
+            cartMapper.deleteBySkuId(message.getUserId(), skuDTO.getSkuId());
+        }
 
         // 4 添加支付记录
         AddPayRecordArg addArg = new AddPayRecordArg();

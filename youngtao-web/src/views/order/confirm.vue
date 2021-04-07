@@ -34,7 +34,7 @@
     <div class="table-responsive-lg">
       <div style="font-weight: 600" class="mb-2">确认商品信息</div>
       <div class="pb-1">
-        <table class="table ">
+        <table class="table">
           <thead>
             <th>商品</th>
             <th>商品信息</th>
@@ -47,7 +47,9 @@
           <!-- 数据 -->
           <tbody v-for="merchant in orderList" :key="merchant.merchatId">
             <tr class="bg-light">
-              <td  colspan="6">{{merchant.shopName}}</td>
+              <td  colspan="6">
+                <i class="el-icon-shopping-bag-1"></i> {{merchant.shopName}}
+              </td>
             </tr>
             <tr v-for="item in merchant.skuList" :key="item.skuId">
               <td> 
@@ -70,7 +72,7 @@
                 <input v-model="merchant.remark" class="remark" placeholder="补充填写其他信息，如有快递不到也请留言">
               </td>
             </tr>
-            <div style="height: 10px"></div>
+            <div style="height: 20px"></div>
           </tbody>
         </table>
       </div>
@@ -144,7 +146,7 @@ export default class Buy extends Vue {
     for (const merchant of this.orderList) {
       for (const sku of merchant.skuList) {
         this.skuCount++;
-        this.payMoney = this.payMoney + sku.price
+        this.payMoney += sku.price * sku.count
       }
     }
   }
@@ -185,7 +187,8 @@ export default class Buy extends Vue {
         }
         orderList.push({ orderItem, remark: merchant.remark })
       }
-      createOrder({ orderList, shippingAddressId: this.checkedAddress }).then((res: any) => {
+      const data = { orderList, shippingAddressId: this.checkedAddress, isCart: this.currentOrder.isCart }
+      createOrder(data).then((res: any) => {
         this.checkOrderStatus(res.data)
       })
     } else {
@@ -193,7 +196,8 @@ export default class Buy extends Vue {
       const data = {
         skuId: this.orderList[0].skuList[0].skuId,
         remark: this.orderList[0].remark,
-        shippingAddressId: this.checkedAddress
+        shippingAddressId: this.checkedAddress,
+        isCart: this.currentOrder.isCart
       }
       gscCreateOrder(data).then((res: any) => {
         this.checkOrderStatus(res.data)

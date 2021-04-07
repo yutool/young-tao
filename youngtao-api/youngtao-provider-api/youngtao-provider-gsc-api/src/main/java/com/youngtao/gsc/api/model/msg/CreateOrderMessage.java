@@ -19,5 +19,7 @@ public class CreateOrderMessage {
 
     private String paymentId;
 
+    private Boolean isCart;
+
     private GscSkuDTO skuDTO;
 }

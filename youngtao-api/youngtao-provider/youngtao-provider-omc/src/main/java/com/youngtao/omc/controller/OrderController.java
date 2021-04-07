@@ -7,6 +7,7 @@ import com.youngtao.core.data.IdArg;
 import com.youngtao.omc.model.data.OrderData;
 import com.youngtao.omc.model.request.CreateOrderRequest;
 import com.youngtao.omc.model.request.GetUserOrderRequest;
+import com.youngtao.omc.model.request.OrderRefundRequest;
 import com.youngtao.omc.service.OrderService;
 import com.youngtao.web.support.ResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +30,20 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+    @PostMapping("/getUserOrder")
+    public PageInfo<OrderData> getUserOrder(@RequestBody GetUserOrderRequest request) {
+        AuthInfo authInfo = AuthContext.get();
+        return orderService.getUserOrder(request, authInfo.getUserId());
+    }
+
     @PostMapping("/create")
     public String createOrder(@Valid @RequestBody CreateOrderRequest request) {
-        AuthInfo authInfo = AuthContext.get();
-        return orderService.createOrder(request, authInfo.getUserId());
+        return orderService.createOrder(request);
+    }
+
+    @PostMapping("/orderRefund")
+    public void orderRefund(@RequestBody OrderRefundRequest request) {
+        orderService.orderRefund(request);
     }
 
     @PostMapping("/queryStatus")
@@ -40,9 +51,13 @@ public class OrderController {
         return orderService.queryStatus(idArg.getId());
     }
 
-    @PostMapping("/getUserOrder")
-    public PageInfo<OrderData> getUserOrder(@RequestBody GetUserOrderRequest request) {
-        AuthInfo authInfo = AuthContext.get();
-        return orderService.getUserOrder(request, authInfo.getUserId());
+    @PostMapping("/delete")
+    public void deleteOrder(@RequestBody IdArg idArg) {
+        orderService.deleteOrder(idArg.getId());
+    }
+
+    @PostMapping("/recover")
+    public void recoverOrder(@RequestBody IdArg idArg) {
+        orderService.recoverOrder(idArg.getId());
     }
 }

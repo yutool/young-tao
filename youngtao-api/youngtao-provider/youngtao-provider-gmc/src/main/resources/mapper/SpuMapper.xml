@@ -31,6 +31,14 @@
         <result property="createTime" column="create_time" />
     </resultMap>
 
+    <update id="paySuccess" parameterType="updateSaleQuery">
+        <foreach collection="spuList" item="item" separator=";">
+            update gmc_spu
+            set sale_num = sale_num + #{item.num}
+            where spu_id = #{item.spuId}
+        </foreach>
+    </update>
+
     <select id="selectBySpuId" resultMap="BaseResultMap">
         select * from gmc_spu
         where spu_id = #{spuId}

@@ -15,7 +15,7 @@
           <thead class="bg-light">
             <tr>
               <th scope="col">
-                <el-checkbox v-model="all" @change="checkAll">全选</el-checkbox>
+                <el-checkbox v-model="checkedAll" @change="handlerAll">全选</el-checkbox>
               </th>
               <th scope="col">商品</th>
               <th scope="col">商品信息</th>
@@ -27,20 +27,22 @@
           </thead>
           <br />
           <tbody v-for="merchant in cartList" :key="merchant.merchantId">
+            <!-- 店名 -->
             <tr class="border mt-3 bg-light">
               <th scope="row">
-                <el-checkbox @change="handlerChange"></el-checkbox>
+                <el-checkbox v-model="checkedMerchant[merchant.merchantId]" @change="handlerMerchant"></el-checkbox>
               </th>
               <td colspan="6">
-                {{merchant.shopName}}
+                <i class="el-icon-shopping-bag-1"></i> {{merchant.shopName}}
               </td>
             </tr>
-            <tr class="border" v-for="cart in merchant.skuList" :key="cart.id">
+            <!-- 商品 -->
+            <tr class="border" v-for="cart in merchant.skuList" :key="cart.skuId">
               <th scope="row">
-                <el-checkbox v-model="checkObj.check[cart.id]" @change="handlerChange"></el-checkbox>
+                <el-checkbox v-model="checkedCart[cart.skuId]" @change="handlerCart"></el-checkbox>
               </th>
-              <td> 
-                <img :src="cart.image" width="60px" alt=""> 
+              <td @click="$router.push(`/market/detail/${cart.spuId}`)" class="pointer">
+                <img :src="cart.image" width="60px" alt="">
                 {{ cart.spu }}
               </td>
               <td>
@@ -74,18 +76,16 @@
       </div>
       <!-- 状态栏 -->
       <div class="cart-paybar clearfix">
-        <div class="float-left">
-          <el-checkbox v-model="all" @change="checkAll">全选</el-checkbox>
-          <ul class="paybar-list">
-            <li><a href="#" @click="batchDelete">删除选中</a></li>
-            <li><a href="#">清空售馨商品</a></li>
-            <li><a href="#">移入收藏夹</a></li>
-          </ul>
+        <div class="float-left pt-1 ">
+          <el-checkbox v-model="checkedAll" @change="handlerAll">全选</el-checkbox>
+          <span class="action-btn" @click="batchDelete">删除选中</span>
+          <span class="action-btn">清空售馨商品</span>
+          <span class="action-btn">移入收藏夹</span>
         </div>
         <div class="float-right">
-          总共 <span style="color: #ff5777;">{{ checkObj.num }} </span> 件商品，
-          共计:<span style="color: #ff5777; font-size: 20px">￥{{ checkObj.money }}</span> 元 
-          <el-button type="primary" @click="buy" size="small">去付款</el-button>
+          <span> 总共 <span style="color: #ff5777;">{{ checkedNum }} </span> 件商品，</span> 
+          <span> 共计:<span style="color: #ff5777; font-size: 20px">￥{{ checkedMoney }}</span> 元 </span> 
+          <el-button class="ml-2" type="danger" @click="buy" size="small">立即购买</el-button>
         </div>
       </div>
     </div>
@@ -100,53 +100,49 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { Getter, State } from 'vuex-class'
 import { getUserCart, updateNum, deleteCart, batchDelete } from '@/api/omc/cart'
-import { prepareOrder } from '@/api/omc/order'
+import { createOrder } from '@/api/omc/order'
 
 @Component
 export default class Cart extends Vue {
   @State((state: any) => state.app.loading) private loading: any
-  @Getter('userId') private userId!: string
   
   private cartList: any = []
-  private all = false
-  private checkObj: any = {
-    check: {},   // id - 是否选中
-    num: 0,     // 选中商品个数
-    money: 0    // 总价格
-  }
+  private checkedAll = false
+  private checkedMerchant: any = {}
+  private checkedCart: any = {}
+
+  private checkedNum = 0;   // 选中个数
+  private checkedMoney = 0  // 总金额
   
-  // 处理按钮改变
-  private handlerChange() {
-    this.checkObj.num = 0
-    this.checkObj.money = 0
-    // 如果被选中，对于id的值为true
-    for (const id of Object.keys(this.checkObj.check)) {
-      if (this.checkObj.check[id] === true) {
-        this.checkObj.num++;
-        // 计算这件商品的总价
-        for (const cart of this.cartList) {
-          if (id === cart.id + '') {
-            this.checkObj.money += cart.num * cart.price
-            break
-          }
+  // 获取购物车
+  private getUserCart() {
+    getUserCart().then((res: any) => {
+      this.cartList = res.data
+      this.$log.info('查询购物车', this.cartList)
+    })
+  }
+  private mounted() {
+    this.getUserCart()
+  }
+
+  // 立即购买
+  private buy() {
+    if (this.checkedNum === 0) {
+      this.$message({type: 'info', message: '暂无该商品，换个吧'})
+      return;
+    }
+    // 处理商品
+    const skuList = []
+    for (const merchant of this.cartList) {
+      for (const sku of merchant.skuList) {
+        if (this.checkedCart[sku.skuId]) {
+          skuList.push({skuId: sku.skuId, count: sku.num})
         }
       }
     }
-    // 处理全选按钮
-    if (this.checkObj.num === this.cartList.length) {
-      this.all = true
-    } else {
-      this.all = false
-    }
-  }
-  
-  // 点击全选按钮
-  private checkAll() {
-    for (const item of this.cartList) {
-      // 当为false时点击就为true
-      this.checkObj.check[item.id] = this.all
-    }
-    this.handlerChange()
+    // 存入cookie
+    const key = this.$utils.setOrderItem({type: this.$orderType.NORMAL, skuList, isCart: true});
+    this.$router.push(`/order/confirm/${key}`)
   }
 
   // 修改商品数量
@@ -166,44 +162,73 @@ export default class Cart extends Vue {
   // 删除选择商品
   private batchDelete() {
     const cartIds: any = []
-    for (const cart of this.cartList) {
-      if (this.checkObj.check[cart.id] === true) {
-        cartIds.push(cart.id)
+    for (const merchant of this.cartList) {
+      for (const item of merchant.skuList) {
+        if (this.checkedCart[item.skuId]) {
+          cartIds.push(item.id)
+        }
       }
     }
-    batchDelete(cartIds).then((res: any) => {
-      this.getUserCart()
-    })
+    if (cartIds.length !== 0) {
+      batchDelete({ids: cartIds}).then((res: any) => {
+        this.getUserCart()
+      })
+    }
   }
-  
-  // 付款
-  private buy() {
-    // 获取选中的skuId
-    const orderItem: any = []
-    // 添加选中商品购物车id
-    const cartIds: any = []
-    for (const cart of this.cartList) {
-      if (this.checkObj.check[cart.id] === true) {
-        orderItem.push({ skuId: cart.skuId, num: cart.num })
-        cartIds.push(cart.id)
+
+  // 处理复选框点击事件
+  private handlerMerchant() {
+    let flag = true
+    for (const merchant of this.cartList) {
+      // 如果被选中，则选中下面所有商品
+      if (this.checkedMerchant[merchant.merchantId]) {
+        for (const sku of merchant.skuList) {
+          this.checkedCart[sku.skuId] = true
+        }
+      } else {
+        for (const sku of merchant.skuList) {
+          this.checkedCart[sku.skuId] = false
+        }
+        flag = false
       }
     }
-    
-    prepareOrder({ userId: this.userId, orderItem, cartIds }).then((res: any) => {
-      this.$router.push(`/order/buy/${res.data}`)
-    })
+    this.checkedAll = flag
+    this.calculate()
   }
-  
-  // 获取购物车
-  private getUserCart() {
-    getUserCart().then((res: any) => {
-      this.cartList = res.data
-      this.$log.info('查询购物车', this.cartList)
-    })
+  private handlerCart() {
+    let allFlag = true
+    for (const merchant of this.cartList) {
+      let flag = true
+      for (const sku of merchant.skuList) {
+        // 如果有一个没有被选中，则取消
+        if (!this.checkedCart[sku.skuId]) {
+          allFlag = flag = false;
+          break;
+        }
+      }
+      this.checkedMerchant[merchant.merchantId] = flag
+    }
+    this.checkedAll = allFlag
+    this.calculate()
   }
-  
-  private mounted() {
-    this.getUserCart()
+  private handlerAll() {
+    for (const merchant of this.cartList) {
+      this.checkedMerchant[merchant.merchantId] = this.checkedAll
+    }
+    this.handlerMerchant()
+  }
+  // 计算选中件数
+  private calculate() {
+    this.checkedNum = 0;
+    this.checkedMoney = 0;
+    for (const merchant of this.cartList) {
+      for (const sku of merchant.skuList) {
+        if (this.checkedCart[sku.skuId]) {
+          this.checkedNum++;
+          this.checkedMoney += sku.price * sku.num;
+        }
+      }
+    }
   }
 }
 </script>
@@ -236,5 +261,13 @@ export default class Cart extends Vue {
       padding-right: 5px;
     }
   }
+}
+.action-btn {
+  font-size: 14px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+.action-btn:hover {
+  color: #ff5777;
 }
 </style>

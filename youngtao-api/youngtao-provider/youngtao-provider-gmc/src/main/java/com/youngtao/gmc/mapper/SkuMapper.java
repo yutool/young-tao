@@ -43,4 +43,6 @@ public interface SkuMapper extends BaseMapper<SkuDO> {
 
 
     List<SkuDO> listDefaultBySpuId(Collection<String> spuIds);
+
+    int paySuccess(@Param("skuList") List<UpdateStockQuery> query);
 }

@@ -3,7 +3,7 @@ package com.youngtao.omc.listener;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.youngtao.core.result.RpcResult;
 import com.youngtao.gmc.api.model.arg.UpdateStockArg;
-import com.youngtao.gmc.api.service.SkuFeign;
+import com.youngtao.gmc.api.service.ProductFeign;
 import com.youngtao.omc.api.constant.OrderStatus;
 import com.youngtao.omc.common.constant.MQTagConsts;
 import com.youngtao.omc.mapper.OrderItemMapper;
@@ -42,13 +42,16 @@ public class OrderPayListener implements RocketMQListener<OrderPayListener.Messa
     private OrderItemMapper orderItemMapper;
 
     @Autowired
-    private SkuFeign skuFeign;
+    private ProductFeign productFeign;
 
     @Override
     public void onMessage(Message message) {
         log.info("订单支付信息, data = {}", message);
 
-        // 1 解冻库存
+        // 1 修改订单信息
+        orderMapper.paySuccess(message.getPaymentId(), message.getPayType(), OrderStatus.DELIVERY);
+
+        // 2 删除库存，增加销量
         List<OrderDO> orderList = orderMapper.selectList(new QueryWrapper<OrderDO>()
                 .eq("payment_id", message.getPaymentId())
         );
@@ -60,19 +63,15 @@ public class OrderPayListener implements RocketMQListener<OrderPayListener.Messa
             arg.setNum(val.getNum());
             return arg;
         }).collect(Collectors.toList());
-        RpcResult<Boolean> decreaseResult = skuFeign.batchDecreaseScore(argList);
+        RpcResult<Boolean> decreaseResult = productFeign.paySuccess(argList);
         if (!decreaseResult.isSuccess()) {
             // 补偿
         }
-
-        // 2 添加销售量
-
-        // 3 修改订单信息
-        orderMapper.updateStatus(message.getPaymentId(), OrderStatus.DELIVERY);
     }
 
     @Data
     static class Message {
         private String paymentId;
+        private Integer payType;
     }
 }

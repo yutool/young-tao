@@ -37,6 +37,7 @@ const routes = [
     children: [
       { path: '/', redirect: 'order' },
       { path: 'order', component: () => import('@/views/center/order.vue' ) },
+      { path: 'orderRecycle', component: () => import('@/views/center/orderRecycle.vue' ) },
     ]
   },
   {

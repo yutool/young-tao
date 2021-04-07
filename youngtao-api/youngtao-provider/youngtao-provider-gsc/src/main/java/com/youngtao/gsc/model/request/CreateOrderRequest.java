@@ -13,4 +13,6 @@ public class CreateOrderRequest {
     private String shippingAddressId;
 
     private String remark;
+
+    private Boolean isCart;
 }

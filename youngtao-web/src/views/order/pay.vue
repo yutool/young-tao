@@ -96,6 +96,9 @@ export default class Pay extends Vue {
 
   // 支付宝支付
   private alipay() {
+    if (this.payType === 1) {
+      return;
+    }
     this.payType = 1
     const data = {
       paymentId: this.payRecord.paymentId,

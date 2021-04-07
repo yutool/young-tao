@@ -19,6 +19,24 @@
         values (#{skuId}, #{userId}, #{title}, #{image}, #{oldPrice}, #{num}, #{updateTime}, #{createTime})
     </insert>
 
+    <update id="updateNum">
+        update omc_cart
+        set num = #{num}
+        where id = #{id}
+    </update>
+
+    <delete id="batchDelete">
+        delete from omc_cart
+        where user_id = #{userId}
+        and sku_id in <foreach collection="skuIds" item="item" open="(" close=")" separator=",">#{item}</foreach>
+    </delete>
+
+    <delete id="deleteBySkuId">
+        delete from omc_cart
+        where user_id = #{userId}
+        and sku_id = #{skuId}
+    </delete>
+
     <select id="listByUserId" resultMap="BaseResultMap">
         select * from omc_cart
         where user_id = #{userId}

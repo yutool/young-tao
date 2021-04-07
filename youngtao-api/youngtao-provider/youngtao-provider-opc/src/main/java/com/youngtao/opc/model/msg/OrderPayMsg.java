@@ -9,4 +9,5 @@ import lombok.Data;
 @Data
 public class OrderPayMsg {
     private String paymentId;
+    private Integer payType;
 }

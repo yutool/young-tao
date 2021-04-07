@@ -10,35 +10,32 @@
       </div>
     </div>
     <div class="menu-wrap">
-      <ul>
-        <li>
-          <div class="menu-title">订单中心</div>
-          <ul class="menu-item">
-            <li @click="$router.push(`/center/${user.id}/order`)">我的订单</li>
-            <li @click="$router.push(`/center/${user.id}/team_order`)">团购订单</li>
-            <li>退款退货</li>
-            <li>订单回收站</li>
-          </ul>
-        </li>
-        <li>
-          <div class="menu-title">关注中心</div>
-          <ul class="menu-item">
-            <li>关注的店铺</li>
-            <li>关注的商品</li>
-            <li>关注的品牌</li>
-            <li>浏览记录</li>
-          </ul>
-        </li>
-        <li>
-          <div class="menu-title">客户服务</div>
-          <ul class="menu-item">
-            <li>返修退换货</li>
-            <li>价格保护</li>
-            <li>交易纠纷</li>
-            <li>我的发票</li>
-          </ul>
-        </li>
-      </ul>
+      <div>
+        <div class="menu-title">
+          <i class="el-icon-goods"></i> 订单中心
+        </div>
+        <div class="menu-item" :class="{'active': activePath == '/center/order'}" @click="handlerClick('/center/order')">我的订单</div>
+        <div class="menu-item">团购订单</div>
+        <div class="menu-item">退款退货</div>
+        <div class="menu-item" :class="{'active': activePath == '/center/orderRecycle'}" @click="handlerClick('/center/orderRecycle')">订单回收站</div>
+      </div>
+      <div>
+        <div class="menu-title">
+          <i class="el-icon-star-off"></i> 关注中心
+        </div>
+        <div class="menu-item">关注的店铺</div>
+        <div class="menu-item">关注的商品</div>
+        <div class="menu-item">关注的品牌</div>
+        <div class="menu-item">浏览记录</div>
+      </div>
+      <div>
+        <div class="menu-title">
+          <i class="el-icon-user"></i> 客户服务
+        </div>
+        <div class="menu-item">返修退换货</div>
+        <div class="menu-item">交易纠纷</div>
+        <div class="menu-item">我的发票</div>
+      </div>
     </div>
   </div>
 </template>
@@ -50,25 +47,36 @@ import { Getter, State } from 'vuex-class'
 @Component
 export default class SideBar extends Vue {
   @State(((state: any) => state.account.user)) private user: any
+
+  private activePath = '/center/order'
+
+  private handlerClick(path: string) {
+    this.activePath = path
+    this.$router.push(path)
+  }
+
+  private mounted() {
+    this.activePath = this.$route.path
+  }
 }
 </script>
 
 <style scoped lang="scss">
 .menu-wrap {
-  ul {
-    padding: 0;
-    li { list-style: none; }
-  }
   .menu-title {
-    font-size: 1.2rem;
-    background: #aaa;
+    padding: 10px;
+    margin-left: 30px;
   }
   .menu-item {
-    li {
-      padding: 3px 0;
-      cursor: pointer;
-    }
-    li:hover { background: #ccc; }
+    padding: 6px;
+    padding-left: 70px;
+    cursor: pointer;
+  }
+  .active {
+    background-color: #ebf2fe;
+    color: #3582fb;
+    border-left: 5px solid #3582fb;
+    padding-left: 65px;
   }
 }
 </style>

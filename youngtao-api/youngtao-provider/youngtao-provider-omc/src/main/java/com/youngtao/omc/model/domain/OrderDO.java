@@ -80,8 +80,15 @@ public class OrderDO extends BaseEntity implements Serializable {
     private Integer status;
 
     /**
+     * 支付方式
+     */
+    private Integer payType;
+
+    /**
      * 订单支付号，给支付平台的订单Id
      */
     private String paymentId;
+
+    private Boolean isDelete;
 
 }

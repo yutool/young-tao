@@ -74,7 +74,6 @@ import { Component, Vue } from 'vue-property-decorator'
 import { Getter } from 'vuex-class'
 import { getProduct } from '@/api/gmc/product'
 import { addCart } from '@/api/omc/cart'
-import { prepareOrder } from '@/api/omc/order'
 
 @Component
 export default class GoodsDetail extends Vue {
@@ -129,7 +128,8 @@ export default class GoodsDetail extends Vue {
     // 存入cookie
     const order = {
       type: this.checkedSku.type,
-      skuList: [{ skuId: this.checkedSku.skuId, count: this.selctedNum }]
+      skuList: [{ skuId: this.checkedSku.skuId, count: this.selctedNum }],
+      isCart: false
     }
     const key = this.$utils.setOrderItem(order);
     this.$router.push(`/order/confirm/${key}`)

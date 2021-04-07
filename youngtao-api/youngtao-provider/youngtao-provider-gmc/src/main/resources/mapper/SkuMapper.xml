@@ -34,7 +34,7 @@
     </insert>
 
     <update id="batchFreezeScore" parameterType="updateStockQuery">
-        <foreach collection="skuList" item="item" close=";">
+        <foreach collection="skuList" item="item" separator=";">
             update gmc_sku
             set num = num - #{item.num}, freeze_num = freeze_num + #{item.num}
             where sku_id = #{item.skuId} and num >= #{item.num}
@@ -42,7 +42,7 @@
     </update>
 
     <update id="batchUnfreezeScore" parameterType="updateStockQuery">
-        <foreach collection="skuList" item="item" close=";">
+        <foreach collection="skuList" item="item" separator=";">
             update gmc_sku
             set num = num + #{item.num}, freeze_num = freeze_num - #{item.num}
             where sku_id = #{item.skuId} and freeze_num >= #{item.num}
@@ -50,9 +50,17 @@
     </update>
 
     <update id="batchDecreaseScore" parameterType="updateStockQuery">
-        <foreach collection="skuList" item="item" close=";">
+        <foreach collection="skuList" item="item" separator=";">
             update gmc_sku
             set freeze_num = freeze_num - #{item.num}
+            where sku_id = #{item.skuId} and freeze_num >= #{item.num}
+        </foreach>
+    </update>
+
+    <update id="paySuccess" parameterType="updateStockQuery">
+        <foreach collection="skuList" item="item" separator=";">
+            update gmc_sku
+            set freeze_num = freeze_num - #{item.num}, sale_num = sale_num + #{item.num}
             where sku_id = #{item.skuId} and freeze_num >= #{item.num}
         </foreach>
     </update>

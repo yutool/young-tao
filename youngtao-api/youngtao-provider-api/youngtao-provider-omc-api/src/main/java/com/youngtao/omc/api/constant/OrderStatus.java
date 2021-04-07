@@ -37,18 +37,23 @@ public class OrderStatus {
     public static final int COMMENT = 5;
 
     /**
-     * 退货中
-     */
-    public static final int RETURN = 6;
-
-    /**
      * 创建失败
      */
     public static final int FAILED = 9;
 
     /**
+     * 退货中
+     */
+    public static final int RETURN = 11;
+
+    /**
+     * 已退款
+     */
+    public static final int REFUND = 12;
+
+    /**
      * 关闭
      */
-    public static final int CLOSE = 10;
+    public static final int CLOSE = 100;
 
 }

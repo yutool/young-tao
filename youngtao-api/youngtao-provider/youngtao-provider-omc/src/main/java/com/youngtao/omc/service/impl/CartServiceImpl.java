@@ -1,6 +1,5 @@
 package com.youngtao.omc.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.youngtao.core.result.RpcResult;
@@ -10,10 +9,11 @@ import com.youngtao.gmc.api.model.dto.SpuDTO;
 import com.youngtao.gmc.api.service.SkuFeign;
 import com.youngtao.gmc.api.service.SpuFeign;
 import com.youngtao.omc.mapper.CartMapper;
-import com.youngtao.omc.model.data.CartData;
 import com.youngtao.omc.model.convert.CartConvert;
+import com.youngtao.omc.model.data.CartData;
 import com.youngtao.omc.model.domain.CartDO;
 import com.youngtao.omc.model.request.AddCartRequest;
+import com.youngtao.omc.model.request.UpdateNumRequest;
 import com.youngtao.omc.model.response.CartResponse;
 import com.youngtao.omc.service.CartService;
 import lombok.extern.slf4j.Slf4j;
@@ -112,9 +112,17 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    public void updateNum(UpdateNumRequest request) {
+        cartMapper.updateNum(request.getId(), request.getNum());
+    }
+
+    @Override
     public void deleteCart(String id) {
-        cartMapper.delete(new UpdateWrapper<CartDO>()
-            .eq("id", id)
-        );
+        cartMapper.deleteById(id);
+    }
+
+    @Override
+    public void batchDelete(List<String> ids) {
+        cartMapper.deleteBatchIds(ids);
     }
 }

@@ -14,6 +14,7 @@ import com.youngtao.omc.api.constant.OrderStatus;
 import com.youngtao.omc.api.constant.OrderType;
 import com.youngtao.omc.api.utils.IdUtils;
 import com.youngtao.omc.common.constant.MQTagConsts;
+import com.youngtao.omc.mapper.CartMapper;
 import com.youngtao.omc.mapper.OrderItemMapper;
 import com.youngtao.omc.mapper.OrderMapper;
 import com.youngtao.omc.model.domain.OrderDO;
@@ -57,6 +58,8 @@ public class CreateOrderListener implements RocketMQListener<CreateOrderRequest>
     private OrderMapper orderMapper;
     @Resource
     private OrderItemMapper orderItemMapper;
+    @Resource
+    private CartMapper cartMapper;
     @Autowired
     private RedisManager<String> redisManager;
 
@@ -165,7 +168,12 @@ public class CreateOrderListener implements RocketMQListener<CreateOrderRequest>
         orderMapper.batchInsert(orderDOList);
         orderItemMapper.batchInsert(orderItemDOList);
 
-        // 4 添加支付记录
+        // 4 删除购物车
+        if (message.getIsCart()) {
+            cartMapper.batchDelete(message.getUserId(), skuIds);
+        }
+
+        // 5 添加支付记录
         AddPayRecordArg addArg = new AddPayRecordArg();
         addArg.setPaymentId(message.getPaymentId());
         addArg.setUserId(message.getUserId());
@@ -173,10 +181,10 @@ public class CreateOrderListener implements RocketMQListener<CreateOrderRequest>
         RpcResult<String> paymentResult = orderPayRecordFeign.addRecord(addArg);
         RpcResultUtils.checkNotNull(paymentResult);
 
-        // 5 修改订单状态为已创建
+        // 6 修改订单状态为已创建
         redisManager.set(OmcRedisKey.ORDER_STATUS.format(message.getPaymentId()), OrderStatus.PAYMENT);
 
-        // 6 发送延迟MQ回查订单
+        // 7 发送延迟MQ回查订单
         try {
             DefaultMQProducer producer = rocketMQTemplate.getProducer();
             Message msg = new Message(orderTopic, MQTagConsts.CHECK_ORDER, message.getPaymentId().getBytes());

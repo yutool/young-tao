@@ -17,8 +17,8 @@ export function getUserCart() {
 
 export function updateNum(data: any) {
   return request({
-    url: `omc/cart`,
-    method: 'put',
+    url: `omc/cart/updateNum`,
+    method: 'post',
     data: JSON.stringify(data)
   })
 }
@@ -31,10 +31,10 @@ export function deleteCart(data: any) {
   })
 }
 
-export function batchDelete(ids: any) {
+export function batchDelete(data: any) {
   return request({
-    url: `omc/cart/batch`,
-    method: 'delete',
-    data: { ids }
+    url: `omc/cart/batchDelete`,
+    method: 'post',
+    data: JSON.stringify(data)
   })
 }
