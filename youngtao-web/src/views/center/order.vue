@@ -29,7 +29,7 @@
               <span class="mr-3">{{ order.createTime }}</span>
               <span>订单编号：{{ order.orderId }}</span>
               <span class="float-right">
-                <el-popconfirm v-if="order.status==0 || order.status==100" 
+                <el-popconfirm v-if="order.status==0 || order.status==12 || order.status==100" 
                     title="确认删除订单吗" @onConfirm="deleteOrder(order.orderId)">
                   <i class="el-icon-delete pointer" slot="reference"></i>
                 </el-popconfirm>
@@ -78,7 +78,7 @@
               <el-button v-if="order.status==2" type="danger" size="mini" @click="$router.push(`/order/pay/${order.paymentId}`)">去付款</el-button>
               <el-button v-if="order.status==3" type="primary" size="mini">提醒发货</el-button>
               <el-button v-if="order.status==4" type="primary" size="mini">确认收货</el-button>
-              <el-button v-if="order.status==0 || order.status==100" type="info" size="mini" @click="$router.push(`/market/detail/${item.spuId}`)">再来一单</el-button>
+              <el-button v-if="order.status==0 || order.status==12 || order.status==100" type="info" size="mini" @click="$router.push(`/market/detail/${item.spuId}`)">再来一单</el-button>
             </td>
           </tr>
         </tbody>

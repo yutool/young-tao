@@ -147,7 +147,7 @@ public class OrderServiceImpl extends BaseService<OrderDO> implements OrderServi
             arg.setOutRequestNo(orderDO.getOrderId());
             RpcResult<AlipayTradeRefundDTO> refundResult = alipayFeign.tradeRefund(arg);
             if (!refundResult.isSuccess()) {
-                CastException.cast("退款失败");
+                CastException.cast("退款失败，请稍后重试");
             }
             // 3 更新为已退款
             orderDO.setStatus(OrderStatus.REFUND);

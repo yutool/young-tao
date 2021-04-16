@@ -26,7 +26,7 @@ public class AlipayFeignClient implements AlipayFeign {
         TradeRefundRequest request = BeanUtils.copy(arg, TradeRefundRequest.class);
         TradeRefundResponse response = alipayService.tradeRefund(request);
         if (response == null) {
-            RpcResult.error();
+            return RpcResult.error();
         }
         AlipayTradeRefundDTO dto = BeanUtils.copy(response, AlipayTradeRefundDTO.class);
         return RpcResult.success(dto);

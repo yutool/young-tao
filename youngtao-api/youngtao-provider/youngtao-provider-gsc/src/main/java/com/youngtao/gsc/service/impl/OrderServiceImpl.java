@@ -43,7 +43,7 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private SpuFeign spuFeign;
 
-    @Value("${topic.order}")
+    @Value("${order-topic}")
     private String orderTopic;
 
     @Override
