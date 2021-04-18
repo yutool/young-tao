@@ -38,9 +38,8 @@ public class AuthFilter extends OncePerRequestFilter {
         String token = authorization.substring(7);
         Claims claims = TokenUtils.parse(token);
         String userId = claims.get("userId").toString();
-        RpcResult<AuthInfo> userResult = userInfoFeign.getById(userId);
-        AuthInfo authInfo = BeanUtils.copy(userResult.getData(), AuthInfo.class);
-        AuthContext.set(authInfo);
+        RpcResult<AuthInfo> authResult = userInfoFeign.getById(userId);
+        AuthContext.set(authResult.getData());
         chain.doFilter(request, response);
         AuthContext.clear();
     }

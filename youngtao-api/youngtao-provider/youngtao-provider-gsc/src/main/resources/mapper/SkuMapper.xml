@@ -37,4 +37,16 @@
         </if>
     </select>
 
+    <select id="listBySpuIds" resultMap="BaseResultMap">
+        select * from gsc_sku
+        where spu_id in
+        <foreach collection="spuIds" item="item" open="(" close=")" separator=",">#{item}</foreach>
+    </select>
+
+    <select id="getAllSpuIdByMerchant" resultType="java.lang.String">
+        select spu_id from gsc_sku
+        where merchant_id = #{merchantId}
+        group by spu_id
+    </select>
+
 </mapper>

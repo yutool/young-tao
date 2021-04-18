@@ -16,7 +16,6 @@ public interface SpuConvert {
     @Mapping(target = "spuId", ignore = true)
     @Mapping(target = "merchantId", ignore = true)
     @Mapping(target = "shopName", ignore = true)
-    @Mapping(target = "priceRange", ignore = true)
     @Mapping(target = "saleNum", ignore = true)
     @Mapping(target = "commentNum", ignore = true)
     @Mapping(target = "seq", ignore = true)

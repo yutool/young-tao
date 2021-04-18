@@ -1,96 +1,52 @@
 <template>
   <div class="container">
-    <!-- 条件筛选 -->
-    <div class="goods-filtrate-btn mb-3">
-      <el-button size="mini">全部商品1000</el-button>
-      <el-button size="mini">已上架900</el-button>
-      <el-button size="mini">未上架100</el-button>
-      <el-button size="mini">待审核1</el-button>
-    </div>
-    <!-- 输入筛选 -->
-    <div class="card mb-3">
-      <div class="card-header">
-        <i class="el-icon-search"></i>筛选查询
-      </div>
-      <div class="card-body">
-        <ul class="m-list-group">
-          <li>
-            <label>输入搜索：</label>
-            <el-autocomplete
-              class="inline-input"
-              size="medium"
-              v-model="state2"
-              :fetch-suggestions="querySearch"
-              placeholder="请输入内容"
-              :trigger-on-focus="false"
-              @select="handleSelect"
-            ></el-autocomplete>
-          </li>
-          <li>
-            <label>商品分类：</label>
-            <el-autocomplete
-              class="inline-input"
-              size="medium"
-              v-model="state2"
-              :fetch-suggestions="querySearch"
-              placeholder="请输入内容"
-              :trigger-on-focus="false"
-              @select="handleSelect"
-            ></el-autocomplete>
-          </li>
-          <li>
-            <label>品牌选择：</label>
-            <el-autocomplete
-              class="inline-input"
-              size="medium"
-              v-model="state2"
-              :fetch-suggestions="querySearch"
-              placeholder="请输入内容"
-              :trigger-on-focus="false"
-              @select="handleSelect"
-            ></el-autocomplete>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <!-- 商品列表 -->
-    <div class="table-responsive-lg">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">商品名称</th>
-            <th scope="col">秒杀日期</th>
-            <th scope="col">秒杀时间</th>
-            <th scope="col">审核状态</th>
-            <th scope="col">开启/关闭</th>
-            <th scope="col">操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="item in goodsList" :key="item.id">
-            <td>
-              <img :src="item.image" alt="img" width="30">
-              {{ item.title }} 
-            </td>
-            <td> {{ item.startTime}} - {{ item.endTime }} </td>
-            <td> {{ item.region }}点 - {{ item.region+2 }}点 </td>
-            <td> 审核成功 </td>
-            <td>
-              <el-switch v-model="item.isMarketable" active-color="#13ce66" inactive-color="#ff4949">
-              </el-switch>
-            </td>
-            <td>
-              <a href="javascript:;">编辑</a>
-              <a href="javascript:;">删除</a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <!-- 数据 -->
+    <el-table :data="productList">
+      <el-table-column type="expand">
+        <template slot-scope="props">
+          <el-table :data="props.row.skuList">
+            <el-table-column label="skuId" prop="skuId"></el-table-column>
+            <el-table-column label="图片" prop="skuId">
+              <template slot-scope="scope">
+                <img :src="scope.row.image" width="40">
+              </template>
+            </el-table-column>
+            <el-table-column label="现价" prop="price"></el-table-column>
+            <el-table-column label="原价" prop="oldPrice"></el-table-column>
+            <el-table-column label="活动数量" prop="num"></el-table-column>
+            <el-table-column label="剩余数量" prop="residue"></el-table-column>
+            <el-table-column label="活动开始时间" prop="startTime" min-width="100"></el-table-column>
+            <el-table-column label="活动结束时间" prop="endTime" min-width="100"></el-table-column>
+            <el-table-column label="审核转态">
+              <template slot-scope="scope">
+                <span v-if="scope.row.status == 0">审核中</span>
+                <span v-if="scope.row.status == 1">审核通过</span>
+                <span v-if="scope.row.status == 2">审核失败</span>
+              </template>
+            </el-table-column>
+          </el-table>
+        </template>
+      </el-table-column>
+      <el-table-column label="spuId" prop="spuId"></el-table-column>
+      <el-table-column label="封面">
+        <template slot-scope="scope">
+          <img :src="scope.row.images[0]" width="40">
+        </template>
+      </el-table-column>
+      <el-table-column label="品牌" prop="brandName"> </el-table-column>
+      <el-table-column label="名称" prop="spu" min-width="100"></el-table-column>
+      <el-table-column label="总销量" prop="saleNum"></el-table-column>
+      <el-table-column label="活动数量" prop="skuList.length"></el-table-column>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button type="primary" size="mini" @click="edit(scope.row)">编辑</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
     <!-- 分页 -->
-    <div class="block text-center">
+    <div class="block text-center mt-3">
       <el-pagination
-        @current-change="skipPage"
+        @current-change="getProduct"
         @size-change="handleSizeChange"
         :current-page="pageInfo.pageNum"
         :page-sizes="[10, 30, 50]"
@@ -103,72 +59,38 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import { getSeckillGoods } from '@/api/seckill'
+import { Component, Vue } from 'vue-property-decorator';
+import { getMerchantProduct } from '@/api/gsc/product';
 
 @Component
-export default class SeckillList extends Vue {
-  private goodsList: any = {}
-  private pageInfo: any = { size: 10 }
-  
-  // test -----------------
-  private restaurants = []
-  private state2 = ''
-  private querySearch(queryString: any, cb: any) {
-    const restaurants = this.restaurants;
-    const results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
-    // 调用 callback 返回建议列表的数据
-    cb(results);
-  }
-  private createFilter(queryString: any) {
-    return (restaurant: any) => {
-      return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
-    };
-  }
-  private handleSelect(item: any) {
-    console.log(item);
-  }
-  // test -----------------
+export default class GoodsList extends Vue {
+  private spuStatus = ['审核通过', '审核中', '审核失败']
+  private pageInfo: any = { size: 10 }  // 初始化页面大小
+  private productList: any = []
+ 
   // 切换页面
-  private skipPage(page: number, size = this.pageInfo.pageSize) {
-    getSeckillGoods(page, size).then((res: any) => {
+  private getProduct(page: any, size = this.pageInfo.pageSize) {
+    getMerchantProduct({page, size}).then((res: any) => {
       const { data } = res
       this.pageInfo = data
-      this.goodsList = data.list
-      this.$log.info('获取秒杀商品', data)
+      this.productList = data.list
     })
   }
   // 切换显示条数
   private handleSizeChange(size: any) {
-    this.skipPage(this.pageInfo.pageNum, size)
+    this.getProduct(this.pageInfo.pageNum, size)
+  }
+  // 添加秒杀商品
+  private seckill(goods: any) {
+    this.$router.push({ name: 'addSeckill', params: {goods} })
   }
   
   private mounted() {
-    this.skipPage(0, this.pageInfo.size)
+    this.getProduct(0, this.pageInfo.size)
   }
 }
 </script>
 
 <style scoped lang="scss">
-.m-list-group {
-  padding: 0;
-  margin: 0;
-  li {
-    display: inline-block;
-    list-style: none;
-    padding: 0 5px;
-  }
-}
-.demo-table-expand {
-  font-size: 0;
-}
-.demo-table-expand label {
-  width: 90px;
-  color: #99a9bf;
-}
-.demo-table-expand .el-form-item {
-  margin-right: 0;
-  margin-bottom: 0;
-  width: 50%;
-}
+
 </style>

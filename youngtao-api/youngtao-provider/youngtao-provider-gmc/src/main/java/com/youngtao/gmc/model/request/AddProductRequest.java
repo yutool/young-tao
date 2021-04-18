@@ -20,11 +20,6 @@ public class AddProductRequest {
     private String spu;
 
     /**
-     * 商品标题
-     */
-//    private String title;
-
-    /**
      * 品牌id
      */
     private String brandId;
@@ -50,11 +45,6 @@ public class AddProductRequest {
     private String category3Id;
 
     /**
-     * 封面
-     */
-    private String cover;
-
-    /**
      * 商品展示
      */
     private JsonList<String> images;
@@ -68,11 +58,6 @@ public class AddProductRequest {
      * 商品服务
      */
     private JsonList<String> serve;
-
-    /**
-     * 优惠券
-     */
-    private JsonList<String> coupon;
 
     /**
      * 规格参数
@@ -135,6 +120,6 @@ public class AddProductRequest {
         /**
          * 默认显示
          */
-        private Boolean defaultShow;
+        private Boolean defaultShow = false;
     }
 }

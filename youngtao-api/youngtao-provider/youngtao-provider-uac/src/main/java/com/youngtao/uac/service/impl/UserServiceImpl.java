@@ -46,11 +46,12 @@ public class UserServiceImpl extends BaseService<UserInfo> implements UserServic
 
     @Override
     public void register(RegisterRequest request) {
-        String code = redisManager.get(RedisKey.REGISTER_CODE.format(request.getEmail()));
+        String code = redisManager.get(RedisKey.REGISTER_USER_CODE.format(request.getEmail()));
         if (!Objects.equals(code, request.getVerifyCode())) {
             CastException.cast("验证码错误");
         }
         UserInfo userInfo = BeanUtils.copy(request, UserInfo.class);
+        userInfo.setUsername(request.getName());
         userInfo.setUserId(IdUtils.getId("user"));
         userInfo.setAvatar("http://www.course.ankoye.com/users/1PUQx4zeqoYgHSHE/avatar_20200725022828.jpeg");
         userInfoMapper.insert(userInfo);

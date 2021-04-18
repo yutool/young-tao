@@ -1,10 +1,12 @@
 package com.youngtao.gmc.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.youngtao.core.lang.JsonList;
+import com.youngtao.core.context.AuthContext;
+import com.youngtao.core.context.AuthInfo;
 import com.youngtao.core.result.RpcResult;
-import com.youngtao.core.util.BigDecimals;
 import com.youngtao.core.util.RpcResultUtils;
 import com.youngtao.gmc.api.constant.ProductType;
 import com.youngtao.gmc.common.constant.SpuConstant;
@@ -21,17 +23,18 @@ import com.youngtao.gmc.model.query.UpdateSaleQuery;
 import com.youngtao.gmc.model.query.UpdateStockQuery;
 import com.youngtao.gmc.model.request.AddProductRequest;
 import com.youngtao.gmc.model.request.ConfirmOrderRequest;
+import com.youngtao.gmc.model.request.GetMerchantProductRequest;
 import com.youngtao.gmc.model.response.ConfirmOrderResponse;
 import com.youngtao.gmc.service.ProductService;
 import com.youngtao.gsc.api.model.dto.GscSkuDTO;
 import com.youngtao.gsc.api.service.GscProductFeign;
+import com.youngtao.web.util.PageUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -60,29 +63,24 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean addProduct(AddProductRequest request) {
+    public void addProduct(AddProductRequest request) {
+        AuthInfo authInfo = AuthContext.get();
         String spuId = IdUtils.productId();
         // fill sku
         List<SkuDO> skuDOList = skuConvert.toSku(request.getSkuList());
-        BigDecimal minPrice = BigDecimals.MAX_INT_VALUE;
-        BigDecimal maxPrice = BigDecimal.ZERO;
         for (SkuDO skuDO : skuDOList) {
             skuDO.setSpuId(spuId);
             skuDO.setSkuId(IdUtils.productId());
-            minPrice = minPrice.min(skuDO.getPrice());
-            maxPrice = maxPrice.max(skuDO.getPrice());
         }
         // fill spu
         SpuDO spuDO = spuConvert.toSpu(request);
         spuDO.setSpuId(spuId);
-        spuDO.setMerchantId("0");
-        spuDO.setShopName("樱桃官方旗舰店");
-        spuDO.setPriceRange(JsonList.build(minPrice, maxPrice));
+        spuDO.setMerchantId(authInfo.getMerchantId());
+        spuDO.setShopName(authInfo.getShopName());
         spuDO.setStatus(SpuConstant.REVIEW_SUCCESS);
         // save the data
         spuMapper.insert(spuDO);
         skuMapper.batchInset(skuDOList);
-        return true;
     }
 
     @Override
@@ -172,5 +170,27 @@ public class ProductServiceImpl implements ProductService {
             }
         }
         spuMapper.paySuccess(spuMap.values());
+    }
+
+    @Override
+    public PageInfo<ProductData> getMerchantProduct(GetMerchantProductRequest request) {
+        PageHelper.startPage(request.getPage(), request.getSize());
+        List<SpuDO> spuList = spuMapper.getMerchantProduct(AuthContext.get().getMerchantId());
+
+        Set<String> spuIds = spuList.stream().map(SpuDO::getSpuId).collect(Collectors.toSet());
+        List<SkuDO> skuList = skuMapper.listBySpuIds(spuIds);
+        Map<String, List<SkuDO>> skuMap = Maps.newHashMap();
+        for (SkuDO skuDO : skuList) {
+            List<SkuDO> list = skuMap.getOrDefault(skuDO.getSpuId(), Lists.newArrayList());
+            list.add(skuDO);
+            skuMap.put(skuDO.getSpuId(), list);
+        }
+
+        List<ProductData> productData = Lists.newArrayList();
+        for (SpuDO spuDO : spuList) {
+            ProductData data = productConvert.toProductData(spuDO, skuMap.get(spuDO.getSpuId()));
+            productData.add(data);
+        }
+        return PageUtils.convert(PageInfo.of(spuList), productData);
     }
 }

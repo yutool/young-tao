@@ -10,7 +10,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * @date 2020/11/07
  */
 @SpringBootApplication
-@EnableFeignClients(basePackages={"com.youngtao.gsc.api.service"})
+@EnableFeignClients(basePackages={"com.youngtao.gsc.api.service", "com.youngtao.uac.api.service"})
 public class GmcApplication {
     static {
         AspectLogEnhance.enhance();

@@ -6,6 +6,7 @@ import com.youngtao.core.context.AuthInfo;
 import com.youngtao.core.data.IdArg;
 import com.youngtao.omc.model.data.OrderData;
 import com.youngtao.omc.model.request.CreateOrderRequest;
+import com.youngtao.omc.model.request.GetMerchantOrderRequest;
 import com.youngtao.omc.model.request.GetUserOrderRequest;
 import com.youngtao.omc.model.request.OrderRefundRequest;
 import com.youngtao.omc.service.OrderService;
@@ -32,8 +33,12 @@ public class OrderController {
 
     @PostMapping("/getUserOrder")
     public PageInfo<OrderData> getUserOrder(@RequestBody GetUserOrderRequest request) {
-        AuthInfo authInfo = AuthContext.get();
-        return orderService.getUserOrder(request, authInfo.getUserId());
+        return orderService.getUserOrder(request);
+    }
+
+    @PostMapping("/getMerchantOrder")
+    public PageInfo<OrderData> getMerchantOrder(@RequestBody GetMerchantOrderRequest request) {
+        return orderService.getMerchantOrder(request);
     }
 
     @PostMapping("/create")

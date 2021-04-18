@@ -58,19 +58,9 @@ public class SpuDTO implements Serializable {
     private String category3Id;
 
     /**
-     * 封面
-     */
-    private String cover;
-
-    /**
      * 商品展示
      */
     private JsonList<String> images;
-
-    /**
-     * 价格范围
-     */
-    private JsonList<BigDecimal> priceRange;
 
     /**
      * 商品详情说明
@@ -81,11 +71,6 @@ public class SpuDTO implements Serializable {
      * 商品服务
      */
     private JsonList<String> serve;
-
-    /**
-     * 优惠券
-     */
-    private JsonList<String> coupon;
 
     /**
      * 规格参数

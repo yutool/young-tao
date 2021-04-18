@@ -9,7 +9,20 @@ import java.util.Date;
 public class AuthInfo {
     private Long id;
 
+    /**
+     * 用户Id
+     */
     private String userId;
+
+    /**
+     * 商家
+     */
+    private String merchantId;
+
+    /**
+     * 店名
+     */
+    private String shopName;
 
     /**
      * 邮箱
@@ -70,6 +83,22 @@ public class AuthInfo {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(String merchantId) {
+        this.merchantId = merchantId;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
     }
 
     public String getEmail() {

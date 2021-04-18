@@ -20,4 +20,5 @@ public interface AuthService {
      * @param userId
      */
     UserInfo getById(String userId);
+
 }

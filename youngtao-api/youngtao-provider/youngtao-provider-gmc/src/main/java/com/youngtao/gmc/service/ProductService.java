@@ -1,9 +1,11 @@
 package com.youngtao.gmc.service;
 
+import com.github.pagehelper.PageInfo;
 import com.youngtao.gmc.model.data.ProductData;
 import com.youngtao.gmc.model.query.UpdateStockQuery;
 import com.youngtao.gmc.model.request.AddProductRequest;
 import com.youngtao.gmc.model.request.ConfirmOrderRequest;
+import com.youngtao.gmc.model.request.GetMerchantProductRequest;
 import com.youngtao.gmc.model.response.ConfirmOrderResponse;
 
 import java.util.List;
@@ -19,7 +21,7 @@ public interface ProductService {
      * @param request product
      * @return bool
      */
-    Boolean addProduct(AddProductRequest request);
+    void addProduct(AddProductRequest request);
 
     /**
      * 根据SpuId获取商品
@@ -40,4 +42,9 @@ public interface ProductService {
      * @param query
      */
     void paySuccess(List<UpdateStockQuery> query);
+
+    /**
+     * 获取商家订单
+     */
+    PageInfo<ProductData> getMerchantProduct(GetMerchantProductRequest request);
 }

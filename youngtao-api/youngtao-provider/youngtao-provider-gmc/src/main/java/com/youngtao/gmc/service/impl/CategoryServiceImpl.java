@@ -65,4 +65,12 @@ public class CategoryServiceImpl extends BaseService<CategoryDO> implements Cate
         );
         return categoryConvert.toCategoryData(rootMenu);
     }
+
+    @Override
+    public List<CategoryData> getSubmenu(String pid) {
+        List<CategoryDO> rootMenu = categoryMapper.selectList(new QueryWrapper<CategoryDO>()
+                .eq("parent_id", pid)
+        );
+        return categoryConvert.toCategoryData(rootMenu);
+    }
 }

@@ -23,4 +23,9 @@ public interface CategoryService extends IService<CategoryDO> {
      */
     List<CategoryData> getMenu();
 
+    /**
+     * 获取子目录
+     * @return
+     */
+    List<CategoryData> getSubmenu(String pid);
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youngtao.uac.mapper.MerchantInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.youngtao.uac.model.domain.MerchantInfo">
+        <result property="id" column="id" />
+        <result property="merchantId" column="merchant_id" />
+        <result property="shopName" column="shop_name" />
+        <result property="email" column="email" />
+        <result property="telephone" column="telephone" />
+        <result property="password" column="password" />
+        <result property="avatar" column="avatar" />
+        <result property="updateTime" column="update_time" />
+        <result property="createTime" column="create_time" />
+    </resultMap>
+
+    <insert id="insert0" keyProperty="id" useGeneratedKeys="true">
+        insert into youngtao_uac.uac_merchant_info(merchant_id, shop_name, email, password, update_time, create_time)
+        values (#{merchantId}, #{shopName}, #{email}, #{password}, #{updateTime}, #{createTime})
+    </insert>
+
+    <select id="login" resultMap="BaseResultMap">
+        select * from uac_merchant_info
+        where password = #{password}
+        and (email = #{account} or telephone = #{account})
+    </select>
+</mapper>

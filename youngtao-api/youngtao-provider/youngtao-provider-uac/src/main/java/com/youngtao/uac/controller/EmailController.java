@@ -1,5 +1,7 @@
 package com.youngtao.uac.controller;
 
+import com.youngtao.core.context.AuthType;
+import com.youngtao.core.exception.CastException;
 import com.youngtao.uac.common.constant.RedisKey;
 import com.youngtao.uac.model.request.EmailRequest;
 import com.youngtao.uac.service.impl.EmailService;
@@ -30,10 +32,15 @@ public class EmailController {
     @PostMapping("/register")
     public void sendRegisterCode(@RequestBody EmailRequest request) {
         String code = RandomStringUtils.randomNumeric(6);
-        redisManager.set(
-                RedisKey.REGISTER_CODE.format(request.getToAddr()),
-                code, 5, TimeUnit.MINUTES
-        );
+        String key = null;
+        if (request.getType() == AuthType.USER) {
+            key = RedisKey.REGISTER_USER_CODE.format(request.getToAddr());
+        } else if (request.getType() == AuthType.MERCHANT) {
+            key = RedisKey.REGISTER_MER_CODE.format(request.getToAddr());
+        } else {
+            CastException.cast("注册类型错误");
+        }
+        redisManager.set(key, code, 5, TimeUnit.MINUTES);
         emailService.sendTextMail(request.getToAddr(), "youngtao注册码", code);
     }
 }

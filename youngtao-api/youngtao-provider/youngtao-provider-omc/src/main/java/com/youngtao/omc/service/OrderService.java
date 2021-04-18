@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.youngtao.omc.model.data.OrderData;
 import com.youngtao.omc.model.domain.OrderDO;
 import com.youngtao.omc.model.request.CreateOrderRequest;
+import com.youngtao.omc.model.request.GetMerchantOrderRequest;
 import com.youngtao.omc.model.request.GetUserOrderRequest;
 import com.youngtao.omc.model.request.OrderRefundRequest;
 import com.youngtao.web.support.IService;
@@ -26,7 +27,12 @@ public interface OrderService extends IService<OrderDO> {
     /**
      * 获取用户订单
      */
-    PageInfo<OrderData> getUserOrder(GetUserOrderRequest request, String userId);
+    PageInfo<OrderData> getUserOrder(GetUserOrderRequest request);
+
+    /**
+     * 获取商家订单
+     */
+    PageInfo<OrderData> getMerchantOrder(GetMerchantOrderRequest request);
 
     /**
      * 订单退款

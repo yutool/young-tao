@@ -36,8 +36,6 @@ public class SpuSkuData {
 
     private JsonList<String> serve;
 
-    private JsonList<String> coupon;
-
     private JsonMap<String> spec;
 
     private JsonMap<List<String>> skuTemplate;

@@ -1,17 +1,15 @@
 package com.youngtao.uac.common.filter;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.youngtao.core.context.AuthContext;
 import com.youngtao.core.context.AuthInfo;
-import com.youngtao.core.util.BeanUtils;
+import com.youngtao.core.result.RpcResult;
 import com.youngtao.core.util.TokenUtils;
-import com.youngtao.uac.mapper.UserInfoMapper;
-import com.youngtao.uac.model.domain.UserInfo;
+import com.youngtao.uac.api.service.UserInfoFeign;
 import io.jsonwebtoken.Claims;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.annotation.Resource;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -24,8 +22,9 @@ import java.io.IOException;
  */
 @Configuration
 public class AuthFilter extends OncePerRequestFilter {
-    @Resource
-    private UserInfoMapper userInfoMapper;
+
+    @Autowired
+    private UserInfoFeign userInfoFeign;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
@@ -38,11 +37,8 @@ public class AuthFilter extends OncePerRequestFilter {
         String token = authorization.substring(7);
         Claims claims = TokenUtils.parse(token);
         String userId = claims.get("userId").toString();
-        UserInfo userInfo = userInfoMapper.selectOne(new QueryWrapper<UserInfo>()
-                .eq("user_id", userId)
-        );
-        AuthInfo authInfo = BeanUtils.copy(userInfo, AuthInfo.class);
-        AuthContext.set(authInfo);
+        RpcResult<AuthInfo> authResult = userInfoFeign.getById(userId);
+        AuthContext.set(authResult.getData());
         chain.doFilter(request, response);
         AuthContext.clear();
     }

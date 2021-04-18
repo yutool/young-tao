@@ -19,4 +19,8 @@ public interface SkuMapper extends BaseMapper<SkuDO> {
     SkuDO getBySkuId(@Param("skuId") String skuId);
 
     List<SkuDO> loadSkuToRedis(@Param("startTime") Date startTime, @Param("endTime") Date endTime, @Param("skuIds") Collection<String> skuIds);
+
+    List<SkuDO> listBySpuIds(Collection<String> spuIds);
+
+    List<String> getAllSpuIdByMerchant(String merchantId);
 }

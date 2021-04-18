@@ -3,10 +3,9 @@ import * as auth from '@/common/utils/auth';
 import store from '@/store'
 import { Message } from 'element-ui'
 
-
 // 创建实例
 const instance = axios.create({
-  baseURL: '/',
+  baseURL: '/api',
   headers: { 'Content-Type': 'application/json' },
   timeout: 30000,
 });
@@ -15,10 +14,10 @@ const instance = axios.create({
 instance.interceptors.request.use(
   (config: any) => {
     store.dispatch('app/setLoading', true)
-    // const token = auth.getToken();
-    // if (token) { // 如果本地存在token，请求时带上
-    //   config.headers.Authorization = `Bearer ${token}`;
-    // }
+    const token = auth.getToken();
+    if (token) { // 如果本地存在token，请求时带上
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
   }, (error: any) => {
     return Promise.reject(error)

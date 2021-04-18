@@ -23,19 +23,7 @@ public interface SkuConvert {
     @Mapping(target = "title", ignore = true)
     SkuData toSkuData(SkuDO skuDO);
 
-    @Mapping(target = "images", ignore = true)
-    @Mapping(target = "oldPrice", ignore = true)
-    @Mapping(target = "alertNum", ignore = true)
-    @Mapping(target = "saleNum", ignore = true)
-    @Mapping(target = "freezeNum", ignore = true)
-    @Mapping(target = "defaultShow", ignore = true)
     ProductData.Sku toProductSku(SkuDO skuDO);
 
-    @Mapping(target = "images", ignore = true)
-    @Mapping(target = "oldPrice", ignore = true)
-    @Mapping(target = "alertNum", ignore = true)
-    @Mapping(target = "saleNum", ignore = true)
-    @Mapping(target = "freezeNum", ignore = true)
-    @Mapping(target = "defaultShow", ignore = true)
     ProductData.Sku toProductSku(SkuData skuData);
 }

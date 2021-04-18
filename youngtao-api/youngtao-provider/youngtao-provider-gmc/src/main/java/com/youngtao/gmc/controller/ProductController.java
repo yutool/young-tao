@@ -1,8 +1,10 @@
 package com.youngtao.gmc.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.youngtao.gmc.model.data.ProductData;
 import com.youngtao.gmc.model.request.AddProductRequest;
 import com.youngtao.gmc.model.request.ConfirmOrderRequest;
+import com.youngtao.gmc.model.request.GetMerchantProductRequest;
 import com.youngtao.gmc.model.response.ConfirmOrderResponse;
 import com.youngtao.gmc.service.ProductService;
 import com.youngtao.web.support.ResponseWrapper;
@@ -24,8 +26,8 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping("/add")
-    public Boolean addProduct(@RequestBody AddProductRequest request) {
-        return productService.addProduct(request);
+    public void addProduct(@RequestBody AddProductRequest request) {
+        productService.addProduct(request);
     }
 
     @GetMapping("/{id}")
@@ -38,4 +40,8 @@ public class ProductController {
         return productService.confirmOrder(request);
     }
 
+    @PostMapping("/getMerchantProduct")
+    public PageInfo<ProductData> getMerchantProduct(@RequestBody GetMerchantProductRequest request) {
+        return productService.getMerchantProduct(request);
+    }
 }

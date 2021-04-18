@@ -51,7 +51,17 @@
     <select id="selectByUserIdAndStatus" resultMap="BaseResultMap">
         select * from omc_order
         where user_id = #{userId}
-        and is_delete = #{isDelete}
+        and is_delete = #{deleted}
+        <if test="status != null">
+            and status = #{status}
+        </if>
+        order by create_time desc
+    </select>
+
+    <select id="selectByMerIdAndStatus" resultMap="BaseResultMap">
+        select * from omc_order
+        where merchant_id = #{merchantId}
+        and is_delete = #{deleted}
         <if test="status != null">
             and status = #{status}
         </if>

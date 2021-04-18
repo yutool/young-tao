@@ -1,8 +1,10 @@
 package com.youngtao.gsc.service;
 
+import com.github.pagehelper.PageInfo;
 import com.youngtao.gsc.model.data.ProductData;
 import com.youngtao.gsc.model.data.SkuData;
 import com.youngtao.gsc.model.request.ConfirmOrderRequest;
+import com.youngtao.gsc.model.request.GetMerchantProductRequest;
 import com.youngtao.gsc.model.response.ConfirmOrderResponse;
 import com.youngtao.gsc.model.response.GetSeckillPageResponse;
 
@@ -39,4 +41,9 @@ public interface ProductService {
      * @param request
      */
     ConfirmOrderResponse confirmOrder(ConfirmOrderRequest request);
+
+    /**
+     * 获取商家活动的商品
+     */
+    PageInfo<ProductData> getMerchantProduct(GetMerchantProductRequest request);
 }

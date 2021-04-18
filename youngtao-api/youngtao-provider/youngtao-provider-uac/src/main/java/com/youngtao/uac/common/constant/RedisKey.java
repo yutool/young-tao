@@ -10,7 +10,12 @@ public enum RedisKey {
     /**
      * key: toAddr
      */
-    REGISTER_CODE("youngtao:uac:email:register:%s"),
+    REGISTER_USER_CODE("youngtao:uac:email:registerUser:%s"),
+
+    /**
+     * key: toAddr
+     */
+    REGISTER_MER_CODE("youngtao:uac:email:registerMer:%s"),
 
     ;
 

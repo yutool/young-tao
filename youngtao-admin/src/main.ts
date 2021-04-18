@@ -19,11 +19,15 @@ import '@/style/index.scss';
 
 // 日志
 import logger from '@/common/utils/logger';
+import Utils from '@/common/utils/utils';
 
 Vue.prototype.$log = logger;
+Vue.prototype.$utils = Utils;
+
 declare module 'vue/types/vue' {
   interface Vue {
-    $log: any;
+    $log: any,
+    $utils: any
   }
 }
 

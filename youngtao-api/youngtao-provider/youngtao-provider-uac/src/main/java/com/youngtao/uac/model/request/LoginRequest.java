@@ -1,5 +1,6 @@
 package com.youngtao.uac.model.request;
 
+import com.youngtao.core.context.AuthType;
 import lombok.Data;
 
 /**
@@ -11,4 +12,6 @@ public class LoginRequest {
     private String account;
 
     private String password;
+
+    private Integer type = AuthType.USER;
 }

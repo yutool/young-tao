@@ -5,6 +5,7 @@ apply plugin: 'org.springframework.boot'
 
 dependencies {
     compile project(":youngtao-provider-api:youngtao-provider-gmc-api")
+    compile project(":youngtao-provider-api:youngtao-provider-uac-api")
     compile project(":youngtao-provider-api:youngtao-provider-gsc-api")
 }
 

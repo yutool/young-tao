@@ -21,14 +21,14 @@
 
     <insert id="batchInset" parameterType="skuDO">
         insert into gmc_sku (
-            sku_id, spu_id, sku, images, price, num, alert_num, default_show
+            sku_id, spu_id, sku, images, price, old_price, num, alert_num, default_show
         ) values
         <foreach collection="skuList" item="sku" separator=",">
             (
                 #{sku.skuId}, #{sku.spuId},
-                #{sku.sku, typeHandler=com.ankoye.youngtao.web.typehandler.MapJsonTypeHandler},
-                #{sku.images, typeHandler=com.ankoye.youngtao.web.typehandler.ListStringJsonTypeHandler},
-                #{sku.price}, #{sku.num}, #{sku.alertNum}, #{sku.defaultShow}
+                #{sku.sku, typeHandler=com.youngtao.web.typehandler.JsonMapTypeHandler},
+                #{sku.images, typeHandler=com.youngtao.web.typehandler.JsonListTypeHandler},
+                #{sku.price}, #{sku.oldPrice}, #{sku.num}, #{sku.alertNum}, #{sku.defaultShow}
             )
         </foreach>
     </insert>

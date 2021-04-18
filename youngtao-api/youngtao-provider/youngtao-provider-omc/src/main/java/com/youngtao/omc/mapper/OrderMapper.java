@@ -15,7 +15,9 @@ import java.util.List;
 @Mapper
 public interface OrderMapper extends BaseMapper<OrderDO> {
 
-    List<OrderDO> selectByUserIdAndStatus(@Param("userId") String userId, @Param("status") Integer status, @Param("isDelete") Boolean isDelete);
+    List<OrderDO> selectByUserIdAndStatus(@Param("userId") String userId, @Param("status") Integer status, @Param("deleted") Boolean deleted);
+
+    List<OrderDO> selectByMerIdAndStatus(@Param("merchantId") String merchantId, @Param("status") Integer status, @Param("deleted") Boolean deleted);
 
     int batchInsert(List<OrderDO> orderList);
 

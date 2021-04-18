@@ -67,23 +67,13 @@ public class SpuDO extends BaseEntity implements Serializable {
     private String category3Id;
 
     /**
-     * 封面
-     */
-    private String cover;
-
-    /**
      * 商品展示
      */
+    @TableField(typeHandler = JsonListTypeHandler.class)
     private JsonList<String> images;
 
     /**
-     * 价格范围
-     */
-    @TableField(typeHandler = JsonListTypeHandler.class)
-    private JsonList<BigDecimal> priceRange;
-
-    /**
-     * 商品详情说明
+     * 商品图文说明
      */
     private String detail;
 
@@ -92,12 +82,6 @@ public class SpuDO extends BaseEntity implements Serializable {
      */
     @TableField(typeHandler = JsonListTypeHandler.class)
     private JsonList<String> serve;
-
-    /**
-     * 优惠券
-     */
-    @TableField(typeHandler = JsonListTypeHandler.class)
-    private JsonList<String> coupon;
 
     /**
      * 规格参数

@@ -23,6 +23,7 @@ import com.youngtao.omc.model.data.OrderItemData;
 import com.youngtao.omc.model.domain.OrderDO;
 import com.youngtao.omc.model.domain.OrderItemDO;
 import com.youngtao.omc.model.request.CreateOrderRequest;
+import com.youngtao.omc.model.request.GetMerchantOrderRequest;
 import com.youngtao.omc.model.request.GetUserOrderRequest;
 import com.youngtao.omc.model.request.OrderRefundRequest;
 import com.youngtao.omc.service.OrderService;
@@ -98,10 +99,24 @@ public class OrderServiceImpl extends BaseService<OrderDO> implements OrderServi
     }
 
     @Override
-    public PageInfo<OrderData> getUserOrder(GetUserOrderRequest request, String userId) {
+    public PageInfo<OrderData> getUserOrder(GetUserOrderRequest request) {
+        String userId = AuthContext.get().getUserId();
         // 获取数据
         PageHelper.startPage(request.getPage(), request.getSize());
         List<OrderDO> orderDOList = orderMapper.selectByUserIdAndStatus(userId, request.getStatus(), request.getIsDelete());
+        return convertToPage(orderDOList);
+    }
+
+    @Override
+    public PageInfo<OrderData> getMerchantOrder(GetMerchantOrderRequest request) {
+        String merchantId = AuthContext.get().getMerchantId();
+        // 获取数据
+        PageHelper.startPage(request.getPage(), request.getSize());
+        List<OrderDO> orderDOList = orderMapper.selectByMerIdAndStatus(merchantId, request.getStatus(), request.getIsDelete());
+        return convertToPage(orderDOList);
+    }
+
+    private PageInfo<OrderData> convertToPage(List<OrderDO> orderDOList) {
         if (CollectionUtils.isEmpty(orderDOList)) {
             return PageInfo.of(Lists.newArrayList());
         }

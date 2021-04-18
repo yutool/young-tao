@@ -1,10 +1,12 @@
 package com.youngtao.gsc.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.google.common.base.Preconditions;
 import com.youngtao.gsc.common.util.DateUtils;
 import com.youngtao.gsc.model.data.ProductData;
 import com.youngtao.gsc.model.data.SkuData;
 import com.youngtao.gsc.model.request.ConfirmOrderRequest;
+import com.youngtao.gsc.model.request.GetMerchantProductRequest;
 import com.youngtao.gsc.model.response.ConfirmOrderResponse;
 import com.youngtao.gsc.model.response.GetSeckillPageResponse;
 import com.youngtao.gsc.service.ProductService;
@@ -54,4 +56,10 @@ public class ProductController {
     public ConfirmOrderResponse confirmOrder(@Valid @RequestBody ConfirmOrderRequest request) {
         return productService.confirmOrder(request);
     }
+
+    @PostMapping("/getMerchantProduct")
+    public PageInfo<ProductData> getMerchantProduct(@RequestBody GetMerchantProductRequest request) {
+        return productService.getMerchantProduct(request);
+    }
+
 }

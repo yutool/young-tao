@@ -21,4 +21,6 @@ public interface SpuMapper extends BaseMapper<SpuDO> {
     List<SpuDO> listBySpuIds(Collection<String> spuIds);
 
     int paySuccess(@Param("spuList") Collection<UpdateSaleQuery> query);
+
+    List<SpuDO> getMerchantProduct(@Param("merchantId")  String merchantId);
 }

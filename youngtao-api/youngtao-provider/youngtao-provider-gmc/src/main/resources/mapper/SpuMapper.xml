@@ -13,12 +13,9 @@
         <result property="category1Id" column="category1_id" />
         <result property="category2Id" column="category2_id" />
         <result property="category3Id" column="category3_id" />
-        <result property="cover" column="cover" />
         <result property="images" column="images" typeHandler="com.youngtao.web.typehandler.JsonListTypeHandler"/>
-        <result property="priceRange" column="price_range" typeHandler="com.youngtao.web.typehandler.JsonListTypeHandler"/>
         <result property="detail" column="detail" />
         <result property="serve" column="serve" typeHandler="com.youngtao.web.typehandler.JsonListTypeHandler"/>
-        <result property="coupon" column="coupon" typeHandler="com.youngtao.web.typehandler.JsonListTypeHandler"/>
         <result property="spec" column="spec" typeHandler="com.youngtao.web.typehandler.JsonMapTypeHandler"/>
         <result property="skuTemplate" column="sku_template" typeHandler="com.youngtao.web.typehandler.JsonMapTypeHandler" />
         <result property="postage" column="postage" />
@@ -50,6 +47,11 @@
         <foreach collection="spuIds" item="item" separator="," open="(" close=")">
             #{item}
         </foreach>
+    </select>
+
+    <select id="getMerchantProduct" resultMap="BaseResultMap">
+        select * from gmc_spu
+        where merchant_id = #{merchantId}
     </select>
 
 </mapper>
