@@ -7,7 +7,7 @@
         <result property="orderId" column="order_id" />
         <result property="spuId" column="spu_id" />
         <result property="skuId" column="sku_id" />
-        <result property="title" column="title" />
+        <result property="spu" column="spu" />
         <result property="sku" column="sku" typeHandler="com.youngtao.web.typehandler.JsonMapTypeHandler"/>
         <result property="image" column="image" />
         <result property="oldPrice" column="old_price" />
@@ -20,12 +20,12 @@
 
     <insert id="batchInsert" parameterType="orderItemDO">
         insert into omc_order_item (
-            order_id, spu_id, sku_id, title, sku,
+            order_id, spu_id, sku_id, spu, sku,
             image, old_price, price, num, total_price
         ) values
         <foreach collection="list" item="item" separator=",">
         (
-            #{item.orderId}, #{item.spuId}, #{item.skuId}, #{item.title},
+            #{item.orderId}, #{item.spuId}, #{item.skuId}, #{item.spu},
             #{item.sku, typeHandler=com.youngtao.web.typehandler.JsonMapTypeHandler},
             #{item.image}, #{item.oldPrice}, #{item.price}, #{item.num}, #{item.totalPrice}
         )

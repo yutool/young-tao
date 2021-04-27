@@ -32,12 +32,7 @@ public class CartDO extends BaseEntity implements Serializable {
     /**
      * spu title
      */
-    private String title;
-
-    /**
-     * 图片
-     */
-    private String image;
+    private String spu;
 
     /**
      * 加入时单价

@@ -21,4 +21,6 @@ public interface UserInfoMapper extends BaseMapper<UserInfo> {
     int insert0(UserInfo userInfo);
 
     UserInfo login(@Param("account") String account, @Param("password") String password);
+
+    UserInfo selectByEmail(String email);
 }

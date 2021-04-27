@@ -20,7 +20,7 @@
         <result property="payType" column="pay_type" />
         <result property="updateTime" column="update_time" />
         <result property="createTime" column="create_time" />
-        <result property="isDelete" column="is_delete" />
+        <result property="deleted" column="is_deleted" />
     </resultMap>
 
     <insert id="batchInsert" parameterType="orderDO">
@@ -51,7 +51,7 @@
     <select id="selectByUserIdAndStatus" resultMap="BaseResultMap">
         select * from omc_order
         where user_id = #{userId}
-        and is_delete = #{deleted}
+        and is_deleted = #{deleted}
         <if test="status != null">
             and status = #{status}
         </if>
@@ -61,7 +61,6 @@
     <select id="selectByMerIdAndStatus" resultMap="BaseResultMap">
         select * from omc_order
         where merchant_id = #{merchantId}
-        and is_delete = #{deleted}
         <if test="status != null">
             and status = #{status}
         </if>
@@ -70,14 +69,28 @@
 
     <update id="deleteOrder">
         update omc_order
-        set is_delete = true
+        set is_deleted = true
         where order_id = #{orderId}
     </update>
 
     <update id="recoverOrder">
         update omc_order
-        set is_delete = false
+        set is_deleted = false
         where order_id = #{orderId}
+    </update>
+
+    <update id="updateStatusByMerchant">
+        update omc_order
+        set status = #{status}
+        where order_id = #{orderId}
+        and merchant_id = #{merchantId}
+    </update>
+
+    <update id="updateStatusByUser">
+        update omc_order
+        set status = #{status}
+        where order_id = #{orderId}
+        and user_id = #{userId}
     </update>
 
 </mapper>

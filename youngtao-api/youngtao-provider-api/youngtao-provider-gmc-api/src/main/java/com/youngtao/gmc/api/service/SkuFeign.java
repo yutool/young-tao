@@ -3,6 +3,7 @@ package com.youngtao.gmc.api.service;
 import com.youngtao.core.result.RpcResult;
 import com.youngtao.gmc.api.model.arg.UpdateStockArg;
 import com.youngtao.gmc.api.model.dto.SkuDTO;
+import com.youngtao.gmc.api.model.dto.SpuSkuDTO;
 import com.youngtao.gmc.api.service.fallback.SkuFeignFallback;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,12 @@ public interface SkuFeign {
 
     @GetMapping("/api/gmc/sku/{skuId}")
     RpcResult<SkuDTO> getBySkuId(@PathVariable("skuId") String skuId);
+
+    /**
+     * 一模一样的玩意，写在ProductFeign不行，有毒
+     */
+    @GetMapping("/api/gmc/sku/getSpuSku/{skuId}")
+    RpcResult<SpuSkuDTO> getSpuSku(@PathVariable("skuId") String skuId);
 
     /**
      * 根据skuList获取sku

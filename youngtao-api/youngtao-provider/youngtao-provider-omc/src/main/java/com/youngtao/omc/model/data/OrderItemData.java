@@ -15,7 +15,7 @@ public class OrderItemData {
 
     private String skuId;
 
-    private String title;
+    private String spu;
 
     private JsonMap<String> sku;
 

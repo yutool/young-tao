@@ -112,7 +112,7 @@ public class CreateGscOrderListener implements RocketMQListener<CreateOrderMessa
         orderItemDO.setSpuId(skuDTO.getSpuId());
         orderItemDO.setSkuId(message.getSkuId());
         orderItemDO.setNum(1);
-        orderItemDO.setTitle(spuDTO.getSpu());
+        orderItemDO.setSpu(spuDTO.getSpu());
         orderItemDO.setSku(skuDTO.getSku());
         orderItemDO.setImage(skuDTO.getImage());
         orderItemDO.setOldPrice(skuDTO.getOldPrice());

@@ -3,6 +3,7 @@ package com.youngtao.gmc.api.service.fallback;
 import com.youngtao.core.result.RpcResult;
 import com.youngtao.gmc.api.model.arg.UpdateStockArg;
 import com.youngtao.gmc.api.model.dto.SkuDTO;
+import com.youngtao.gmc.api.model.dto.SpuSkuDTO;
 import com.youngtao.gmc.api.service.SkuFeign;
 
 import java.util.Collection;
@@ -15,6 +16,11 @@ import java.util.List;
 public class SkuFeignFallback implements SkuFeign {
     @Override
     public RpcResult<SkuDTO> getBySkuId(String skuId) {
+        return null;
+    }
+
+    @Override
+    public RpcResult<SpuSkuDTO> getSpuSku(String skuId) {
         return null;
     }
 

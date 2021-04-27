@@ -2,10 +2,12 @@ package com.youngtao.gmc.service;
 
 import com.github.pagehelper.PageInfo;
 import com.youngtao.gmc.model.data.ProductData;
+import com.youngtao.gmc.model.data.SpuSkuData;
 import com.youngtao.gmc.model.query.UpdateStockQuery;
 import com.youngtao.gmc.model.request.AddProductRequest;
 import com.youngtao.gmc.model.request.ConfirmOrderRequest;
 import com.youngtao.gmc.model.request.GetMerchantProductRequest;
+import com.youngtao.gmc.model.request.SearchProductRequest;
 import com.youngtao.gmc.model.response.ConfirmOrderResponse;
 
 import java.util.List;
@@ -15,6 +17,11 @@ import java.util.List;
  * @date 2020/11/22
  */
 public interface ProductService {
+
+    /**
+     * 搜索商品，暂时这样吧
+     */
+    PageInfo<SpuSkuData> searchProduct(SearchProductRequest request);
 
     /**
      * 添加商品
@@ -47,4 +54,10 @@ public interface ProductService {
      * 获取商家订单
      */
     PageInfo<ProductData> getMerchantProduct(GetMerchantProductRequest request);
+
+    /**
+     * 获取SkuSpu
+     */
+    SpuSkuData getSpuSku(String skuId);
+
 }

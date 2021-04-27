@@ -1,7 +1,7 @@
 <template>
   <el-form :model="registerForm" :rules="rules" ref="registerForm" class="pl-2 pr-2">
-    <el-form-item prop="username">
-      <el-input v-model="registerForm.username" placeholder="请填写用户名"/>
+    <el-form-item prop="name">
+      <el-input v-model="registerForm.name" placeholder="请填写用户名"/>
     </el-form-item>
     <el-form-item prop="email">
       <el-input v-model="registerForm.email" placeholder="请填写邮箱"/>
@@ -42,13 +42,13 @@ export default class RegisterForm extends Vue {
   private verifyHint = '获取验证码'
   private verifyCodeError = ''
   private registerForm = {
-    username: '',
+    name: '',
     email: '',
     password: '',
     verifyCode: '',
   };
   private rules = {
-    username: [
+    name: [
       { required: true, message: '请输入用户名', trigger: 'change' },
     ],
     email: [

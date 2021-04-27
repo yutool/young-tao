@@ -27,4 +27,9 @@
         and (email = #{account} or telephone = #{account})
     </select>
 
+    <select id="selectByEmail" resultMap="BaseResultMap">
+        select * from uac_user_info
+        where email = #{email}
+    </select>
+
 </mapper>

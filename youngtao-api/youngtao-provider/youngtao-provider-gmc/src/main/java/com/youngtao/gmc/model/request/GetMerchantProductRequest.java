@@ -11,4 +11,5 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class GetMerchantProductRequest extends PageArg {
+    private boolean deleted = false;
 }

@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="'detail/'+spu.spuId" class="product-card p-3">
+  <router-link :to="`/product/detail/${spu.spuId}`" class="product-card p-3">
     <div class="product-image">
       <img :src="spu.images[0]" alt="">
     </div>

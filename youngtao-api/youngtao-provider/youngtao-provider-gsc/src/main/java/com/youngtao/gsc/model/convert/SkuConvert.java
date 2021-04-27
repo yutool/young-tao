@@ -25,5 +25,4 @@ public interface SkuConvert {
 
     ProductData.Sku toProductSku(SkuDO skuDO);
 
-    ProductData.Sku toProductSku(SkuData skuData);
 }

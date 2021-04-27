@@ -1,5 +1,6 @@
 package com.youngtao.web.advice;
 
+import com.youngtao.core.exception.RpcResultException;
 import com.youngtao.core.exception.ServiceException;
 import com.youngtao.core.result.ResponseCode;
 import com.youngtao.core.result.ResponseResult;
@@ -23,6 +24,12 @@ public class GlobalExceptionAdvice {
     @ResponseBody
     @ExceptionHandler(ServiceException.class)
     private ResponseResult<?> serviceException(ServiceException ex) {
+        return new ResponseResult<>(ex.getCode(), ex.getMessage());
+    }
+
+    @ResponseBody
+    @ExceptionHandler(RpcResultException.class)
+    private ResponseResult<?> rpcException(RpcResultException ex) {
         return new ResponseResult<>(ex.getCode(), ex.getMessage());
     }
 

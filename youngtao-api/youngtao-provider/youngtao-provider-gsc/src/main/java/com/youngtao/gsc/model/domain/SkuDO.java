@@ -34,6 +34,8 @@ public class SkuDO extends BaseEntity implements Serializable {
      */
     private String spuId;
 
+    private String merchantId;
+
     /**
      * sku
      */

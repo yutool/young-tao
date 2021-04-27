@@ -6,6 +6,7 @@ import com.youngtao.core.result.RpcResult;
 import com.youngtao.core.util.RpcResultUtils;
 import com.youngtao.gmc.api.model.dto.SkuDTO;
 import com.youngtao.gmc.api.model.dto.SpuDTO;
+import com.youngtao.gmc.api.model.dto.SpuSkuDTO;
 import com.youngtao.gmc.api.service.SkuFeign;
 import com.youngtao.gmc.api.service.SpuFeign;
 import com.youngtao.omc.mapper.CartMapper;
@@ -53,13 +54,14 @@ public class CartServiceImpl implements CartService {
             return;
         }
 
-        RpcResult<SkuDTO> skuResult = skuFeign.getBySkuId(request.getSkuId());
+        RpcResult<SpuSkuDTO> skuResult = skuFeign.getSpuSku(request.getSkuId());
         RpcResultUtils.checkNotNull(skuResult);
-        SkuDTO skuDTO = skuResult.getData();
+        SpuSkuDTO spuSku = skuResult.getData();
 
         CartDO cartDO = cartConvert.toCart(request);
+        cartDO.setSpu(spuSku.getSpu());
         cartDO.setUserId(userId);
-        cartDO.setOldPrice(skuDTO.getPrice());
+        cartDO.setOldPrice(spuSku.getPrice());
         cartMapper.insert(cartDO);
     }
 

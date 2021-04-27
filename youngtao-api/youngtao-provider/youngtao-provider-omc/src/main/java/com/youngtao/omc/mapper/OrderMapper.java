@@ -17,7 +17,7 @@ public interface OrderMapper extends BaseMapper<OrderDO> {
 
     List<OrderDO> selectByUserIdAndStatus(@Param("userId") String userId, @Param("status") Integer status, @Param("deleted") Boolean deleted);
 
-    List<OrderDO> selectByMerIdAndStatus(@Param("merchantId") String merchantId, @Param("status") Integer status, @Param("deleted") Boolean deleted);
+    List<OrderDO> selectByMerIdAndStatus(@Param("merchantId") String merchantId, @Param("status") Integer status);
 
     int batchInsert(List<OrderDO> orderList);
 
@@ -28,4 +28,8 @@ public interface OrderMapper extends BaseMapper<OrderDO> {
     int deleteOrder(String orderId);
 
     int recoverOrder(String orderId);
+
+    int updateStatusByMerchant(@Param("orderId") String orderId, @Param("merchantId") String merchantId, @Param("status") Integer status);
+
+    int updateStatusByUser(@Param("orderId") String orderId, @Param("userId") String userId, @Param("status") Integer status);
 }

@@ -51,4 +51,14 @@ public interface OrderService extends IService<OrderDO> {
      * @param orderId
      */
     void recoverOrder(String orderId);
+
+    /**
+     * 修改订单信息
+     */
+    void updateStatusByMerchant(String orderId, Integer status);
+
+    /**
+     * 修改订单信息
+     */
+    void updateStatusByUser(String orderId, int status);
 }

@@ -13,3 +13,9 @@ button {
     width: 45%;
   }
 }
+
+.cascader-menu-500 {
+  .el-cascader-menu__wrap {
+    height: 500px !important;
+  }
+}

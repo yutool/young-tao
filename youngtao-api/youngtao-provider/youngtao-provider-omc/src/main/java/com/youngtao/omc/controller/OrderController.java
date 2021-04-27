@@ -1,9 +1,8 @@
 package com.youngtao.omc.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.youngtao.core.context.AuthContext;
-import com.youngtao.core.context.AuthInfo;
 import com.youngtao.core.data.IdArg;
+import com.youngtao.omc.api.constant.OrderStatus;
 import com.youngtao.omc.model.data.OrderData;
 import com.youngtao.omc.model.request.CreateOrderRequest;
 import com.youngtao.omc.model.request.GetMerchantOrderRequest;
@@ -64,5 +63,15 @@ public class OrderController {
     @PostMapping("/recover")
     public void recoverOrder(@RequestBody IdArg idArg) {
         orderService.recoverOrder(idArg.getId());
+    }
+
+    @PostMapping("/delivery")
+    public void delivery(@RequestBody IdArg arg) {
+        orderService.updateStatusByMerchant(arg.getId(), OrderStatus.RECEIVING);
+    }
+
+    @PostMapping("/accept")
+    public void accept(@RequestBody IdArg arg) {
+        orderService.updateStatusByUser(arg.getId(), OrderStatus.COMPLETED);
     }
 }

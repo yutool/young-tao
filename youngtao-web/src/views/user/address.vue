@@ -152,7 +152,7 @@ export default class Address extends Vue {
         const form = this.$utils.copyOf(this.addrForm)
         form.address = form.address.join(' ')
         addOrUpdateAddress(form).then((res: any) => {
-          this.$message({type: 'success', message: '添加成功'})
+          this.$message({type: 'success', message: '保存成功'})
           this.resetForm()
           this.getUserAddress()
         })

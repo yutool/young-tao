@@ -22,6 +22,8 @@ public class SpuSkuData {
 
     private String merchantId;
 
+    private String shopName;
+
     private String brandId;
 
     private String brandName;

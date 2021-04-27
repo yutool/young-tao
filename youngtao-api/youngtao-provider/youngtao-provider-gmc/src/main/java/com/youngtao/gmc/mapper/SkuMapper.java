@@ -42,7 +42,7 @@ public interface SkuMapper extends BaseMapper<SkuDO> {
     int batchDecreaseScore(@Param("skuList") Collection<UpdateStockQuery> args);
 
 
-    List<SkuDO> listDefaultBySpuId(Collection<String> spuIds);
+    List<SkuDO> listDefaultBySpuIds(Collection<String> spuIds);
 
     int paySuccess(@Param("skuList") List<UpdateStockQuery> query);
 }

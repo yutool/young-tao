@@ -1,12 +1,19 @@
 const routes = [
-  { path: '/', component: () => import('@/views/home/index.vue'), meta: { title: '果冻商城'} },
+  { path: '/', component: () => import('@/views/home/index.vue'), meta: { title: '聚美商城'} },
+  {
+    path: '/product',
+    component: () => import('@/views/product/index.vue'),
+    children: [
+      { path: '/', redirect: 'list' },
+      { path: 'detail/:id', component: () => import('@/views/product/detail.vue') },
+    ]
+  },
   {
     path: '/market',
     component: () => import('@/views/market/index.vue'),
     children: [
       { path: '/', redirect: 'list' },
       { path: 'list', component: () => import('@/views/market/list.vue') },
-      { path: 'detail/:id', component: () => import('@/views/market/detail.vue') },
     ]
   },
   {

@@ -11,7 +11,7 @@ NProgress.configure({ showSpinner: false }) // 进度环显示隐藏
 router.beforeEach(async (to, from, next) => {
   // start progress bar
   // set page title
-  document.title = to.meta.title ? to.meta.title : '果冻商城'
+  document.title = to.meta.title ? to.meta.title : '聚美-商家版'
   NProgress.start()
 
   // determine whether the user has logged in

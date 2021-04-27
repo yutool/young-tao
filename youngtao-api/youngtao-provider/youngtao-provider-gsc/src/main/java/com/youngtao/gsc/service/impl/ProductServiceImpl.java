@@ -33,6 +33,7 @@ import com.youngtao.web.util.PageUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -145,22 +146,25 @@ public class ProductServiceImpl implements ProductService {
         // 获取数据
         PageHelper.startPage(request.getPage(), request.getSize());
         List<String> spuIds = skuMapper.getAllSpuIdByMerchant(AuthContext.get().getMerchantId());
-        RpcResult<List<SpuDTO>> spuResult = spuFeign.listBySpuIds(spuIds);
-        RpcResultUtils.checkNotNull(spuResult);
-
-        List<SpuDTO> spuDTOList = spuResult.getData();
-        List<SkuDO> skuList = skuMapper.listBySpuIds(spuIds);
-        Map<String, List<SkuDO>> skuMap = Maps.newHashMap();
-        for (SkuDO skuDO : skuList) {
-            List<SkuDO> list = skuMap.getOrDefault(skuDO.getSpuId(), Lists.newArrayList());
-            list.add(skuDO);
-            skuMap.put(skuDO.getSpuId(), list);
-        }
-        // 整理数据
         List<ProductData> productData = Lists.newArrayList();
-        for (SpuDTO spuDTO : spuDTOList) {
-            ProductData data = productConvert.toProductData(spuDTO, skuMap.get(spuDTO.getSpuId()));
-            productData.add(data);
+
+        if (!CollectionUtils.isEmpty(spuIds)) {
+            RpcResult<List<SpuDTO>> spuResult = spuFeign.listBySpuIds(spuIds);
+            RpcResultUtils.checkNotNull(spuResult);
+
+            List<SpuDTO> spuDTOList = spuResult.getData();
+            List<SkuDO> skuList = skuMapper.listBySpuIds(spuIds);
+            Map<String, List<SkuDO>> skuMap = Maps.newHashMap();
+            for (SkuDO skuDO : skuList) {
+                List<SkuDO> list = skuMap.getOrDefault(skuDO.getSpuId(), Lists.newArrayList());
+                list.add(skuDO);
+                skuMap.put(skuDO.getSpuId(), list);
+            }
+            // 整理数据
+            for (SpuDTO spuDTO : spuDTOList) {
+                ProductData data = productConvert.toProductData(spuDTO, skuMap.get(spuDTO.getSpuId()));
+                productData.add(data);
+            }
         }
         return PageUtils.convert(PageInfo.of(spuIds), productData);
     }

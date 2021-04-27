@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-5">
+  <div class="mb-5 container">
     <!-- 订单列表 -->
     <div class="table-responsive-lg">
       <table class="table order-table">
@@ -36,6 +36,7 @@
                   <img :src="item.image" alt="" width="70">
                 </el-col>
                 <el-col :span="15">
+                  <div>{{item.spu}}</div>
                   <div class="item-sku" v-for="(val, key) in item.sku" :key="key">
                     {{ key }}：{{ val }}
                   </div>
@@ -66,7 +67,9 @@
               </td>
               <td v-if="index == 0" :rowspan="item.length">
                 <el-button v-if="order.status==2" type="danger" size="mini">提醒付款</el-button>
-                <el-button v-if="order.status==3" type="primary" size="mini">去发货</el-button>
+                <el-popconfirm v-if="order.status==3"  title="是否确认发货" @onConfirm="orderDelivery(order.orderId)" >
+                  <el-button slot="reference" type="primary" size="mini">去发货</el-button>
+                </el-popconfirm>
                 <el-button v-if="order.status==4" type="primary" size="mini">提醒物流</el-button>
               </td>
             </tr>
@@ -80,8 +83,8 @@
       <!-- 分页 -->
       <el-pagination
         class="text-center"
-        @size-change="handleSizeChange"
         @current-change="getMerchantOrder"
+        @size-change="handleSizeChange"
         :current-page="pageInfo.pageNum"
         :page-sizes="[10, 20, 30, 50]"
         :page-size="pageInfo.pageSize"
@@ -94,7 +97,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { getMerchantOrder } from '@/api/omc/order'
+import { getMerchantOrder, orderDelivery } from '@/api/omc/order'
 
 @Component
 export default class OrderList extends Vue {
@@ -106,12 +109,12 @@ export default class OrderList extends Vue {
     { value: '12', label: '已退款' },
     { value: '100', label: '关闭' },
   ]
-  private pageInfo: any = { size: 10 }  // 分页信息
+  private pageInfo: any = { pageSize: 10 }  // 分页信息
   private selectedStatus = ''
   private orderList: any = []
   
   // 获取用户的订单
-  private getMerchantOrder(page: number, size = this.pageInfo.pageSize) {
+  private getMerchantOrder(page = 1, size = this.pageInfo.pageSize) {
     getMerchantOrder({page, size, status: this.selectedStatus}).then((res: any) => {
       this.$log.info('获取用户订单', res)
       this.pageInfo = res.data
@@ -119,16 +122,23 @@ export default class OrderList extends Vue {
     })
   }
   private mounted() {
-    this.getMerchantOrder(0, this.pageInfo.size)
+    this.getMerchantOrder()
   }
   
   // 切换显示条数
   private handleSizeChange(size: number) {
-    this.getMerchantOrder(this.pageInfo.pageNum, size)
+    this.getMerchantOrder(1, size)
   }
   // 切换状态
   private handleChange() {
-    this.getMerchantOrder(0, 10)
+    this.getMerchantOrder()
+  }
+  // 订单发货
+  private orderDelivery(id: string) {
+    orderDelivery({id}).then((res: any) => {
+      this.$message({type: 'success', message: '发货成功'})
+      this.getMerchantOrder()
+    })
   }
 }
 </script>

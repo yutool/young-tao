@@ -11,6 +11,7 @@ const routes = [
           { path: '/', redirect: 'list'},
           { path: 'list', component: () => import('@/views/product/list.vue') },
           { path: 'add', component: () => import('@/views/product/add.vue') },
+          { path: 'recycle', component: () => import('@/views/product/recycle.vue') },
         ]
       },
       {
@@ -19,7 +20,6 @@ const routes = [
         children: [
           { path: '/', redirect: 'list'},
           { path: 'list', component: () => import('@/views/seckill/list.vue') },
-          { path: 'add', component: () => import('@/views/seckill/add.vue') },
         ]
       },
       {

@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 
-const tokenKey = 'token';
+const tokenKey = 'yt-admin-token';
 
 // 不晓得存在Cookies怎么不能关闭浏览器了
 

@@ -20,10 +20,13 @@
             <el-table-column label="原价" prop="oldPrice"></el-table-column>
             <el-table-column label="库存" prop="num"></el-table-column>
             <el-table-column label="销量" prop="saleNum"></el-table-column>
-            <el-table-column label="操作" min-width="130">
+            <el-table-column label="操作" min-width="160">
               <template slot-scope="scope">
-                <el-button type="primary" size="mini" @click="edit(scope.row)">编辑</el-button>
-                <el-button type="primary" size="mini" @click="edit(scope.row)">添加活动</el-button>
+                <el-button type="info" size="mini" @click="editSku(scope.row)">编辑</el-button>
+                <el-button class="ml-1" type="primary" size="mini" @click="addSeckill(props.row, scope.row)">活动</el-button>
+                <el-popconfirm class="ml-1" title="是否确认删除？" @onConfirm="deleteSku(scope.row)">
+                  <el-button slot="reference" type="danger" size="mini">删除</el-button>
+                </el-popconfirm>
               </template>
             </el-table-column>
           </el-table>
@@ -51,9 +54,12 @@
           <span v-if="scope.row.isMarketable == 1">已上架</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" min-width="100px">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="edit(scope.row)">编辑</el-button>
+          <el-button class="mr-1" type="warning" size="mini" @click="editSpu(scope.row)">编辑</el-button>
+          <el-popconfirm title="是否确认删除？" @onConfirm="deleteSpu(scope.row)">
+            <el-button slot="reference" type="danger" size="mini">删除</el-button>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -69,21 +75,54 @@
         :total="pageInfo.total">
       </el-pagination>
     </div>
+
+    <!-- 添加活动商品 -->
+    <el-dialog title="添加活动商品" :visible.sync="seckillDialog" width="600px">
+      <seckill-form :data="seckillData" @confirm="seckillDialog = false" />
+    </el-dialog>
+
+    <!-- 编辑SPU -->
+    <el-dialog title="添加活动商品" :visible.sync="spuDialog" width="600px">
+      <edit-spu-form :data="spuData" @confirm="spuConfirm" />
+    </el-dialog>
+
+    <!-- 编辑SKU -->
+    <el-dialog title="添加活动商品" :visible.sync="skuDialog" width="600px">
+      <edit-sku-form :data="skuData" @confirm="skuConfirm" />
+    </el-dialog>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { getMerchantProduct } from '@/api/gmc/product';
+import { deleteSku } from '@/api/gmc/sku';
+import { deleteSpu } from '@/api/gmc/spu';
+import SeckillForm from './components/SeckillForm.vue';
+import EditSkuForm from './components/EditSkuForm.vue';
+import EditSpuForm from './components/EditSpuForm.vue';
 
-@Component
-export default class GoodsList extends Vue {
+@Component({
+  components: {
+    SeckillForm, EditSkuForm, EditSpuForm
+  }
+})
+export default class ProductList extends Vue {
   private spuStatus = ['审核通过', '审核中', '审核失败']
-  private pageInfo: any = { size: 10 }  // 初始化页面大小
+  private pageInfo: any = { pageSize: 10 }  // 初始化页面大小
   private productList: any = []
+  // 活动弹窗
+  private seckillDialog = false;
+  private seckillData = {};
+  // spu弹窗
+  private spuDialog = false;
+  private spuData = {};
+   // sku弹窗
+  private skuDialog = false;
+  private skuData = {};
  
   // 切换页面
-  private getProduct(page: any, size = this.pageInfo.pageSize) {
+  private getProduct(page = 1, size = this.pageInfo.pageSize) {
     getMerchantProduct({page, size}).then((res: any) => {
       const { data } = res
       this.pageInfo = data
@@ -91,16 +130,49 @@ export default class GoodsList extends Vue {
     })
   }
   // 切换显示条数
-  private handleSizeChange(size: any) {
-    this.getProduct(this.pageInfo.pageNum, size)
+  private handleSizeChange(size: number) {
+    this.getProduct(1, size)
   }
-  // 添加秒杀商品
-  private seckill(goods: any) {
-    this.$router.push({ name: 'addSeckill', params: {goods} })
-  }
-  
   private mounted() {
-    this.getProduct(0, this.pageInfo.size)
+    this.getProduct()
+  }
+
+  // 添加活动商品
+  private addSeckill(spu: any, sku: any) {
+    this.seckillData = {spu, sku};
+    this.seckillDialog = true;
+  }
+
+  // 编辑spu
+  private editSpu(data: any) {
+    this.spuData = this.$utils.copyOf(data);
+    this.spuDialog = true;
+  }
+  private spuConfirm() {
+    this.spuDialog = false;
+    this.getProduct(this.pageInfo.pageNum)
+  }
+  private deleteSpu(data: any) {
+    deleteSpu({id: data.spuId, logic: true}).then((res: any) => {
+      this.$message({type: 'success', message: '删除成功'})
+      this.getProduct(this.pageInfo.pageNum)
+    })
+  }
+
+  // 编辑sku
+  private editSku(data: any) {
+    this.skuData = this.$utils.copyOf(data);
+    this.skuDialog = true;
+  }
+  private skuConfirm() {
+    this.skuDialog = false;
+    this.getProduct(this.pageInfo.pageNum)
+  }
+  private deleteSku(data: any) {
+    deleteSku({id: data.skuId}).then((res: any) => {
+      this.$message({type: 'success', message: '删除成功'})
+      this.getProduct(this.pageInfo.pageNum)
+    })
   }
 }
 </script>

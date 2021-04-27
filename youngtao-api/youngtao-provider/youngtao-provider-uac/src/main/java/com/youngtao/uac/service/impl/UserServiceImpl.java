@@ -50,6 +50,10 @@ public class UserServiceImpl extends BaseService<UserInfo> implements UserServic
         if (!Objects.equals(code, request.getVerifyCode())) {
             CastException.cast("验证码错误");
         }
+        UserInfo isExist = userInfoMapper.selectByEmail(request.getEmail());
+        if (isExist != null) {
+            CastException.cast("邮箱已被注册");
+        }
         UserInfo userInfo = BeanUtils.copy(request, UserInfo.class);
         userInfo.setUsername(request.getName());
         userInfo.setUserId(IdUtils.getId("user"));

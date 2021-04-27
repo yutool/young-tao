@@ -112,7 +112,7 @@ export default class List extends Vue {
   
   // 获取用户的订单
   private getUserOrder(page: number, size = this.pageInfo.pageSize) {
-    getUserOrder({page, size, status: this.selectedStatus, isDelete: true}).then((res: any) => {
+    getUserOrder({page, size, status: this.selectedStatus, deleted: true}).then((res: any) => {
       this.$log.info('获取用户订单', res)
       this.pageInfo = res.data
       this.orderList = res.data.list

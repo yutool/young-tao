@@ -47,3 +47,12 @@ export function recoverOrder(data: any) {
     data: JSON.stringify(data)
   })
 }
+
+export function acceptOrder(data: any) {
+  return request({
+    url: 'omc/order/accept',
+    method: 'post',
+    data: JSON.stringify(data)
+  })
+}
+

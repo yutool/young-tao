@@ -124,4 +124,7 @@ public class SpuDO extends BaseEntity implements Serializable {
      * 0-审核中，1-审核成功，2-审核失败
      */
     private Integer status;
+
+    @TableField("is_deleted")
+    private Boolean deleted;
 }

@@ -57,15 +57,17 @@ public class RecommendServiceImpl implements RecommendService {
                     .eq("parent_id", rootId)
             );
             CategoryData categoryData = categoryConvert.toCategoryData(category);
+            categoryData.setChildren(Lists.newArrayList());
             List<CategoryData> tmp = categoryConvert.toCategoryData(categoryList);
             categoryData.getChildren().addAll(tmp);
             // 获取商品
             List<SpuDO> spuList = spuMapper.selectList(new QueryWrapper<SpuDO>()
                     .eq("category1_id", rootId)
-                    .last("limit 10")
+                    .eq("is_deleted", false)
+                    .last("limit 20")
             );
             Set<String> spuIds = spuList.stream().map(SpuDO::getSpuId).collect(Collectors.toSet());
-            List<SkuDO> skuList = skuMapper.listDefaultBySpuId(spuIds);
+            List<SkuDO> skuList = skuMapper.listDefaultBySpuIds(spuIds);
             Map<String, SkuDO> spuIdMap = skuList.stream().collect(Collectors.toMap(SkuDO::getSpuId, val -> val));
             List<SpuSkuData> dataList = spuList.stream()
                     .map(val -> productConvert.toSpuSkuData(val, spuIdMap.get(val.getSpuId())))

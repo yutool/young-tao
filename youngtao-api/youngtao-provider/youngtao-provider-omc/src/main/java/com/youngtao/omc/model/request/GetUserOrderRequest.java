@@ -13,5 +13,5 @@ import lombok.EqualsAndHashCode;
 public class GetUserOrderRequest extends PageArg {
     private Integer status;
 
-    private Boolean isDelete = false;
+    private boolean deleted = false;
 }

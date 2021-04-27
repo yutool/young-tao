@@ -4,6 +4,7 @@ import com.youngtao.core.lang.JsonList;
 import com.youngtao.core.lang.JsonMap;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * @date 2020/12/20
  */
 @Data
-public class ProductDTO {
+public class ProductDTO implements Serializable {
 
     private String spuId;
 

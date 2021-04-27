@@ -20,8 +20,7 @@ public interface CartConvert {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "userId", ignore = true)
     @Mapping(target = "oldPrice", ignore = true)
-    @Mapping(target = "title", ignore = true)
-    @Mapping(target = "image", ignore = true)
+    @Mapping(target = "spu", ignore = true)
     @Mapping(target = "updateTime", ignore = true)
     @Mapping(target = "createTime", ignore = true)
     CartDO toCart(AddCartRequest request);
@@ -29,7 +28,6 @@ public interface CartConvert {
     @Named("toCartData")
     @Mapping(target = "price", ignore = true)
     @Mapping(target = "spuId", ignore = true)
-    @Mapping(target = "spu", ignore = true)
     @Mapping(target = "sku", ignore = true)
     CartData toCartData(CartDO cartDO);
 

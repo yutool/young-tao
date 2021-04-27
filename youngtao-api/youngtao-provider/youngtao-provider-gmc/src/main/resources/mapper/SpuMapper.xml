@@ -24,6 +24,7 @@
         <result property="seq" column="seq" />
         <result property="isMarketable" column="is_marketable" />
         <result property="status" column="status" />
+        <result property="deleted" column="is_deleted" />
         <result property="updateTime" column="update_time" />
         <result property="createTime" column="create_time" />
     </resultMap>
@@ -35,6 +36,17 @@
             where spu_id = #{item.spuId}
         </foreach>
     </update>
+
+    <update id="logicDelete">
+        update gmc_spu set is_deleted = true
+        where spu_id = #{spuId}
+    </update>
+
+    <update id="recycleBySpuId">
+        update gmc_spu set is_deleted = false
+        where spu_id = #{spuId}
+    </update>
+
 
     <select id="selectBySpuId" resultMap="BaseResultMap">
         select * from gmc_spu
@@ -52,6 +64,19 @@
     <select id="getMerchantProduct" resultMap="BaseResultMap">
         select * from gmc_spu
         where merchant_id = #{merchantId}
+        and is_deleted = #{deleted}
+    </select>
+
+    <select id="searchProduct" resultMap="BaseResultMap">
+        <bind name="likeValue" value="'%'+ searchValue + '%'"/>
+        select * from gmc_spu
+        where is_deleted = false
+        <if test="categoryId != null">
+            and category3_id = #{categoryId}
+        </if>
+        <if test="searchValue != null">
+            and spu like #{likeValue}
+        </if>
     </select>
 
 </mapper>

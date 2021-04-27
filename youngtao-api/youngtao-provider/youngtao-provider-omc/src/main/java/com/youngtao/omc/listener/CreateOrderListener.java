@@ -130,7 +130,7 @@ public class CreateOrderListener implements RocketMQListener<CreateOrderRequest>
                 orderItemDO.setOrderId(orderId);
                 orderItemDO.setSpuId(skuDTO.getSpuId());
                 orderItemDO.setSkuId(item.getSkuId());
-                orderItemDO.setTitle(spuDTO.getSpu());
+                orderItemDO.setSpu(spuDTO.getSpu());
                 orderItemDO.setSku(skuDTO.getSku());
                 orderItemDO.setImage(skuDTO.getImages().get(0));
                 orderItemDO.setOldPrice(skuDTO.getPrice());

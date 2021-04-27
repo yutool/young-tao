@@ -103,7 +103,7 @@ public class OrderServiceImpl extends BaseService<OrderDO> implements OrderServi
         String userId = AuthContext.get().getUserId();
         // 获取数据
         PageHelper.startPage(request.getPage(), request.getSize());
-        List<OrderDO> orderDOList = orderMapper.selectByUserIdAndStatus(userId, request.getStatus(), request.getIsDelete());
+        List<OrderDO> orderDOList = orderMapper.selectByUserIdAndStatus(userId, request.getStatus(), request.isDeleted());
         return convertToPage(orderDOList);
     }
 
@@ -112,7 +112,7 @@ public class OrderServiceImpl extends BaseService<OrderDO> implements OrderServi
         String merchantId = AuthContext.get().getMerchantId();
         // 获取数据
         PageHelper.startPage(request.getPage(), request.getSize());
-        List<OrderDO> orderDOList = orderMapper.selectByMerIdAndStatus(merchantId, request.getStatus(), request.getIsDelete());
+        List<OrderDO> orderDOList = orderMapper.selectByMerIdAndStatus(merchantId, request.getStatus());
         return convertToPage(orderDOList);
     }
 
@@ -180,5 +180,17 @@ public class OrderServiceImpl extends BaseService<OrderDO> implements OrderServi
     @Override
     public void recoverOrder(String orderId) {
         orderMapper.recoverOrder(orderId);
+    }
+
+    @Override
+    public void updateStatusByMerchant(String orderId, Integer status) {
+        String merchantId = AuthContext.get().getMerchantId();
+        orderMapper.updateStatusByMerchant(orderId, merchantId, status);
+    }
+
+    @Override
+    public void updateStatusByUser(String orderId, int status) {
+        String userId = AuthContext.get().getUserId();
+        orderMapper.updateStatusByUser(orderId, userId, status);
     }
 }

@@ -12,6 +12,4 @@ import lombok.EqualsAndHashCode;
 @Data
 public class GetMerchantOrderRequest extends PageArg {
     private Integer status;
-
-    private Boolean isDelete = false;
 }

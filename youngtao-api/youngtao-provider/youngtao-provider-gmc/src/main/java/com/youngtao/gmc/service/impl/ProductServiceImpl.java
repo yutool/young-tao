@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.youngtao.core.context.AuthContext;
 import com.youngtao.core.context.AuthInfo;
+import com.youngtao.core.exception.CastException;
 import com.youngtao.core.result.RpcResult;
 import com.youngtao.core.util.RpcResultUtils;
 import com.youngtao.gmc.api.constant.ProductType;
@@ -17,6 +18,7 @@ import com.youngtao.gmc.model.convert.ProductConvert;
 import com.youngtao.gmc.model.convert.SkuConvert;
 import com.youngtao.gmc.model.convert.SpuConvert;
 import com.youngtao.gmc.model.data.ProductData;
+import com.youngtao.gmc.model.data.SpuSkuData;
 import com.youngtao.gmc.model.domain.SkuDO;
 import com.youngtao.gmc.model.domain.SpuDO;
 import com.youngtao.gmc.model.query.UpdateSaleQuery;
@@ -24,6 +26,7 @@ import com.youngtao.gmc.model.query.UpdateStockQuery;
 import com.youngtao.gmc.model.request.AddProductRequest;
 import com.youngtao.gmc.model.request.ConfirmOrderRequest;
 import com.youngtao.gmc.model.request.GetMerchantProductRequest;
+import com.youngtao.gmc.model.request.SearchProductRequest;
 import com.youngtao.gmc.model.response.ConfirmOrderResponse;
 import com.youngtao.gmc.service.ProductService;
 import com.youngtao.gsc.api.model.dto.GscSkuDTO;
@@ -33,6 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -62,12 +66,34 @@ public class ProductServiceImpl implements ProductService {
     private GscProductFeign gscProductFeign;
 
     @Override
+    public PageInfo<SpuSkuData> searchProduct(SearchProductRequest request) {
+        PageHelper.startPage(request.getPage(), request.getSize());
+        List<SpuDO> spuList = spuMapper.searchProduct(request.getCategory(), request.getSearchValue());
+        List<SpuSkuData> result = Lists.newArrayList();
+
+        if (!CollectionUtils.isEmpty(spuList)) {
+            Set<String> spuIds = spuList.stream().map(SpuDO::getSpuId).collect(Collectors.toSet());
+            List<SkuDO> skuList = skuMapper.listDefaultBySpuIds(spuIds);
+            Map<String, SkuDO> spuIdMap = skuList.stream().collect(Collectors.toMap(SkuDO::getSpuId, val -> val));
+            result = spuList.stream()
+                    .map(val -> productConvert.toSpuSkuData(val, spuIdMap.get(val.getSpuId())))
+                    .collect(Collectors.toList());
+        }
+        return PageUtils.convert(PageInfo.of(spuList), result);
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public void addProduct(AddProductRequest request) {
         AuthInfo authInfo = AuthContext.get();
         String spuId = IdUtils.productId();
         // fill sku
         List<SkuDO> skuDOList = skuConvert.toSku(request.getSkuList());
+        if (CollectionUtils.isEmpty(skuDOList)) {
+            CastException.cast("未添加商品");
+        }
+
+        skuDOList.get(0).setDefaultShow(true);
         for (SkuDO skuDO : skuDOList) {
             skuDO.setSpuId(spuId);
             skuDO.setSkuId(IdUtils.productId());
@@ -175,22 +201,31 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public PageInfo<ProductData> getMerchantProduct(GetMerchantProductRequest request) {
         PageHelper.startPage(request.getPage(), request.getSize());
-        List<SpuDO> spuList = spuMapper.getMerchantProduct(AuthContext.get().getMerchantId());
-
-        Set<String> spuIds = spuList.stream().map(SpuDO::getSpuId).collect(Collectors.toSet());
-        List<SkuDO> skuList = skuMapper.listBySpuIds(spuIds);
-        Map<String, List<SkuDO>> skuMap = Maps.newHashMap();
-        for (SkuDO skuDO : skuList) {
-            List<SkuDO> list = skuMap.getOrDefault(skuDO.getSpuId(), Lists.newArrayList());
-            list.add(skuDO);
-            skuMap.put(skuDO.getSpuId(), list);
-        }
-
+        List<SpuDO> spuList = spuMapper.getMerchantProduct(AuthContext.get().getMerchantId(), request.isDeleted());
         List<ProductData> productData = Lists.newArrayList();
-        for (SpuDO spuDO : spuList) {
-            ProductData data = productConvert.toProductData(spuDO, skuMap.get(spuDO.getSpuId()));
-            productData.add(data);
+
+        if (!CollectionUtils.isEmpty(spuList)) {
+            Set<String> spuIds = spuList.stream().map(SpuDO::getSpuId).collect(Collectors.toSet());
+            List<SkuDO> skuList = skuMapper.listBySpuIds(spuIds);
+            Map<String, List<SkuDO>> skuMap = Maps.newHashMap();
+            for (SkuDO skuDO : skuList) {
+                List<SkuDO> list = skuMap.getOrDefault(skuDO.getSpuId(), Lists.newArrayList());
+                list.add(skuDO);
+                skuMap.put(skuDO.getSpuId(), list);
+            }
+
+            for (SpuDO spuDO : spuList) {
+                ProductData data = productConvert.toProductData(spuDO, skuMap.get(spuDO.getSpuId()));
+                productData.add(data);
+            }
         }
         return PageUtils.convert(PageInfo.of(spuList), productData);
+    }
+
+    @Override
+    public SpuSkuData getSpuSku(String skuId) {
+        SkuDO skuDO = skuMapper.selectBySkuId(skuId);
+        SpuDO spuDO = spuMapper.selectBySpuId(skuDO.getSpuId());
+        return productConvert.toSpuSkuData(spuDO, skuDO);
     }
 }

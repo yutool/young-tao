@@ -12,13 +12,13 @@
         <el-menu-item index="/product/add" route="/product/add">
           <i class="el-icon-sell"></i>添加商品
         </el-menu-item>
+        <el-menu-item index="/product/recycle" route="/product/recycle">
+          <i class="el-icon-sell"></i>回收站
+        </el-menu-item>
       </el-menu-item-group>
       <el-menu-item-group title="活动商品">
         <el-menu-item index="/seckill/list" route="/seckill/list">
           <i class="el-icon-document"></i>活动列表
-        </el-menu-item>
-        <el-menu-item index="/seckill/add" route="/seckill/add">
-          <i class="el-icon-sell"></i>添加活动商品
         </el-menu-item>
       </el-menu-item-group>
     </el-submenu>

@@ -40,7 +40,7 @@ public class OrderItemDO extends BaseEntity implements Serializable {
     /**
      * 商品名称
      */
-    private String title;
+    private String spu;
 
     /**
      * sku Json

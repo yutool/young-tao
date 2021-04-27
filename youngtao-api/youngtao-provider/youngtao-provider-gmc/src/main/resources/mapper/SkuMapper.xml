@@ -86,7 +86,7 @@
         </foreach>
     </select>
 
-    <select id="listDefaultBySpuId" resultMap="BaseResultMap">
+    <select id="listDefaultBySpuIds" resultMap="BaseResultMap">
         select * from gmc_sku
         where spu_id in
         <foreach collection="spuIds" item="item" separator="," open="(" close=")">

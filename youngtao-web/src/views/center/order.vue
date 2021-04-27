@@ -77,7 +77,9 @@
             <td v-if="index == 0" :rowspan="item.length">
               <el-button v-if="order.status==2" type="danger" size="mini" @click="$router.push(`/order/pay/${order.paymentId}`)">去付款</el-button>
               <el-button v-if="order.status==3" type="primary" size="mini">提醒发货</el-button>
-              <el-button v-if="order.status==4" type="primary" size="mini">确认收货</el-button>
+              <el-popconfirm v-if="order.status==4"  title="是否确认收货" @onConfirm="acceptOrder(order.orderId)" >
+                  <el-button slot="reference" type="primary" size="mini">确认收货</el-button>
+                </el-popconfirm>
               <el-button v-if="order.status==0 || order.status==12 || order.status==100" type="info" size="mini" @click="$router.push(`/market/detail/${item.spuId}`)">再来一单</el-button>
             </td>
           </tr>
@@ -105,7 +107,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { getUserOrder, orderRefund, deleteOrder } from '@/api/omc/order'
+import { getUserOrder, orderRefund, deleteOrder, acceptOrder } from '@/api/omc/order'
 
 @Component
 export default class List extends Vue {
@@ -152,6 +154,13 @@ export default class List extends Vue {
   private deleteOrder(id: string) {
     deleteOrder({id}).then((res: any) => {
       this.$log.info('删除订单：', res)
+      this.getUserOrder(this.pageInfo.pageNum, this.pageInfo.size)
+    })
+  }
+  // 确认收货
+  private acceptOrder(id: string) {
+    acceptOrder({id}).then((res: any) => {
+      this.$message({type: 'success', message: '确认收货成功'})
       this.getUserOrder(this.pageInfo.pageNum, this.pageInfo.size)
     })
   }

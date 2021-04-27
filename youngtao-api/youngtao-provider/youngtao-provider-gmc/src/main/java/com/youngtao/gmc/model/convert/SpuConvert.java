@@ -20,6 +20,7 @@ public interface SpuConvert {
     @Mapping(target = "commentNum", ignore = true)
     @Mapping(target = "seq", ignore = true)
     @Mapping(target = "status", ignore = true)
+    @Mapping(target = "deleted", ignore = true)
     @Mapping(target = "createTime", ignore = true)
     @Mapping(target = "updateTime", ignore = true)
     SpuDO toSpu(AddProductRequest request);

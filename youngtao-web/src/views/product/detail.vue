@@ -76,7 +76,7 @@ import { getProduct } from '@/api/gmc/product'
 import { addCart } from '@/api/omc/cart'
 
 @Component
-export default class GoodsDetail extends Vue {
+export default class ProductDetail extends Vue {
   private spu: any = {}
   private skuList: any = []
   private checkedObj: any = {}  // 选中的属性

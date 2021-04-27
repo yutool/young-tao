@@ -2,9 +2,11 @@ package com.youngtao.gmc.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.youngtao.gmc.model.data.ProductData;
+import com.youngtao.gmc.model.data.SpuSkuData;
 import com.youngtao.gmc.model.request.AddProductRequest;
 import com.youngtao.gmc.model.request.ConfirmOrderRequest;
 import com.youngtao.gmc.model.request.GetMerchantProductRequest;
+import com.youngtao.gmc.model.request.SearchProductRequest;
 import com.youngtao.gmc.model.response.ConfirmOrderResponse;
 import com.youngtao.gmc.service.ProductService;
 import com.youngtao.web.support.ResponseWrapper;
@@ -24,6 +26,11 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+
+    @PostMapping("/search")
+    public PageInfo<SpuSkuData> searchProduct(@RequestBody SearchProductRequest request) {
+        return productService.searchProduct(request);
+    }
 
     @PostMapping("/add")
     public void addProduct(@RequestBody AddProductRequest request) {

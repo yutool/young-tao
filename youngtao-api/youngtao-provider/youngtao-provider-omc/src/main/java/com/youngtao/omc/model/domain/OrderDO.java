@@ -1,5 +1,6 @@
 package com.youngtao.omc.model.domain;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.youngtao.web.support.BaseEntity;
 import lombok.Data;
@@ -89,6 +90,7 @@ public class OrderDO extends BaseEntity implements Serializable {
      */
     private String paymentId;
 
-    private Boolean isDelete;
+    @TableField("is_deleted")
+    private Boolean deleted;
 
 }

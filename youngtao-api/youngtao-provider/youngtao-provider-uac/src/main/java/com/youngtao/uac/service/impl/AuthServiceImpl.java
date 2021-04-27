@@ -33,7 +33,7 @@ public class AuthServiceImpl implements AuthService {
         if (request.getType() == AuthType.USER) {
             UserInfo user = userInfoMapper.login(request.getAccount(), request.getPassword());
             if (user == null) {
-                CastException.cast("登录失败");
+                CastException.cast("用户名或密码错误");
             }
             String token = TokenUtils.generateToken(user.getUserId());
             AuthToken authToken = new AuthToken();
@@ -42,7 +42,7 @@ public class AuthServiceImpl implements AuthService {
         } else if (request.getType() == AuthType.MERCHANT) {
             MerchantInfo merchant = merchantInfoMapper.login(request.getAccount(), request.getPassword());
             if (merchant == null) {
-                CastException.cast("登录失败");
+                CastException.cast("用户名或密码错误");
             }
             String token = TokenUtils.generateToken(merchant.getMerchantId());
             AuthToken authToken = new AuthToken();

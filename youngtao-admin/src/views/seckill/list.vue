@@ -15,13 +15,26 @@
             <el-table-column label="原价" prop="oldPrice"></el-table-column>
             <el-table-column label="活动数量" prop="num"></el-table-column>
             <el-table-column label="剩余数量" prop="residue"></el-table-column>
-            <el-table-column label="活动开始时间" prop="startTime" min-width="100"></el-table-column>
-            <el-table-column label="活动结束时间" prop="endTime" min-width="100"></el-table-column>
+            <el-table-column label="活动开始时间" min-width="100">
+              <template slot-scope="scope">
+                <span>{{scope.row.startTime}}点</span>
+              </template>
+            </el-table-column>
             <el-table-column label="审核转态">
               <template slot-scope="scope">
                 <span v-if="scope.row.status == 0">审核中</span>
                 <span v-if="scope.row.status == 1">审核通过</span>
                 <span v-if="scope.row.status == 2">审核失败</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" min-width="115">
+              <template slot-scope="scope">
+                <el-button class="mr-1" type="primary" size="mini" @click="editRow(scope.row)">编辑</el-button>
+                <template>
+                  <el-popconfirm title="是否确认删除？" @onConfirm="deleteRow(scope.row)">
+                    <el-button slot="reference" type="danger" size="mini">删除</el-button>
+                  </el-popconfirm>
+                </template>
               </template>
             </el-table-column>
           </el-table>
@@ -33,13 +46,13 @@
           <img :src="scope.row.images[0]" width="40">
         </template>
       </el-table-column>
-      <el-table-column label="品牌" prop="brandName"> </el-table-column>
       <el-table-column label="名称" prop="spu" min-width="100"></el-table-column>
       <el-table-column label="总销量" prop="saleNum"></el-table-column>
       <el-table-column label="活动数量" prop="skuList.length"></el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="是否上架">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="edit(scope.row)">编辑</el-button>
+          <span v-if="scope.row.isMarketable == 0">未上架</span>
+          <span v-if="scope.row.isMarketable == 1">已上架</span>
         </template>
       </el-table-column>
     </el-table>
@@ -55,21 +68,53 @@
         :total="pageInfo.total">
       </el-pagination>
     </div>
+
+    <!-- 修改信息弹窗 -->
+    <el-dialog title="修改活动商品" :visible.sync="editDialog" width="600px">
+      <edit-form :data="editData" @confirm="confirmEdit" />
+    </el-dialog>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { getMerchantProduct } from '@/api/gsc/product';
+import { deleteById } from '@/api/gsc/sku';
+import EditForm from './components/EditForm.vue'
 
-@Component
+@Component({
+  components: {
+    EditForm
+  }
+})
 export default class GoodsList extends Vue {
   private spuStatus = ['审核通过', '审核中', '审核失败']
-  private pageInfo: any = { size: 10 }  // 初始化页面大小
+  private pageInfo: any = { pageSize: 10 }  // 初始化页面大小
   private productList: any = []
+  // 修改弹窗
+  private editData = {}
+  private editDialog = false;
+
+  // 修改数据
+  private editRow(data: any) {
+    this.editData = data;
+    this.editDialog = true;
+  }
+  private confirmEdit() {
+    this.editDialog = false;
+    this.getProduct(this.pageInfo.pageNum)
+  }
+
+  // 删除数据
+  private deleteRow(data: any) {
+    deleteById({id: data.skuId}).then((res: any) => {
+      this.$message({type: 'success', message: '删除成功'})
+      this.getProduct(this.pageInfo.pageNum)
+    })
+  }
  
   // 切换页面
-  private getProduct(page: any, size = this.pageInfo.pageSize) {
+  private getProduct(page = 1, size = this.pageInfo.pageSize) {
     getMerchantProduct({page, size}).then((res: any) => {
       const { data } = res
       this.pageInfo = data
@@ -78,15 +123,11 @@ export default class GoodsList extends Vue {
   }
   // 切换显示条数
   private handleSizeChange(size: any) {
-    this.getProduct(this.pageInfo.pageNum, size)
-  }
-  // 添加秒杀商品
-  private seckill(goods: any) {
-    this.$router.push({ name: 'addSeckill', params: {goods} })
+    this.getProduct(1, size)
   }
   
   private mounted() {
-    this.getProduct(0, this.pageInfo.size)
+    this.getProduct()
   }
 }
 </script>

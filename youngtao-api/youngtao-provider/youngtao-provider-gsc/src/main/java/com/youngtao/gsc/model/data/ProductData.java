@@ -36,8 +36,6 @@ public class ProductData {
 
     private JsonList<String> images;
 
-    private JsonList<BigDecimal> priceRange;
-
     private String detail;
 
     private JsonList<String> serve;
