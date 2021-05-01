@@ -53,4 +53,16 @@ public class AlipayController {
         }
         return "failure";
     }
+//
+//    @Autowired
+//    private RocketMQTemplate rocketMQTemplate;
+//    @Value("${order-pay-topic}")
+//    private String payTopic;
+//    @GetMapping("/notify/test/{id}")
+//    public void test(@PathVariable String id) {
+//        OrderPayMsg msg = new OrderPayMsg();
+//        msg.setPaymentId(id);
+//        msg.setPayType(1);
+//        rocketMQTemplate.convertAndSend(RocketMQUtils.withTag(payTopic, MQTagConsts.PAY_SUCCESS), msg);
+//    }
 }

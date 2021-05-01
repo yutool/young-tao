@@ -107,7 +107,7 @@ public class AlipayServiceImpl implements AlipayService {
         AlipayTradePagePayRequest payRequest = new AlipayTradePagePayRequest();
         payRequest.setBizModel(model);
         payRequest.setNotifyUrl(config.getNotifyUrl());
-        payRequest.setReturnUrl("http://localhost:9000/center/order");
+        payRequest.setReturnUrl(config.getReturnUrl());
         try {
             return alipay.pageExecute(payRequest).getBody();
         } catch (AlipayApiException e) {

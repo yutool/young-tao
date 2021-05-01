@@ -44,11 +44,11 @@
 
     <!-- 分页 -->
       <el-pagination
-        class="text-center mt-5"
+        class="text-center mt-3 mb-5"
         @current-change="searchProduct"
         @size-change="handleSizeChange"
         :current-page="pageInfo.pageNum"
-        :page-sizes="[1, 10, 20, 30, 50]"
+        :page-sizes="[10, 20, 30, 50]"
         :page-size="pageInfo.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="pageInfo.total">
@@ -68,7 +68,7 @@ import { searchProduct } from '@/api/gmc/product'
   }
 })
 export default class GoodsList extends Vue {
-  private pageInfo: any = { pageSize: 20 }
+  private pageInfo: any = { pageSize: 10 }
   private productList = []
   private menuList = []
   private menuIds = new Array(3)

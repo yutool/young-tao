@@ -32,25 +32,24 @@ public class OrderPayRecordDO extends BaseEntity implements Serializable {
     private String userId;
 
     /**
-     * 1-支付宝 2-微信 3-他人代付
-     */
-    private Integer payType;
-
-    /**
      * 支付金额
      */
     private BigDecimal money;
-
-    /**
-     * 备注
-     */
-    private String remark;
 
     /**
      * 0-待支付 1-完成 1-失败
      */
     private Integer status;
 
+    /**
+     * 1-支付宝 2-微信 3-他人代付
+     */
+    private Integer payType;
+
+    /**
+     * 支付时间
+     */
+    private Date payTime;
 
     /**
      * 支付流水号
@@ -58,8 +57,7 @@ public class OrderPayRecordDO extends BaseEntity implements Serializable {
     private String transactionId;
 
     /**
-     * 支付时间
+     * 备注
      */
-    private Date payTime;
-
+    private String remark;
 }

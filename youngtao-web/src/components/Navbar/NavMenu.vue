@@ -7,13 +7,13 @@
       <router-link class="nav-link" to="/seckill">限时快抢</router-link>
     </li>
     <li class="nav-item">
-      <router-link class="nav-link" to="/quality">精品推荐</router-link>
-    </li>
-    <li class="nav-item">
-      <router-link class="nav-link" to="/brand">品牌抢购</router-link>
+      <router-link class="nav-link disable" to="/brand">品牌抢购</router-link>
     </li>
     <li class="nav-item">
       <router-link class="nav-link" to="/live">直播</router-link>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="http://shop.ankoye.com" target="_blank">商家版</a>
     </li>
   </ul>
 </template>

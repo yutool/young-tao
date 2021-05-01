@@ -35,6 +35,7 @@
                 <img :src="item.image" alt="" width="70">
               </el-col>
               <el-col :span="15">
+                <div class="text-truncate">{{item.spu}}</div>
                 <div class="item-sku" v-for="(val, key) in item.sku" :key="key">
                   {{ key }}：{{ val }}
                 </div>

@@ -57,7 +57,7 @@ public class UserServiceImpl extends BaseService<UserInfo> implements UserServic
         UserInfo userInfo = BeanUtils.copy(request, UserInfo.class);
         userInfo.setUsername(request.getName());
         userInfo.setUserId(IdUtils.getId("user"));
-        userInfo.setAvatar("http://www.course.ankoye.com/users/1PUQx4zeqoYgHSHE/avatar_20200725022828.jpeg");
+        userInfo.setAvatar("https://avatars.githubusercontent.com/u/56569932?v=4");
         userInfoMapper.insert(userInfo);
     }
 }

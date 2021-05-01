@@ -2,6 +2,7 @@ package com.youngtao.omc.service.impl;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.youngtao.core.context.AuthContext;
 import com.youngtao.core.result.RpcResult;
 import com.youngtao.core.util.RpcResultUtils;
 import com.youngtao.gmc.api.model.dto.SkuDTO;
@@ -45,7 +46,8 @@ public class CartServiceImpl implements CartService {
     private SpuFeign spuFeign;
 
     @Override
-    public void addCart(AddCartRequest request, String userId) {
+    public void addCart(AddCartRequest request) {
+        String userId = AuthContext.get().getUserId();
         CartDO select = cartMapper.selectByUserIdAndSkuId(userId, request.getSkuId());
         if (select != null) {
             // 存在则只添加库存

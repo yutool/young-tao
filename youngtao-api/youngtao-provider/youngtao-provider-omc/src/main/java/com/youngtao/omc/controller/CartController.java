@@ -35,8 +35,7 @@ public class CartController {
 
     @PostMapping("/add")
     public void addCart(@RequestBody AddCartRequest request) {
-        AuthInfo authInfo = AuthContext.get();
-        cartService.addCart(request, authInfo.getUserId());
+        cartService.addCart(request);
     }
 
     @PostMapping("/updateNum")

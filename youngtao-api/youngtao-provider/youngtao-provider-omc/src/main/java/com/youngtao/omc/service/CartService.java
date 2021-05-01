@@ -14,7 +14,7 @@ public interface CartService {
     /**
      * 添加购物车
      */
-    void addCart(AddCartRequest request, String userId);
+    void addCart(AddCartRequest request);
 
     /**
      * 获取用户购物车

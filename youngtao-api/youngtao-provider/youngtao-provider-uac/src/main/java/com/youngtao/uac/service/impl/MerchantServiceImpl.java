@@ -37,8 +37,8 @@ public class MerchantServiceImpl extends BaseService<MerchantInfo> implements Me
         merchant.setShopName(request.getName());
         merchant.setEmail(request.getEmail());
         merchant.setPassword(request.getPassword());
-        merchant.setMerchantId(IdUtils.getId("merchant"));
-        merchant.setAvatar("http://www.course.ankoye.com/users/1PUQx4zeqoYgHSHE/avatar_20200725022828.jpeg");
+        merchant.setMerchantId(IdUtils.getId("shop"));
+        merchant.setAvatar("https://avatars.githubusercontent.com/u/56569932?v=4");
         merchantInfoMapper.insert(merchant);
     }
 }

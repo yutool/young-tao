@@ -88,6 +88,7 @@ public class OrderServiceImpl extends BaseService<OrderDO> implements OrderServi
         // 2 发送MQ，进行扣减库存
         SendResult sendResult = rocketMQTemplate.syncSend(RocketMQUtils.withTag(orderTopic, MQTagConsts.CREATE_ORDER), request);
         if (sendResult == null) {
+            redisManager.set(OmcRedisKey.ORDER_STATUS.format(paymentId), OrderStatus.FAILED);
             log.warn("createOrder syncSend fail, data = {}", request);
         }
         return paymentId;
