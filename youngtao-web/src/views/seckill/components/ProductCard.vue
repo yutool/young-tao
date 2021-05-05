@@ -35,7 +35,7 @@ export default class ProductCard extends Vue {
   @Prop() private time: any
   
   private productDetail(spuId: string, skuId: string) {
-    this.$router.push(`/market/detail/${spuId}?skuId=${skuId}`)
+    this.$router.push(`/product/detail/${spuId}?skuId=${skuId}`)
   }
 }
 </script>

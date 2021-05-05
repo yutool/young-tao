@@ -1,7 +1,7 @@
 <template>
   <div class="mb-5">
     <!-- 订单列表 -->
-    <div v-if="orderList.length" class="table-responsive-lg">
+    <div class="table-responsive-lg">
       <table class="table order-table">
         <thead class="table-head">
           <tr>
@@ -22,69 +22,75 @@
           </tr>
         </thead>
         <!-- 订单数据 -->
-        <tbody v-for="order in orderList" :key="order.orderId" >
-          <div style="height: 10px"></div>
-          <tr class="bg-light">
-            <td colspan="8">
-              <span class="mr-3">{{ order.createTime }}</span>
-              <span>订单编号：{{ order.orderId }}</span>
-              <span class="float-right">
-                <el-popconfirm v-if="order.status==0 || order.status==12 || order.status==100" 
-                    title="确认删除订单吗" @onConfirm="deleteOrder(order.orderId)">
-                  <i class="el-icon-delete pointer" slot="reference"></i>
-                </el-popconfirm>
-              </span>
-            </td>
-          </tr>
-          <tr v-for="(item, index) in order.orderItem" :key="item.skuId">
-            <td colspan="2" class="pointer" @click="$router.push(`/market/detail/${item.spuId}`)">
-              <el-col :span="9">
-                <img :src="item.image" alt="" width="70">
-              </el-col>
-              <el-col :span="15">
-                <div class="text-truncate">{{item.spu}}</div>
-                <div class="item-sku" v-for="(val, key) in item.sku" :key="key">
-                  {{ key }}：{{ val }}
+        <template v-if="orderList.length">
+          <tbody v-for="order in orderList" :key="order.orderId" >
+            <div style="height: 10px"></div>
+            <tr class="bg-light">
+              <td colspan="8">
+                <span class="mr-3">{{ order.createTime }}</span>
+                <span>订单编号：{{ order.orderId }}</span>
+                <span class="float-right">
+                  <el-popconfirm v-if="order.status==0 || order.status==12 || order.status==100" 
+                      title="确认删除订单吗" @onConfirm="deleteOrder(order.orderId)">
+                    <i class="el-icon-delete pointer" slot="reference"></i>
+                  </el-popconfirm>
+                </span>
+              </td>
+            </tr>
+            <tr v-for="(item, index) in order.orderItem" :key="item.skuId">
+              <td colspan="2" class="pointer" @click="$router.push(`/market/detail/${item.spuId}`)">
+                <el-col :span="9">
+                  <img :src="item.image" alt="" width="70">
+                </el-col>
+                <el-col :span="15">
+                  <div class="text-truncate">{{item.spu}}</div>
+                  <div class="item-sku" v-for="(val, key) in item.sku" :key="key">
+                    {{ key }}：{{ val }}
+                  </div>
+                </el-col>
+              </td>
+              <td> 
+                <div>￥{{ item.price }}</div>
+                <div class="text-black-50"> <s>￥{{ item.oldPrice }}</s> </div>
+              </td>
+              <td>
+                {{ item.num }}
+              </td>
+              <td v-if="index == 0" :rowspan="item.length">
+                <div class="pb-1 pointer" v-if="order.status==3" @click="orderRefund(order.orderId)">退款</div>
+                <div class="pb-1 pointer">投诉卖家</div>
+              </td>
+              <td v-if="index == 0" :rowspan="item.length">
+                <span class="order-price">￥{{ order.payMoney }}</span>
+              </td>
+              <td v-if="index == 0" :rowspan="item.length">
+                <div class="pb-1 text-primary">
+                  <span v-if="order.status==0">已完成</span>
+                  <span v-if="order.status==2">待付款</span>
+                  <span v-if="order.status==3">待发货</span>
+                  <span v-if="order.status==4">待收货</span>
+                  <span v-if="order.status==5">待评价</span>
+                  <span v-if="order.status==12">已退款</span>
+                  <span v-if="order.status==100">交易关闭</span>
                 </div>
-              </el-col>
-            </td>
-            <td> 
-              <div>￥{{ item.price }}</div>
-              <div class="text-black-50"> <s>￥{{ item.oldPrice }}</s> </div>
-            </td>
-            <td>
-              {{ item.num }}
-            </td>
-            <td v-if="index == 0" :rowspan="item.length">
-              <div class="pb-1 pointer" v-if="order.status==3" @click="orderRefund(order.orderId)">退款</div>
-              <div class="pb-1 pointer">投诉卖家</div>
-            </td>
-            <td v-if="index == 0" :rowspan="item.length">
-              <span class="order-price">￥{{ order.payMoney }}</span>
-            </td>
-            <td v-if="index == 0" :rowspan="item.length">
-              <div class="pb-1 text-primary">
-                <span v-if="order.status==0">已完成</span>
-                <span v-if="order.status==2">待付款</span>
-                <span v-if="order.status==3">待发货</span>
-                <span v-if="order.status==4">待收货</span>
-                <span v-if="order.status==5">待评价</span>
-                <span v-if="order.status==12">已退款</span>
-                <span v-if="order.status==100">交易关闭</span>
-              </div>
-              <div class="pb-1"><a href="#">订单详情</a></div>
-              <div><a href="#">查看物流</a></div>
-            </td>
-            <td v-if="index == 0" :rowspan="item.length">
-              <el-button v-if="order.status==2" type="danger" size="mini" @click="$router.push(`/order/pay/${order.paymentId}`)">去付款</el-button>
-              <el-button v-if="order.status==3" type="primary" size="mini">提醒发货</el-button>
-              <el-popconfirm v-if="order.status==4"  title="是否确认收货" @onConfirm="acceptOrder(order.orderId)" >
-                  <el-button slot="reference" type="primary" size="mini">确认收货</el-button>
-                </el-popconfirm>
-              <el-button v-if="order.status==0 || order.status==12 || order.status==100" type="info" size="mini" @click="$router.push(`/market/detail/${item.spuId}`)">再来一单</el-button>
-            </td>
-          </tr>
-        </tbody>
+                <div class="pb-1"><a href="#">订单详情</a></div>
+                <div><a href="#">查看物流</a></div>
+              </td>
+              <td v-if="index == 0" :rowspan="item.length">
+                <el-button v-if="order.status==2" type="danger" size="mini" @click="$router.push(`/order/pay/${order.paymentId}`)">去付款</el-button>
+                <el-button v-if="order.status==3" type="primary" size="mini">提醒发货</el-button>
+                <el-popconfirm v-if="order.status==4"  title="是否确认收货" @onConfirm="acceptOrder(order.orderId)" >
+                    <el-button slot="reference" type="primary" size="mini">确认收货</el-button>
+                  </el-popconfirm>
+                <el-button v-if="order.status==0 || order.status==12 || order.status==100" type="info" size="mini" @click="$router.push(`/market/detail/${item.spuId}`)">再来一单</el-button>
+              </td>
+            </tr>
+          </tbody>
+        </template>
+        <!-- 无订单显示 -->
+        <div v-else class="text-center pt-5">
+          你还没有购买过商品哦~~~
+        </div>
       </table>
       <!-- 分页 -->
       <el-pagination
@@ -97,11 +103,6 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="pageInfo.total">
       </el-pagination>
-    </div>
-    
-    <!-- 无订单显示 -->
-    <div v-else class="text-center pt-5">
-      你还没有购买过商品哦~~~
     </div>
   </div>
 </template>

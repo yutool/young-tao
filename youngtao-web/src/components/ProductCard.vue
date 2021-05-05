@@ -46,9 +46,11 @@ export default class ProductCard extends Vue {
     }
   }
   .product-image {
+    height: 200px;
+    overflow: hidden;
     img {
-      max-width: 100%;
-      height: 200px;
+      width: 100%;
+      height: auto;
     }
   }
 }
