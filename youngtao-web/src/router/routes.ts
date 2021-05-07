@@ -58,6 +58,7 @@ const routes = [
       { path: 'security', component: () => import('@/views/user/security.vue') },
     ]
   },
+  { path: '/forget_password', component: () => import('@/views/user/forgetPassword.vue') },
 ];
 
 export default routes

@@ -21,6 +21,12 @@
         values (#{userId}, #{username}, #{nickname}, #{avatar}, #{email}, #{telephone}, #{gender}, #{birthday}, #{points}, #{userLevel}, #{updateTime}, #{createTime})
     </insert>
 
+    <update id="resetPassword">
+        update uac_user_info
+        set password = #{password}
+        where email = #{email}
+    </update>
+
     <select id="login" resultMap="BaseResultMap">
         select * from uac_user_info
         where password = #{password}

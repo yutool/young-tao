@@ -1,44 +1,41 @@
-package com.youngtao.omc.model.request;
+package com.youngtao.omc.flow;
 
 import lombok.Data;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 /**
  * @author ankoye@qq.com
- * @date 2020/11/29
+ * @date 2021/05/04
  */
 @Data
-public class CreateOrderRequest {
-    @Valid
-    @NotEmpty
+public class CreateOrderFlowData {
+
     private List<Order> orderList;
 
-    @NotBlank
     private String shippingAddressId;
 
     private Boolean isCart;
 
+    private String userId;
+
+    private String paymentId;
+
     @Data
     public static class Order {
-        @Valid
-        @NotEmpty
         private List<OrderItem> orderItem;
 
         private String remark;
+
     }
 
     @Data
     public static class OrderItem {
+        // type == 2
+        private String menu;
 
-        @NotBlank
         private String skuId;
 
-        @Min(value = 1)
         private Integer count;
     }
 }

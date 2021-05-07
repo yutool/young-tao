@@ -1,32 +1,28 @@
-package com.youngtao.omc.model.request;
+package com.youngtao.omc.api.model.msg;
 
 import lombok.Data;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 /**
  * @author ankoye@qq.com
- * @date 2020/11/29
+ * @date 2021/05/05
  */
 @Data
-public class CreateOrderRequest {
-    @Valid
-    @NotEmpty
+public class CreateOrderMessage {
+
     private List<Order> orderList;
 
-    @NotBlank
     private String shippingAddressId;
 
     private Boolean isCart;
 
+    private String userId;
+
+    private String paymentId;
+
     @Data
     public static class Order {
-        @Valid
-        @NotEmpty
         private List<OrderItem> orderItem;
 
         private String remark;
@@ -34,11 +30,10 @@ public class CreateOrderRequest {
 
     @Data
     public static class OrderItem {
+        private String menu;
 
-        @NotBlank
         private String skuId;
 
-        @Min(value = 1)
         private Integer count;
     }
 }

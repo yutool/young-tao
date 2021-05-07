@@ -41,7 +41,7 @@
               <th scope="row">
                 <el-checkbox v-model="checkedCart[cart.skuId]" @change="handlerCart"></el-checkbox>
               </th>
-              <td @click="$router.push(`/market/detail/${cart.spuId}`)" class="pointer">
+              <td @click="$router.push(`/product/detail/${cart.spuId}`)" class="pointer">
                 <img :src="cart.image" width="60px" alt="">
                 {{ cart.spu }}
               </td>

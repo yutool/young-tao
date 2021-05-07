@@ -31,6 +31,15 @@ const routes = [
           { path: 'pending', component: () => import('@/views/order/pending.vue') },
         ]
       },
+      {
+        path: '/account',
+        component: () => import('@/views/account/index.vue'),
+        children: [
+          { path: '/', redirect: 'info'},
+          { path: 'info', component: () => import('@/views/account/info.vue') },
+          { path: 'security', component: () => import('@/views/account/security.vue') },
+        ]
+      },
     ]
   },
   { path: '/login', component: () => import('@/views/login/index.vue') },

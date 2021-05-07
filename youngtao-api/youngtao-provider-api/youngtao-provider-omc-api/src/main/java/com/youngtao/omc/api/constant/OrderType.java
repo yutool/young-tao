@@ -5,7 +5,7 @@ package com.youngtao.omc.api.constant;
  * @date 2021/03/20
  */
 public class OrderType {
-    public static final Integer NORMAL = 1;
+    public static final int NORMAL = 1;
 
-    public static final Integer SECKILL = 2;
+    public static final int SECKILL = 2;
 }

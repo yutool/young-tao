@@ -17,6 +17,16 @@ public enum RedisKey {
      */
     REGISTER_MER_CODE("youngtao:uac:email:registerMer:%s"),
 
+    /**
+     * key: toAddr
+     */
+    FORGET_PWD_USER_CODE("youngtao:uac:email:forgetPwd:%s"),
+
+    /**
+     * key: toAddr
+     */
+    FORGET_PWD_MER_CODE("youngtao:uac:email:forgetPwd:%s"),
+
     ;
 
     @Getter

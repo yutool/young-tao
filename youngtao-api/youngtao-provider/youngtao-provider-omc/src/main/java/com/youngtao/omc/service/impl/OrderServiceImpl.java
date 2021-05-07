@@ -8,10 +8,12 @@ import com.google.common.collect.Maps;
 import com.youngtao.core.context.AuthContext;
 import com.youngtao.core.exception.CastException;
 import com.youngtao.core.result.RpcResult;
+import com.youngtao.core.util.BeanUtils;
 import com.youngtao.core.util.RocketMQUtils;
 import com.youngtao.omc.api.constant.OmcRedisKey;
 import com.youngtao.omc.api.constant.OrderStatus;
 import com.youngtao.omc.api.constant.PayType;
+import com.youngtao.omc.api.model.msg.CreateOrderMessage;
 import com.youngtao.omc.api.utils.IdUtils;
 import com.youngtao.omc.common.constant.MQTagConsts;
 import com.youngtao.omc.mapper.OrderItemMapper;
@@ -79,14 +81,15 @@ public class OrderServiceImpl extends BaseService<OrderDO> implements OrderServi
 
     @Override
     public String createOrder(CreateOrderRequest request) {
-        request.setUserId(AuthContext.get().getUserId());
+        CreateOrderMessage msg = BeanUtils.copy(request, CreateOrderMessage.class);
+        msg.setUserId(AuthContext.get().getUserId());
         String paymentId = IdUtils.orderId();
-        request.setPaymentId(paymentId);
+        msg.setPaymentId(paymentId);
         // 1 设置当前订单创建中
         redisManager.set(OmcRedisKey.ORDER_STATUS.format(paymentId), OrderStatus.CREATING);
 
         // 2 发送MQ，进行扣减库存
-        SendResult sendResult = rocketMQTemplate.syncSend(RocketMQUtils.withTag(orderTopic, MQTagConsts.CREATE_ORDER), request);
+        SendResult sendResult = rocketMQTemplate.syncSend(RocketMQUtils.withTag(orderTopic, MQTagConsts.CREATE_ORDER), msg);
         if (sendResult == null) {
             redisManager.set(OmcRedisKey.ORDER_STATUS.format(paymentId), OrderStatus.FAILED);
             log.warn("createOrder syncSend fail, data = {}", request);

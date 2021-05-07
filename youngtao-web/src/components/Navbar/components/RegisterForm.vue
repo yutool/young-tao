@@ -53,6 +53,7 @@ export default class RegisterForm extends Vue {
     ],
     email: [
       { required: true, message: '请输入邮箱', trigger: 'change' },
+      { type: 'email', message: '邮箱格式有误', trigger: 'blur' },
     ],
     password: [
       { required: true, message: '请输入密码', trigger: 'change' },

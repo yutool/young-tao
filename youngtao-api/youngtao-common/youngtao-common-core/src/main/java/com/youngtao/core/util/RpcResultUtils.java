@@ -42,4 +42,9 @@ public class RpcResultUtils {
     public static void checkNotNull(RpcResult<?> result) {
         checkNotNull(result, null);
     }
+
+    public static <T> T getData(RpcResult<T> result) {
+        checkNotNull(result);
+        return result.getData();
+    }
 }

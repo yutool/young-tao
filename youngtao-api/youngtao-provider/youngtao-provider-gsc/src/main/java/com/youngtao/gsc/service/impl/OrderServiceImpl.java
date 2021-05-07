@@ -1,22 +1,20 @@
 package com.youngtao.gsc.service.impl;
 
+import com.google.common.collect.Lists;
 import com.youngtao.core.context.AuthContext;
 import com.youngtao.core.exception.CastException;
 import com.youngtao.core.result.ResponseCode;
-import com.youngtao.core.util.BeanUtils;
 import com.youngtao.core.util.RocketMQUtils;
 import com.youngtao.gmc.api.service.SpuFeign;
 import com.youngtao.gsc.api.constant.GscMQTagConsts;
-import com.youngtao.gsc.api.model.dto.GscSkuDTO;
-import com.youngtao.gsc.api.model.msg.CreateOrderMessage;
 import com.youngtao.gsc.common.constant.RedisKey;
 import com.youngtao.gsc.common.util.DateUtils;
 import com.youngtao.gsc.common.util.IdUtils;
-import com.youngtao.gsc.model.data.SkuData;
 import com.youngtao.gsc.model.request.CreateOrderRequest;
 import com.youngtao.gsc.service.OrderService;
 import com.youngtao.omc.api.constant.OmcRedisKey;
 import com.youngtao.omc.api.constant.OrderStatus;
+import com.youngtao.omc.api.model.msg.CreateOrderMessage;
 import com.youngtao.web.cache.DCacheManager;
 import com.youngtao.web.cache.RedisManager;
 import lombok.extern.slf4j.Slf4j;
@@ -50,28 +48,19 @@ public class OrderServiceImpl implements OrderService {
     public String createOrder(CreateOrderRequest request) {
         String menu = DateUtils.currentMenu();
         String skuId = request.getSkuId();
-        String paymentId = IdUtils.orderId();
-        String userId = AuthContext.get().getUserId();
         // 1 redis扣减库存
         long count = redisManager.decrement(RedisKey.SKU_COUNT_KEY.format(menu, skuId));
         if (count < 0) {
             redisManager.increment(RedisKey.SKU_COUNT_KEY.format(menu, skuId));
-            CastException.cast("库存不足");
+            CastException.cast("库存不足，或商品不存在");
         }
-
         // 2 设置订单状态
+        String paymentId = IdUtils.orderId();
         redisManager.set(OmcRedisKey.ORDER_STATUS.format(paymentId), OrderStatus.CREATING);
-
         // 3 封装并发送消息
-        SkuData skuData = redisManager.get(RedisKey.SKU_INFO_KEY.format(menu, skuId));
-        CreateOrderMessage msg = new CreateOrderMessage();
+        CreateOrderMessage msg = convertToMessage(request, menu);
+        msg.setUserId(AuthContext.get().getUserId());
         msg.setPaymentId(paymentId);
-        msg.setUserId(userId);
-        msg.setRemark(request.getRemark());
-        msg.setSkuId(skuId);
-        msg.setShippingAddressId(request.getShippingAddressId());
-        msg.setIsCart(request.getIsCart());
-        msg.setSkuDTO(BeanUtils.copy(skuData, GscSkuDTO.class));
         SendResult sendResult = rocketMQTemplate.syncSendOrderly(RocketMQUtils.withTag(orderTopic, GscMQTagConsts.CREATE_ORDER), msg, skuId);
         if (sendResult == null) {
             log.warn("prepareOrder syncSendOrderly fail, data = {}", request);
@@ -79,5 +68,21 @@ public class OrderServiceImpl implements OrderService {
             CastException.cast(ResponseCode.SERVICE_ERROR);
         }
         return paymentId;
+    }
+
+    private CreateOrderMessage convertToMessage(CreateOrderRequest request, String menu) {
+        CreateOrderMessage msg = new CreateOrderMessage();
+        msg.setIsCart(false);
+        msg.setShippingAddressId(request.getShippingAddressId());
+
+        CreateOrderMessage.OrderItem orderItem = new CreateOrderMessage.OrderItem();
+        orderItem.setMenu(menu);
+        orderItem.setSkuId(request.getSkuId());
+        orderItem.setCount(1);
+        CreateOrderMessage.Order order = new CreateOrderMessage.Order();
+        order.setOrderItem(Lists.newArrayList(orderItem));
+        order.setRemark(request.getRemark());
+        msg.setOrderList(Lists.newArrayList(order));
+        return msg;
     }
 }

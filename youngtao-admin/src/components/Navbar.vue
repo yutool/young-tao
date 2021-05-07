@@ -7,7 +7,7 @@
     <!-- 头像 -->
     <div class="ml-auto mr-5" style="height: 36px;">
       <el-dropdown class="pl-3" @command="handleCommand">
-        <el-avatar class="user-avatar pointer" :size="36">
+        <el-avatar class="user-avatar pointer" :size="36" @click.native="$router.push('/account')">
           <img v-if="JSON.stringify(merchantInfo) !== '{}'" :src="merchantInfo.avatar"/>
           <span v-else>游客</span>
         </el-avatar>

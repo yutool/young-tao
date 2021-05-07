@@ -3,6 +3,7 @@ package com.youngtao.uac.controller;
 import com.youngtao.core.context.AuthContext;
 import com.youngtao.core.context.AuthInfo;
 import com.youngtao.uac.model.request.RegisterRequest;
+import com.youngtao.uac.model.request.ResetPasswordRequest;
 import com.youngtao.uac.model.request.UpdatePasswordRequest;
 import com.youngtao.uac.model.request.UpdateUserInfoRequest;
 import com.youngtao.uac.service.UserService;
@@ -31,14 +32,18 @@ public class UserController {
 
     @RequestMapping("/update")
     public void updateUserInfo(@RequestBody UpdateUserInfoRequest request) {
-        AuthInfo authInfo = AuthContext.get();
-        userService.updateUserInfo(authInfo.getId(), request);
+        userService.updateUserInfo(request);
     }
 
     @RequestMapping("/updatePassword")
     public void updatePassword(@RequestBody UpdatePasswordRequest request) {
         AuthInfo authInfo = AuthContext.get();
         userService.updatePassword(authInfo.getId(), request);
+    }
+
+    @RequestMapping("/resetPassword")
+    public void resetPassword(@RequestBody ResetPasswordRequest request) {
+        userService.resetPassword(request);
     }
 
 }

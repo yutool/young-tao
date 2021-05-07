@@ -158,7 +158,7 @@ export default class Buy extends Vue {
       // 设置默认地址
       for (const addr of this.userAddress) {
         if (addr.isDefault) {
-          this.checkedAddress = addr.id
+          this.checkedAddress = addr.shippingAddrId
           break
         }
       }

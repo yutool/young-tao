@@ -14,7 +14,7 @@ import java.util.List;
  * @author ankoye@qq.com
  * @date 2021/03/15
  */
-@FeignClient(value = "youngtao-gsc-serve", contextId = "product", fallback = GscProductFeignFallback.class)
+@FeignClient(value = "youngtao-gsc-serve", contextId = "gsc-product", fallback = GscProductFeignFallback.class)
 public interface GscProductFeign {
 
     @GetMapping("/api/gsc/product/listBySpuId")

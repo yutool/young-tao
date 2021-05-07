@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 @RocketMQMessageListener(
         topic = "${order-topic}",
         selectorExpression = MQTagConsts.CHECK_ORDER,
-        consumerGroup = "check-order-group"
+        consumerGroup = "check-order-group-tmp"
 )
 public class CheckOrderListener implements RocketMQListener<String> {
 

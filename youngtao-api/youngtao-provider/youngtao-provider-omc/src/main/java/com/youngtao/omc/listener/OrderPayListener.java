@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 @RocketMQMessageListener(
         topic = "${order-pay-topic}",
         selectorExpression = MQTagConsts.PAY_SUCCESS,
-        consumerGroup = "order-pay-group"
+        consumerGroup = "order-pay-group-tmp"
 )
 public class OrderPayListener implements RocketMQListener<OrderPayListener.Message> {
 

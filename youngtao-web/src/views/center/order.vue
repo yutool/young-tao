@@ -38,7 +38,7 @@
               </td>
             </tr>
             <tr v-for="(item, index) in order.orderItem" :key="item.skuId">
-              <td colspan="2" class="pointer" @click="$router.push(`/market/detail/${item.spuId}`)">
+              <td colspan="2" class="pointer" @click="$router.push(`/product/detail/${item.spuId}`)">
                 <el-col :span="9">
                   <img :src="item.image" alt="" width="70">
                 </el-col>

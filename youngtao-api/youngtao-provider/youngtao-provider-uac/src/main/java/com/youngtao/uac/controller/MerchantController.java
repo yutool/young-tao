@@ -1,6 +1,8 @@
 package com.youngtao.uac.controller;
 
 import com.youngtao.uac.model.request.RegisterRequest;
+import com.youngtao.uac.model.request.UpdateMerchantInfoRequest;
+import com.youngtao.uac.model.request.UpdatePasswordRequest;
 import com.youngtao.uac.service.MerchantService;
 import com.youngtao.web.support.ResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,16 @@ public class MerchantController {
     @PostMapping("/register")
     public void register(@RequestBody RegisterRequest request) {
         merchantService.register(request);
+    }
+
+    @PostMapping("/update")
+    public void update(@RequestBody UpdateMerchantInfoRequest request) {
+        merchantService.updateInfo(request);
+    }
+
+    @PostMapping("/updatePassword")
+    public void updatePassword(@RequestBody UpdatePasswordRequest request) {
+        merchantService.updatePassword(request);
     }
 
 }

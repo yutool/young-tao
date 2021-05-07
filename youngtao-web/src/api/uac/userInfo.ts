@@ -24,3 +24,10 @@ export function register(data: any) {
   })
 }
 
+export function resetPassword(data: any) {
+  return request({
+    url: 'uac/user/resetPassword',
+    method: 'post',
+    data: JSON.stringify(data)
+  })
+}
