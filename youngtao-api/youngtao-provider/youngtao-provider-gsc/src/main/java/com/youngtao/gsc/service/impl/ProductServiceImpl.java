@@ -7,7 +7,7 @@ import com.google.common.collect.Maps;
 import com.youngtao.core.context.AuthContext;
 import com.youngtao.core.exception.CastException;
 import com.youngtao.core.result.RpcResult;
-import com.youngtao.core.util.RpcResultUtils;
+import com.youngtao.core.util.RpcUtils;
 import com.youngtao.gmc.api.model.dto.ProductDTO;
 import com.youngtao.gmc.api.model.dto.SpuDTO;
 import com.youngtao.gmc.api.service.ProductFeign;
@@ -29,7 +29,7 @@ import com.youngtao.gsc.model.response.GetSeckillPageResponse;
 import com.youngtao.gsc.service.ProductService;
 import com.youngtao.web.cache.DCacheManager;
 import com.youngtao.web.cache.RedisManager;
-import com.youngtao.web.util.PageUtils;
+import com.youngtao.web.page.PageUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -92,7 +92,7 @@ public class ProductServiceImpl implements ProductService {
         ProductData data = dCacheManager.get(CacheKey.PRODUCT_KEY.format(time, skuId), v -> {
             SkuData skuData = productManager.getSkuData(time, skuId);
             RpcResult<ProductDTO> productResult = productFeign.getBySpuId(skuData.getSkuId());
-            RpcResultUtils.checkNotNull(productResult);
+            RpcUtils.checkNotNull(productResult);
 //            ProductData productData = productConvert.toProductData(productResult.getData());
 //            productData.getSkuList().removeIf(sku -> sku.getSkuId().equals(skuId));
 //            productData.getSkuList().add(skuConvert.toProductSku(skuData));
@@ -119,7 +119,7 @@ public class ProductServiceImpl implements ProductService {
 
         SpuDTO spuDTO = dCacheManager.get(CacheKey.SPU_KEY.format(menu, skuId), v -> {
             RpcResult<SpuDTO> spuDTOResult = spuFeign.getBySkuId(skuId);
-            RpcResultUtils.checkNotNull(spuDTOResult);
+            RpcUtils.checkNotNull(spuDTOResult);
             return spuDTOResult.getData();
         }, true);
 
@@ -150,7 +150,7 @@ public class ProductServiceImpl implements ProductService {
 
         if (!CollectionUtils.isEmpty(spuIds)) {
             RpcResult<List<SpuDTO>> spuResult = spuFeign.listBySpuIds(spuIds);
-            RpcResultUtils.checkNotNull(spuResult);
+            RpcUtils.checkNotNull(spuResult);
 
             List<SpuDTO> spuDTOList = spuResult.getData();
             List<SkuDO> skuList = skuMapper.listBySpuIds(spuIds);

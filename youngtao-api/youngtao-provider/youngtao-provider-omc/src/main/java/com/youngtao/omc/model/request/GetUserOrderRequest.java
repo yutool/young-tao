@@ -1,6 +1,6 @@
 package com.youngtao.omc.model.request;
 
-import com.youngtao.web.model.PageArg;
+import com.youngtao.web.page.PageArg;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

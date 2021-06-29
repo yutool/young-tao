@@ -3,7 +3,7 @@ package com.youngtao.gsc.service.impl;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.youngtao.core.exception.CastException;
 import com.youngtao.core.result.RpcResult;
-import com.youngtao.core.util.RpcResultUtils;
+import com.youngtao.core.util.RpcUtils;
 import com.youngtao.gmc.api.model.dto.SpuSkuDTO;
 import com.youngtao.gmc.api.service.ProductFeign;
 import com.youngtao.gmc.api.service.SkuFeign;
@@ -36,7 +36,7 @@ public class SkuServiceImpl extends BaseService<SkuDO> implements SkuService {
     @Override
     public void addOrUpdate(AddOrUpdateSkuRequest request) {
         RpcResult<SpuSkuDTO> spuSkuResult = skuFeign.getSpuSku(request.getSkuId());
-        RpcResultUtils.checkNotNull(spuSkuResult);
+        RpcUtils.checkNotNull(spuSkuResult);
         SpuSkuDTO spuSku = spuSkuResult.getData();
         if (request.getNum() > spuSku.getNum()) {
             CastException.cast("活动数量不能大于总库存");

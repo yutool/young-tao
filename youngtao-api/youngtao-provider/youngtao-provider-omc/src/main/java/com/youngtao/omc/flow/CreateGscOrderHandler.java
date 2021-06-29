@@ -1,7 +1,7 @@
 package com.youngtao.omc.flow;
 
 import com.youngtao.core.result.RpcResult;
-import com.youngtao.core.util.RpcResultUtils;
+import com.youngtao.core.util.RpcUtils;
 import com.youngtao.gmc.api.model.dto.SpuDTO;
 import com.youngtao.gmc.api.service.SpuFeign;
 import com.youngtao.gsc.api.model.dto.GscSkuDTO;
@@ -43,9 +43,9 @@ public class CreateGscOrderHandler implements FlowHandler<CreateOrderFlowData, C
         CreateOrderFlowData.OrderItem orderItem = order.getOrderItem().get(0);
         // 1 获取数据
         RpcResult<SpuDTO> spuResult = spuFeign.getBySkuId(orderItem.getSkuId());
-        SpuDTO spuDTO = RpcResultUtils.getData(spuResult);
+        SpuDTO spuDTO = RpcUtils.getData(spuResult);
         RpcResult<GscSkuDTO> skuResult = gscSkuFeign.getBySkuId(orderItem.getMenu(), orderItem.getSkuId());
-        GscSkuDTO skuDTO = RpcResultUtils.getData(skuResult);
+        GscSkuDTO skuDTO = RpcUtils.getData(skuResult);
 
         // 订单信息
         String orderId = IdUtils.orderId();

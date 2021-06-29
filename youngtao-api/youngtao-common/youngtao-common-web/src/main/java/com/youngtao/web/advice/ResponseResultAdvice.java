@@ -1,6 +1,7 @@
 package com.youngtao.web.advice;
 
-import com.youngtao.core.result.ResponseResult;
+import com.youngtao.core.result.RestResult;
+import com.youngtao.core.result.Result;
 import com.youngtao.core.util.JsonUtils;
 import com.youngtao.web.support.NoWrapper;
 import com.youngtao.web.support.ResponseWrapper;
@@ -32,10 +33,10 @@ public class ResponseResultAdvice implements ResponseBodyAdvice {
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter methodParameter, MediaType mediaType, Class aClass, ServerHttpRequest request, ServerHttpResponse response) {
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
-        if (body instanceof ResponseResult) {
+        if (body instanceof Result) {
             return body;
         }
-        ResponseResult<?> result = ResponseResult.success(body);
+        Result<?> result = RestResult.success(body);
         if (body instanceof String) {
             return JsonUtils.toJson(result);
         }

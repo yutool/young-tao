@@ -1,13 +1,13 @@
 package com.youngtao.opc.model.domain;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.youngtao.web.support.BaseEntity;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.io.Serializable;
 
 /**
  * 支付记录表 实体类
@@ -15,11 +15,14 @@ import java.io.Serializable;
  * @author ankoye@qq.com
  * @date 2021/01/17
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
 @TableName("opc_order_pay_record")
-public class OrderPayRecordDO extends BaseEntity implements Serializable {
+public class OrderPayRecordDO implements Serializable {
     private static final long serialVersionUID = 113755885319857971L;
+
+    /** 自增ID */
+    @TableId(type = IdType.AUTO)
+    private Long id;
 
     /**
      * 支付id
@@ -60,4 +63,10 @@ public class OrderPayRecordDO extends BaseEntity implements Serializable {
      * 备注
      */
     private String remark;
+
+    /** 创建时间 */
+    private Date createTime;
+
+    /** 修改时间 */
+    private Date updateTime;
 }

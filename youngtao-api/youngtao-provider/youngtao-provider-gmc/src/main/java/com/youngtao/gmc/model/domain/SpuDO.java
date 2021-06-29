@@ -1,16 +1,18 @@
 package com.youngtao.gmc.model.domain;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.youngtao.core.lang.JsonList;
 import com.youngtao.core.lang.JsonMap;
-import com.youngtao.web.support.BaseEntity;
 import com.youngtao.web.typehandler.JsonListTypeHandler;
 import com.youngtao.web.typehandler.JsonMapTypeHandler;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.*;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,9 +22,12 @@ import java.util.List;
  * @since 2020/11/21
  */
 @Data
-@EqualsAndHashCode(callSuper=false)
 @TableName("gmc_spu")
-public class SpuDO extends BaseEntity implements Serializable {
+public class SpuDO implements Serializable {
+
+    /** 自增ID */
+    @TableId(type = IdType.AUTO)
+    private Long id;
 
     private String spuId;
 
@@ -127,4 +132,10 @@ public class SpuDO extends BaseEntity implements Serializable {
 
     @TableField("is_deleted")
     private Boolean deleted;
+
+    /** 创建时间 */
+    private Date createTime;
+
+    /** 修改时间 */
+    private Date updateTime;
 }

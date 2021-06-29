@@ -3,7 +3,7 @@ package com.youngtao.omc.flow;
 import com.google.common.collect.Lists;
 import com.youngtao.core.result.RpcResult;
 import com.youngtao.core.util.BigDecimals;
-import com.youngtao.core.util.RpcResultUtils;
+import com.youngtao.core.util.RpcUtils;
 import com.youngtao.gmc.api.model.dto.SkuDTO;
 import com.youngtao.gmc.api.model.dto.SpuDTO;
 import com.youngtao.gmc.api.service.SkuFeign;
@@ -54,12 +54,12 @@ public class CreateOrderHandler implements FlowHandler<CreateOrderFlowData, Crea
             }
         }
         RpcResult<List<SkuDTO>> skuListResult = skuFeign.listBySkuIds(skuIds);
-        RpcResultUtils.checkNotNull(skuListResult);
+        RpcUtils.checkNotNull(skuListResult);
         Map<String, SkuDTO> skuDTOMap = skuListResult.getData().stream().collect(Collectors.toMap(SkuDTO::getSkuId, val -> val));
         // get SpuDTO map
         Set<String> spuIds = skuListResult.getData().stream().map(SkuDTO::getSpuId).collect(Collectors.toSet());
         RpcResult<List<SpuDTO>> spuListResult = spuFeign.listBySpuIds(spuIds);
-        RpcResultUtils.checkNotNull(spuListResult);
+        RpcUtils.checkNotNull(spuListResult);
         Map<String, SpuDTO> spuDTOMap = spuListResult.getData().stream().collect(Collectors.toMap(SpuDTO::getSpuId, val -> val));
         // 将信息转为订单信息
         List<OrderItemDO> orderItemDOList = Lists.newArrayList();

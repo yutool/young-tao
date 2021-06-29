@@ -3,7 +3,7 @@ package com.youngtao.gsc.service.impl;
 import com.google.common.collect.Lists;
 import com.youngtao.core.context.AuthContext;
 import com.youngtao.core.exception.CastException;
-import com.youngtao.core.result.ResponseCode;
+import com.youngtao.core.result.RestResCode;
 import com.youngtao.core.util.RocketMQUtils;
 import com.youngtao.gmc.api.service.SpuFeign;
 import com.youngtao.gsc.api.constant.GscMQTagConsts;
@@ -65,7 +65,7 @@ public class OrderServiceImpl implements OrderService {
         if (sendResult == null) {
             log.warn("prepareOrder syncSendOrderly fail, data = {}", request);
             redisManager.increment(RedisKey.SKU_COUNT_KEY.format(menu, skuId));
-            CastException.cast(ResponseCode.SERVICE_ERROR);
+            CastException.cast(RestResCode.SERVICE_ERROR);
         }
         return paymentId;
     }

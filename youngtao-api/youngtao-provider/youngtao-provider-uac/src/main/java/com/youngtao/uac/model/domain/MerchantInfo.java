@@ -1,11 +1,12 @@
 package com.youngtao.uac.model.domain;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.youngtao.web.support.BaseEntity;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 商家信息
@@ -13,11 +14,14 @@ import java.io.Serializable;
  * @author ankoye@qq.com
  * @date 2021/03/30
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
 @TableName("uac_merchant_info")
-public class MerchantInfo extends BaseEntity implements Serializable {
+public class MerchantInfo implements Serializable {
     private static final long serialVersionUID = 428486670449283711L;
+
+    /** 自增ID */
+    @TableId(type = IdType.AUTO)
+    private Long id;
 
     /**
      * 商家ID
@@ -48,4 +52,10 @@ public class MerchantInfo extends BaseEntity implements Serializable {
      * 头像
      */
     private String avatar;
+
+    /** 创建时间 */
+    private Date createTime;
+
+    /** 修改时间 */
+    private Date updateTime;
 }

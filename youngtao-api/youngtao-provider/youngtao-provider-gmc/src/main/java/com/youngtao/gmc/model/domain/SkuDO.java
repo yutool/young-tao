@@ -1,16 +1,18 @@
 package com.youngtao.gmc.model.domain;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.youngtao.core.lang.JsonList;
 import com.youngtao.core.lang.JsonMap;
-import com.youngtao.web.support.BaseEntity;
 import com.youngtao.web.typehandler.JsonListTypeHandler;
 import com.youngtao.web.typehandler.JsonMapTypeHandler;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.*;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * 商品SKU实体类
@@ -19,10 +21,13 @@ import java.math.BigDecimal;
  * @since 2020/11/21
  */
 @Data
-@EqualsAndHashCode(callSuper=false)
 @TableName("gmc_sku")
-public class SkuDO extends BaseEntity implements Serializable {
+public class SkuDO implements Serializable {
     private static final long serialVersionUID = 227889639103151085L;
+
+    /** 自增ID */
+    @TableId(type = IdType.AUTO)
+    private Long id;
 
     private String skuId;
 
@@ -77,4 +82,10 @@ public class SkuDO extends BaseEntity implements Serializable {
      * 默认显示
      */
     private Boolean defaultShow;
+
+    /** 创建时间 */
+    private Date createTime;
+
+    /** 修改时间 */
+    private Date updateTime;
 }

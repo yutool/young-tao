@@ -1,6 +1,7 @@
 package com.youngtao.web.support;
 
-import com.youngtao.core.result.ResponseResult;
+import com.youngtao.core.result.RestResult;
+import com.youngtao.core.result.Result;
 
 /**
  * @author ankoye@qq.com
@@ -12,13 +13,13 @@ public abstract class BaseController {
      * 若不需要判断返回值，不要使用此方法
      * @param o service result
      */
-    protected <T> ResponseResult<T> handleResult(T o) {
+    protected <T> Result<T> handleResult(T o) {
         boolean flag = isSuccess(o);
-        ResponseResult<T> result;
+        Result<T> result;
         if (flag) {
-            result = ResponseResult.success(o);
+            result = RestResult.success(o);
         } else {
-            result = ResponseResult.error(o);
+            result = RestResult.error(o);
         }
         return result;
     }

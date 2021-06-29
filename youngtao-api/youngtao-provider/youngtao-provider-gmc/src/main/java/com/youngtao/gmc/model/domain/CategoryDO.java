@@ -1,11 +1,12 @@
 package com.youngtao.gmc.model.domain;
 
-import com.youngtao.web.support.BaseEntity;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 商品分类实体类
@@ -14,10 +15,13 @@ import java.io.Serializable;
  * @date 2020/11/21
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
 @TableName("gmc_category")
-public class CategoryDO extends BaseEntity implements Serializable {
+public class CategoryDO implements Serializable {
     private static final long serialVersionUID = -47219282192887378L;
+
+    /** 自增ID */
+    @TableId(type = IdType.AUTO)
+    private Long id;
 
     /**
      * 分类id
@@ -63,4 +67,10 @@ public class CategoryDO extends BaseEntity implements Serializable {
      * 排序
      */
     private Integer seq;
+
+    /** 创建时间 */
+    private Date createTime;
+
+    /** 修改时间 */
+    private Date updateTime;
 }

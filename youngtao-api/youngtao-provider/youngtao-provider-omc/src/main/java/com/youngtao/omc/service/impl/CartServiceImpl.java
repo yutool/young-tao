@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.youngtao.core.context.AuthContext;
 import com.youngtao.core.result.RpcResult;
-import com.youngtao.core.util.RpcResultUtils;
+import com.youngtao.core.util.RpcUtils;
 import com.youngtao.gmc.api.model.dto.SkuDTO;
 import com.youngtao.gmc.api.model.dto.SpuDTO;
 import com.youngtao.gmc.api.model.dto.SpuSkuDTO;
@@ -57,7 +57,7 @@ public class CartServiceImpl implements CartService {
         }
 
         RpcResult<SpuSkuDTO> skuResult = skuFeign.getSpuSku(request.getSkuId());
-        RpcResultUtils.checkNotNull(skuResult);
+        RpcUtils.checkNotNull(skuResult);
         SpuSkuDTO spuSku = skuResult.getData();
 
         CartDO cartDO = cartConvert.toCart(request);
@@ -76,11 +76,11 @@ public class CartServiceImpl implements CartService {
         // 准备数据 skuDTOMap spuDTOMap
         Set<String> skuIds = cartDOList.stream().map(CartDO::getSkuId).collect(Collectors.toSet());
         RpcResult<List<SkuDTO>> skuResult = skuFeign.listBySkuIds(skuIds);
-        RpcResultUtils.checkNotNull(skuResult);
+        RpcUtils.checkNotNull(skuResult);
         Map<String, SkuDTO> skuDTOMap = skuResult.getData().stream().collect(Collectors.toMap(SkuDTO::getSkuId, val -> val));
         Set<String> spuIds = skuResult.getData().stream().map(SkuDTO::getSpuId).collect(Collectors.toSet());
         RpcResult<List<SpuDTO>> spuResult = spuFeign.listBySpuIds(spuIds);
-        RpcResultUtils.checkNotNull(skuResult);
+        RpcUtils.checkNotNull(skuResult);
         Map<String, SpuDTO> spuDTOMap = spuResult.getData().stream().collect(Collectors.toMap(SpuDTO::getSpuId, val -> val));
 
         Map<String, CartResponse> responseMap = Maps.newHashMap();

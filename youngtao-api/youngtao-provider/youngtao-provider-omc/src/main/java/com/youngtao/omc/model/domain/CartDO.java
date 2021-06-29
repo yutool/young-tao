@@ -1,23 +1,27 @@
 package com.youngtao.omc.model.domain;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.youngtao.web.support.BaseEntity;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * 购物车，可直接存储到Redis
  * @author ankoye@qq.com
  * @date 2021/03/21
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
 @TableName("omc_cart")
-public class CartDO extends BaseEntity implements Serializable {
+public class CartDO implements Serializable {
     private static final long serialVersionUID = 519088811468850687L;
+
+    /** 自增ID */
+    @TableId(type = IdType.AUTO)
+    private Long id;
 
     /**
      * 需要对比是否降价
@@ -43,4 +47,10 @@ public class CartDO extends BaseEntity implements Serializable {
      * 数量
      */
     private Integer num;
+
+    /** 创建时间 */
+    private Date createTime;
+
+    /** 修改时间 */
+    private Date updateTime;
 }

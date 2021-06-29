@@ -1,26 +1,30 @@
 package com.youngtao.omc.model.domain;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.youngtao.core.lang.JsonMap;
-import com.youngtao.web.support.BaseEntity;
 import com.youngtao.web.typehandler.JsonMapTypeHandler;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * 订单商品实体类
  * @author ankoye@qq.com
  * @date 2020/11/29
  */
-@EqualsAndHashCode(callSuper = false)
 @Data
 @TableName("omc_order_item")
-public class OrderItemDO extends BaseEntity implements Serializable {
+public class OrderItemDO implements Serializable {
     private static final long serialVersionUID = 834445604095061529L;
+
+    /** 自增ID */
+    @TableId(type = IdType.AUTO)
+    private Long id;
 
     /**
      * 订单id
@@ -73,4 +77,9 @@ public class OrderItemDO extends BaseEntity implements Serializable {
      */
     private BigDecimal totalPrice;
 
+    /** 创建时间 */
+    private Date createTime;
+
+    /** 修改时间 */
+    private Date updateTime;
 }

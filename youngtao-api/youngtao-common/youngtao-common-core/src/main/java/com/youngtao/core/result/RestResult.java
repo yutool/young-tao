@@ -9,70 +9,66 @@ import java.util.Map;
  *
  * @author ankoye@qq.com
  */
-public class ResponseResult<T> implements Serializable {
+public class RestResult<T> extends Result<T> implements Serializable {
     private static final long serialVersionUID = 7478131510160474918L;
 
-    private Integer code;
+    private static int SUCCESS_CODE = RestResCode.SUCCESS.code();
 
-    private String message;
-
-    private T data;
-
-    public ResponseResult() {
+    public RestResult() {
     }
 
-    public ResponseResult(ResponseCode responseCode) {
-        this.setResponseCode(responseCode);
+    public RestResult(RestResCode restResCode) {
+        this.setResponseCode(restResCode);
     }
 
-    public ResponseResult(Integer code, String message) {
+    public RestResult(Integer code, String message) {
         this.code = code;
         this.message = message;
     }
 
-    public ResponseResult(Integer code, String message, T data) {
+    public RestResult(Integer code, String message, T data) {
         this.code = code;
         this.message = message;
         this.data = data;
     }
 
-    public static <T> ResponseResult<T> success() {
-        return new ResponseResult<>(ResponseCode.SUCCESS);
+    public static <T> RestResult<T> success() {
+        return new RestResult<>(RestResCode.SUCCESS);
     }
 
-    public static <T> ResponseResult<T> success(T data) {
-        ResponseResult<T> result = new ResponseResult<>(ResponseCode.SUCCESS);
+    public static <T> RestResult<T> success(T data) {
+        RestResult<T> result = new RestResult<>(RestResCode.SUCCESS);
         result.setData(data);
         return result;
     }
 
-    public static <T> ResponseResult<T> error() {
-        return new ResponseResult<>(ResponseCode.ERROR);
+    public static <T> RestResult<T> error() {
+        return new RestResult<>(RestResCode.ERROR);
     }
 
-    public static <T> ResponseResult<T> error(T data) {
-        ResponseResult<T> result = new ResponseResult<>(ResponseCode.ERROR);
+    public static <T> RestResult<T> error(T data) {
+        RestResult<T> result = new RestResult<>(RestResCode.ERROR);
         result.setData(data);
         return result;
     }
 
-    public static <T> ResponseResult<T> error(ResponseCode responseCode) {
-        return new ResponseResult<>(responseCode);
+    public static <T> RestResult<T> error(RestResCode restResCode) {
+        return new RestResult<>(restResCode);
     }
 
-    public static <T> ResponseResult<T> error(ResponseCode responseCode, T data) {
-        ResponseResult<T> result = new ResponseResult<>(responseCode);
+    public static <T> RestResult<T> error(RestResCode restResCode, T data) {
+        RestResult<T> result = new RestResult<>(restResCode);
         result.setData(data);
         return result;
     }
 
-    public static <T> ResponseResult<T> error(String errorMsg, T data) {
-        ResponseResult<T> result = new ResponseResult<>(-1, errorMsg);
+    public static <T> RestResult<T> error(String errorMsg, T data) {
+        RestResult<T> result = new RestResult<>(-1, errorMsg);
         result.setData(data);
         return result;
     }
 
-    private void setResponseCode(ResponseCode code) {
+    private void setResponseCode(RestResCode code) {
         this.code = code.code();
         this.message = code.message();
     }
@@ -105,6 +101,11 @@ public class ResponseResult<T> implements Serializable {
 
     public void setData(T data) {
         this.data = data;
+    }
+
+    @Override
+    public boolean isSuccess() {
+        return this.code == SUCCESS_CODE;
     }
 
     @Override

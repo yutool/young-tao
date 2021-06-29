@@ -8,7 +8,7 @@ import com.youngtao.core.context.AuthContext;
 import com.youngtao.core.context.AuthInfo;
 import com.youngtao.core.exception.CastException;
 import com.youngtao.core.result.RpcResult;
-import com.youngtao.core.util.RpcResultUtils;
+import com.youngtao.core.util.RpcUtils;
 import com.youngtao.gmc.api.constant.ProductType;
 import com.youngtao.gmc.common.constant.SpuConstant;
 import com.youngtao.gmc.common.util.IdUtils;
@@ -31,7 +31,7 @@ import com.youngtao.gmc.model.response.ConfirmOrderResponse;
 import com.youngtao.gmc.service.ProductService;
 import com.youngtao.gsc.api.model.dto.GscSkuDTO;
 import com.youngtao.gsc.api.service.GscProductFeign;
-import com.youngtao.web.util.PageUtils;
+import com.youngtao.web.page.PageUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -117,7 +117,7 @@ public class ProductServiceImpl implements ProductService {
         // 替换活动商品的价格
         List<String> skuIds = skuDOList.stream().map(SkuDO::getSkuId).collect(Collectors.toList());
         RpcResult<List<GscSkuDTO>> skuResult = gscProductFeign.listByIds(skuIds);
-        RpcResultUtils.checkNotNull(skuResult);
+        RpcUtils.checkNotNull(skuResult);
         for (ProductData.Sku sku : productData.getSkuList()) {
             for (GscSkuDTO dto : skuResult.getData()) {
                 if (Objects.equals(sku.getSkuId(), dto.getSkuId())) {

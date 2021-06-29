@@ -35,7 +35,7 @@ import com.youngtao.opc.api.service.AlipayFeign;
 import com.youngtao.opc.api.service.OrderPayRecordFeign;
 import com.youngtao.web.cache.RedisManager;
 import com.youngtao.web.support.BaseService;
-import com.youngtao.web.util.PageUtils;
+import com.youngtao.web.page.PageUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.rocketmq.client.producer.SendResult;

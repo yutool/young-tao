@@ -1,4 +1,4 @@
-package com.youngtao.web.util;
+package com.youngtao.web.page;
 
 import com.github.pagehelper.PageInfo;
 

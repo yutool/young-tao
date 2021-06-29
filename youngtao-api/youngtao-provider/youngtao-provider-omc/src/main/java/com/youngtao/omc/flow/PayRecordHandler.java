@@ -1,7 +1,7 @@
 package com.youngtao.omc.flow;
 
 import com.youngtao.core.result.RpcResult;
-import com.youngtao.core.util.RpcResultUtils;
+import com.youngtao.core.util.RpcUtils;
 import com.youngtao.opc.api.model.arg.AddPayRecordArg;
 import com.youngtao.opc.api.service.OrderPayRecordFeign;
 import com.youngtao.web.flow.FlowHandler;
@@ -26,6 +26,6 @@ public class PayRecordHandler implements FlowHandler<CreateOrderFlowData, Create
         addArg.setUserId(data.getUserId());
         addArg.setMoney(ctx.getPayMoney());
         RpcResult<String> paymentResult = orderPayRecordFeign.addRecord(addArg);
-        RpcResultUtils.checkNotNull(paymentResult);
+        RpcUtils.checkNotNull(paymentResult);
     }
 }

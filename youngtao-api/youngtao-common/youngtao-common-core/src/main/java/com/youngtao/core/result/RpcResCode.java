@@ -1,11 +1,9 @@
 package com.youngtao.core.result;
 
-
 /**
  * @author ankoye@qq.com
- * @date 2020/10/27
  */
-public enum ResponseCode {
+public enum RpcResCode {
 
     /* 成功状态码 */
     SUCCESS(0, "成功"),
@@ -62,7 +60,7 @@ public enum ResponseCode {
 
     private String message;
 
-    ResponseCode(Integer code, String message) {
+    RpcResCode(Integer code, String message) {
         this.code = code;
         this.message = message;
     }
@@ -76,7 +74,7 @@ public enum ResponseCode {
     }
 
     public static String getMessage(String name) {
-        for (ResponseCode item : ResponseCode.values()) {
+        for (RpcResCode item : RpcResCode.values()) {
             if (item.name().equals(name)) {
                 return item.message;
             }
@@ -85,7 +83,7 @@ public enum ResponseCode {
     }
 
     public static Integer getCode(String name) {
-        for (ResponseCode item : ResponseCode.values()) {
+        for (RpcResCode item : RpcResCode.values()) {
             if (item.name().equals(name)) {
                 return item.code;
             }
@@ -97,4 +95,5 @@ public enum ResponseCode {
     public String toString() {
         return this.name();
     }
+
 }
