@@ -8,7 +8,7 @@ import com.youngtao.gmc.api.model.dto.SkuDTO;
 import com.youngtao.gmc.api.model.dto.SpuDTO;
 import com.youngtao.gmc.api.service.SkuFeign;
 import com.youngtao.gmc.api.service.SpuFeign;
-import com.youngtao.gsc.api.service.GscSkuFeign;
+import com.youngtao.gpc.api.service.GpcSkuFeign;
 import com.youngtao.omc.api.constant.OrderStatus;
 import com.youngtao.omc.api.constant.OrderType;
 import com.youngtao.omc.api.utils.IdUtils;
@@ -38,7 +38,7 @@ public class CreateOrderHandler implements FlowHandler<CreateOrderFlowData, Crea
     @Autowired
     private SpuFeign spuFeign;
     @Autowired
-    private GscSkuFeign gscSkuFeign;
+    private GpcSkuFeign gpcSkuFeign;
 
     @Resource
     private OrderMapper orderMapper;

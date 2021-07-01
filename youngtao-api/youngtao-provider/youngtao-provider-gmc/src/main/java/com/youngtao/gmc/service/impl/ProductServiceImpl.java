@@ -29,8 +29,8 @@ import com.youngtao.gmc.model.request.GetMerchantProductRequest;
 import com.youngtao.gmc.model.request.SearchProductRequest;
 import com.youngtao.gmc.model.response.ConfirmOrderResponse;
 import com.youngtao.gmc.service.ProductService;
-import com.youngtao.gsc.api.model.dto.GscSkuDTO;
-import com.youngtao.gsc.api.service.GscProductFeign;
+import com.youngtao.gpc.api.model.dto.GpcSkuDTO;
+import com.youngtao.gpc.api.service.GpcProductFeign;
 import com.youngtao.web.page.PageUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +63,7 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private SkuConvert skuConvert;
     @Autowired
-    private GscProductFeign gscProductFeign;
+    private GpcProductFeign gpcProductFeign;
 
     @Override
     public PageInfo<SpuSkuData> searchProduct(SearchProductRequest request) {
@@ -116,10 +116,10 @@ public class ProductServiceImpl implements ProductService {
         ProductData productData = productConvert.toProductDataWithTitle(spuDO, skuDOList);
         // 替换活动商品的价格
         List<String> skuIds = skuDOList.stream().map(SkuDO::getSkuId).collect(Collectors.toList());
-        RpcResult<List<GscSkuDTO>> skuResult = gscProductFeign.listByIds(skuIds);
+        RpcResult<List<GpcSkuDTO>> skuResult = gpcProductFeign.listByIds(skuIds);
         RpcUtils.checkNotNull(skuResult);
         for (ProductData.Sku sku : productData.getSkuList()) {
-            for (GscSkuDTO dto : skuResult.getData()) {
+            for (GpcSkuDTO dto : skuResult.getData()) {
                 if (Objects.equals(sku.getSkuId(), dto.getSkuId())) {
                     sku.setPrice(dto.getPrice());
                     sku.setOldPrice(dto.getOldPrice());

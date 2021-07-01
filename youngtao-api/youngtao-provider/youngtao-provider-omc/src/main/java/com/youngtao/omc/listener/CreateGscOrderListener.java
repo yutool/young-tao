@@ -1,7 +1,7 @@
 package com.youngtao.omc.listener;
 
 import com.youngtao.core.util.BeanUtils;
-import com.youngtao.gsc.api.constant.GscMQTagConsts;
+import com.youngtao.gpc.api.constant.GpcMQTagConsts;
 import com.youngtao.omc.api.model.msg.CreateOrderMessage;
 import com.youngtao.omc.flow.CreateGscOrderFlowInvoke;
 import com.youngtao.omc.flow.CreateOrderFlowData;
@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 @RocketMQMessageListener(
         topic = "${order-topic}",
-        selectorExpression = GscMQTagConsts.CREATE_ORDER,
+        selectorExpression = GpcMQTagConsts.CREATE_ORDER,
         consumerGroup = "gsc-order-create-group-tmp",
         consumeMode = ConsumeMode.ORDERLY
 )

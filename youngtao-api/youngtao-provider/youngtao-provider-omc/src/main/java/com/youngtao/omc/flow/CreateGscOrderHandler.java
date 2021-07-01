@@ -4,8 +4,8 @@ import com.youngtao.core.result.RpcResult;
 import com.youngtao.core.util.RpcUtils;
 import com.youngtao.gmc.api.model.dto.SpuDTO;
 import com.youngtao.gmc.api.service.SpuFeign;
-import com.youngtao.gsc.api.model.dto.GscSkuDTO;
-import com.youngtao.gsc.api.service.GscSkuFeign;
+import com.youngtao.gpc.api.model.dto.GpcSkuDTO;
+import com.youngtao.gpc.api.service.GpcSkuFeign;
 import com.youngtao.omc.api.constant.OrderStatus;
 import com.youngtao.omc.api.constant.OrderType;
 import com.youngtao.omc.api.utils.IdUtils;
@@ -29,7 +29,7 @@ public class CreateGscOrderHandler implements FlowHandler<CreateOrderFlowData, C
     @Autowired
     private SpuFeign spuFeign;
     @Autowired
-    private GscSkuFeign gscSkuFeign;
+    private GpcSkuFeign gpcSkuFeign;
 
     @Resource
     private OrderMapper orderMapper;
@@ -44,8 +44,8 @@ public class CreateGscOrderHandler implements FlowHandler<CreateOrderFlowData, C
         // 1 获取数据
         RpcResult<SpuDTO> spuResult = spuFeign.getBySkuId(orderItem.getSkuId());
         SpuDTO spuDTO = RpcUtils.getData(spuResult);
-        RpcResult<GscSkuDTO> skuResult = gscSkuFeign.getBySkuId(orderItem.getMenu(), orderItem.getSkuId());
-        GscSkuDTO skuDTO = RpcUtils.getData(skuResult);
+        RpcResult<GpcSkuDTO> skuResult = gpcSkuFeign.getBySkuId(orderItem.getMenu(), orderItem.getSkuId());
+        GpcSkuDTO skuDTO = RpcUtils.getData(skuResult);
 
         // 订单信息
         String orderId = IdUtils.orderId();

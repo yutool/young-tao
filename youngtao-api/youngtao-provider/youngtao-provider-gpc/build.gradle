@@ -1,4 +1,4 @@
-description = "订单管理中心"
+description = "商品促销中心"
 
 // 使用spring boot
 apply plugin: 'org.springframework.boot'
@@ -6,11 +6,9 @@ apply plugin: 'org.springframework.boot'
 dependencies {
     compile libs['rocketmq']
     compile 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
-
-    compile project(":youngtao-provider-api:youngtao-provider-omc-api")
-    compile project(":youngtao-provider-api:youngtao-provider-opc-api")
     compile project(":youngtao-provider-api:youngtao-provider-gpc-api")
     compile project(":youngtao-provider-api:youngtao-provider-gmc-api")
+    compile project(":youngtao-provider-api:youngtao-provider-omc-api")
     compile project(":youngtao-provider-api:youngtao-provider-uac-api")
 }
 

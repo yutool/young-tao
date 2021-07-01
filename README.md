@@ -4,7 +4,7 @@
 ![Spring Cloud Hoxton.SR1](https://img.shields.io/badge/Spring%20Cloud-Hoxton.SR1-9cf.svg)
 ![Spring Boot 2](https://img.shields.io/badge/Spring%20Boot-2.2.6-blue.svg)
 ![JDK 1.8](https://img.shields.io/badge/JDK-1.8-brightgreen.svg)
-![maven](https://img.shields.io/badge/maven-3.6.1-important.svg)
+![gradle](https://img.shields.io/badge/gradle-6.7-important.svg)
 ![license](https://img.shields.io/badge/license-GPL-orange.svg)
 
 ### 项目简介
@@ -24,6 +24,37 @@
 
 ### 目录结构说明
 ```
+├─youngtao-admin----------------------------商家管理后台
+|
+├─youngtao-app------------------------------uniapp(待开发)
+|
+├─youngtao-api------------------------------系统后端
+│  │
+│  ├─youngtao-gateway-----------------------微服务网关中心
+│  │  │
+│  │  ├─youngtao-gateway-app----------------app、web网关
+│  │
+│  ├─youngtao-common------------------------微服务依赖中心
+│  │  │
+│  │  ├─youngtao-common-core----------------核心依赖
+│  │  │
+│  │  ├─youngtao-common-web-----------------web层依赖
+│  │
+│  ├─youngtao-provider----------------------微服务服务中心 - Spring Cloud版本
+│  │  │
+│  │  ├─youngtao-provider-gmc---------------商品管理中心
+│  │  │
+│  │  ├─youngtao-provider-gpc---------------商品促销中心
+│  │  │
+│  │  ├─youngtao-provider-omc---------------订单管理中心
+│  │  │
+│  │  ├─youngtao-provider-opc---------------支付管理中心
+│  │  │
+│  │  ├─youngtao-provider-uac---------------用户授权中心（待开发）
+│  │  │
+│  │  ├─youngtao-provider-umc---------------用户管理中心
+│  │
+│  ├─youngtao-provider-api------------------微服务API依赖
 ```
 
 ### 实现的功能
