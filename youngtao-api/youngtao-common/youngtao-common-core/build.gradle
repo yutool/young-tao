@@ -5,6 +5,8 @@ dependencies {
     compile libs['jackson-databind']
     compile libs['servlet-api']
     compile libs['jjwt']
+    compile 'com.github.ben-manes.caffeine:caffeine'
+
 
     implementation libs['jedis']
 }
