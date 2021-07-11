@@ -1,7 +1,7 @@
 package com.youngtao.uac.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.youngtao.uac.model.domain.UserInfo;
+import com.youngtao.uac.model.domain.UserInfoDO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -10,19 +10,19 @@ import org.apache.ibatis.annotations.Param;
  * @date 2021/03/30
  */
 @Mapper
-public interface UserInfoMapper extends BaseMapper<UserInfo> {
+public interface UserInfoMapper extends BaseMapper<UserInfoDO> {
 
     /**
      * 新增数据
      *
-     * @param userInfo 实例对象
+     * @param userInfoDO 实例对象
      * @return 影响行数
      */
-    int insert0(UserInfo userInfo);
+    int insert0(UserInfoDO userInfoDO);
 
-    UserInfo login(@Param("account") String account, @Param("password") String password);
+    UserInfoDO login(@Param("account") String account, @Param("password") String password);
 
-    UserInfo selectByEmail(String email);
+    UserInfoDO selectByEmail(String email);
 
     int resetPassword(@Param("email") String email, @Param("password") String password);
 }

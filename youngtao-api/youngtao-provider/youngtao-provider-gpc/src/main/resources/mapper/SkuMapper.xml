@@ -22,11 +22,11 @@
     </resultMap>
 
     <select id="getBySkuId" resultMap="BaseResultMap">
-        select * from gsc_sku where sku_id = #{skuId}
+        select * from gpc_sku where sku_id = #{skuId}
     </select>
 
     <select id="loadSkuToRedis" resultMap="BaseResultMap">
-        select * from gsc_sku
+        select * from gpc_sku
         where start_time <![CDATA[>=]]> #{startTime}
         and end_time <![CDATA[<=]]> #{endTime}
         and status = 1
@@ -38,13 +38,13 @@
     </select>
 
     <select id="listBySpuIds" resultMap="BaseResultMap">
-        select * from gsc_sku
+        select * from gpc_sku
         where spu_id in
         <foreach collection="spuIds" item="item" open="(" close=")" separator=",">#{item}</foreach>
     </select>
 
     <select id="getAllSpuIdByMerchant" resultType="java.lang.String">
-        select spu_id from gsc_sku
+        select spu_id from gpc_sku
         where merchant_id = #{merchantId}
         group by spu_id
     </select>

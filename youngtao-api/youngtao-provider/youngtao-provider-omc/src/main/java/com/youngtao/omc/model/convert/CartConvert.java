@@ -2,7 +2,7 @@ package com.youngtao.omc.model.convert;
 
 import com.youngtao.omc.model.data.CartData;
 import com.youngtao.omc.model.domain.CartDO;
-import com.youngtao.omc.model.request.AddCartRequest;
+import com.youngtao.omc.model.req.AddCartReq;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -23,7 +23,7 @@ public interface CartConvert {
     @Mapping(target = "spu", ignore = true)
     @Mapping(target = "updateTime", ignore = true)
     @Mapping(target = "createTime", ignore = true)
-    CartDO toCart(AddCartRequest request);
+    CartDO toCart(AddCartReq request);
 
     @Named("toCartData")
     @Mapping(target = "price", ignore = true)

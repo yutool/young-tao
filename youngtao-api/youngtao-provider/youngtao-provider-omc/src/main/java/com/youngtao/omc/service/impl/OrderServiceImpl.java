@@ -24,10 +24,10 @@ import com.youngtao.omc.model.data.OrderData;
 import com.youngtao.omc.model.data.OrderItemData;
 import com.youngtao.omc.model.domain.OrderDO;
 import com.youngtao.omc.model.domain.OrderItemDO;
-import com.youngtao.omc.model.request.CreateOrderRequest;
-import com.youngtao.omc.model.request.GetMerchantOrderRequest;
-import com.youngtao.omc.model.request.GetUserOrderRequest;
-import com.youngtao.omc.model.request.OrderRefundRequest;
+import com.youngtao.omc.model.req.CreateOrderReq;
+import com.youngtao.omc.model.req.GetMerchantOrderReq;
+import com.youngtao.omc.model.req.GetUserOrderReq;
+import com.youngtao.omc.model.req.OrderRefundReq;
 import com.youngtao.omc.service.OrderService;
 import com.youngtao.opc.api.model.arg.TradeRefundArg;
 import com.youngtao.opc.api.model.dto.AlipayTradeRefundDTO;
@@ -80,7 +80,7 @@ public class OrderServiceImpl extends BaseService<OrderDO> implements OrderServi
     private String orderTopic;
 
     @Override
-    public String createOrder(CreateOrderRequest request) {
+    public String createOrder(CreateOrderReq request) {
         CreateOrderMessage msg = BeanUtils.copy(request, CreateOrderMessage.class);
         msg.setUserId(AuthContext.get().getUserId());
         String paymentId = IdUtils.orderId();
@@ -103,7 +103,7 @@ public class OrderServiceImpl extends BaseService<OrderDO> implements OrderServi
     }
 
     @Override
-    public PageInfo<OrderData> getUserOrder(GetUserOrderRequest request) {
+    public PageInfo<OrderData> getUserOrder(GetUserOrderReq request) {
         String userId = AuthContext.get().getUserId();
         // 获取数据
         PageHelper.startPage(request.getPage(), request.getSize());
@@ -112,7 +112,7 @@ public class OrderServiceImpl extends BaseService<OrderDO> implements OrderServi
     }
 
     @Override
-    public PageInfo<OrderData> getMerchantOrder(GetMerchantOrderRequest request) {
+    public PageInfo<OrderData> getMerchantOrder(GetMerchantOrderReq request) {
         String merchantId = AuthContext.get().getMerchantId();
         // 获取数据
         PageHelper.startPage(request.getPage(), request.getSize());
@@ -144,7 +144,7 @@ public class OrderServiceImpl extends BaseService<OrderDO> implements OrderServi
     }
 
     @Override
-    public void orderRefund(OrderRefundRequest request) {
+    public void orderRefund(OrderRefundReq request) {
         // 1 查询订单
         OrderDO orderDO = orderMapper.selectOne(new QueryWrapper<OrderDO>()
                 .eq("order_id", request.getOrderId())

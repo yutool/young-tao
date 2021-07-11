@@ -10,7 +10,7 @@ import com.youngtao.gpc.api.constant.GpcMQTagConsts;
 import com.youngtao.gpc.common.constant.RedisKey;
 import com.youngtao.gpc.common.util.DateUtils;
 import com.youngtao.gpc.common.util.IdUtils;
-import com.youngtao.gpc.model.request.CreateOrderRequest;
+import com.youngtao.gpc.model.req.CreateOrderReq;
 import com.youngtao.gpc.service.OrderService;
 import com.youngtao.omc.api.constant.OmcRedisKey;
 import com.youngtao.omc.api.constant.OrderStatus;
@@ -45,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
     private String orderTopic;
 
     @Override
-    public String createOrder(CreateOrderRequest request) {
+    public String createOrder(CreateOrderReq request) {
         String menu = DateUtils.currentMenu();
         String skuId = request.getSkuId();
         // 1 redis扣减库存
@@ -70,7 +70,7 @@ public class OrderServiceImpl implements OrderService {
         return paymentId;
     }
 
-    private CreateOrderMessage convertToMessage(CreateOrderRequest request, String menu) {
+    private CreateOrderMessage convertToMessage(CreateOrderReq request, String menu) {
         CreateOrderMessage msg = new CreateOrderMessage();
         msg.setIsCart(false);
         msg.setShippingAddressId(request.getShippingAddressId());

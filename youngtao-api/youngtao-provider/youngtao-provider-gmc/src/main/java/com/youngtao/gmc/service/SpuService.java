@@ -2,7 +2,7 @@ package com.youngtao.gmc.service;
 
 import com.youngtao.core.data.DeleteArg;
 import com.youngtao.gmc.model.domain.SpuDO;
-import com.youngtao.gmc.model.request.UpdateSpuRequest;
+import com.youngtao.gmc.model.req.UpdateSpuReq;
 import com.youngtao.web.support.IService;
 
 /**
@@ -14,7 +14,7 @@ public interface SpuService extends IService<SpuDO> {
     /**
      * 更新spu
      */
-    void update(UpdateSpuRequest request);
+    void update(UpdateSpuReq request);
 
     /**
      * 删除spu

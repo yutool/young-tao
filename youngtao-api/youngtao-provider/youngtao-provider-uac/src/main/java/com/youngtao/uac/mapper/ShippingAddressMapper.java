@@ -1,6 +1,6 @@
 package com.youngtao.uac.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.youngtao.uac.model.domain.ShippingAddress;
+import com.youngtao.uac.model.domain.ShippingAddressDO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -10,17 +10,17 @@ import java.util.List;
  * @date 2021/03/30
  */
 @Mapper
-public interface ShippingAddressMapper extends BaseMapper<ShippingAddress> {
+public interface ShippingAddressMapper extends BaseMapper<ShippingAddressDO> {
 
     /**
      * 新增数据
      *
-     * @param shippingAddress 实例对象
+     * @param shippingAddressDO 实例对象
      * @return 影响行数
      */
-    int insert0(ShippingAddress shippingAddress);
+    int insert0(ShippingAddressDO shippingAddressDO);
 
-    List<ShippingAddress> selectByUserId(String userId);
+    List<ShippingAddressDO> selectByUserId(String userId);
 
     int cancelDefault(String userId);
 

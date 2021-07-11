@@ -5,10 +5,10 @@ import com.google.common.base.Preconditions;
 import com.youngtao.gpc.common.util.DateUtils;
 import com.youngtao.gpc.model.data.ProductData;
 import com.youngtao.gpc.model.data.SkuData;
-import com.youngtao.gpc.model.request.ConfirmOrderRequest;
-import com.youngtao.gpc.model.request.GetMerchantProductRequest;
-import com.youngtao.gpc.model.response.ConfirmOrderResponse;
-import com.youngtao.gpc.model.response.GetSeckillPageResponse;
+import com.youngtao.gpc.model.req.ConfirmOrderReq;
+import com.youngtao.gpc.model.req.GetMerchantProductReq;
+import com.youngtao.gpc.model.res.ConfirmOrderRes;
+import com.youngtao.gpc.model.res.GetSeckillPageRes;
 import com.youngtao.gpc.service.ProductService;
 import com.youngtao.web.support.ResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class ProductController {
     }
 
     @GetMapping("/getSeckillPage")
-    public GetSeckillPageResponse getSeckillPage() {
+    public GetSeckillPageRes getSeckillPage() {
         return productService.getSeckillPage();
     }
 
@@ -53,12 +53,12 @@ public class ProductController {
     }
 
     @PostMapping("/confirmOrder")
-    public ConfirmOrderResponse confirmOrder(@Valid @RequestBody ConfirmOrderRequest request) {
+    public ConfirmOrderRes confirmOrder(@Valid @RequestBody ConfirmOrderReq request) {
         return productService.confirmOrder(request);
     }
 
     @PostMapping("/getMerchantProduct")
-    public PageInfo<ProductData> getMerchantProduct(@RequestBody GetMerchantProductRequest request) {
+    public PageInfo<ProductData> getMerchantProduct(@RequestBody GetMerchantProductReq request) {
         return productService.getMerchantProduct(request);
     }
 

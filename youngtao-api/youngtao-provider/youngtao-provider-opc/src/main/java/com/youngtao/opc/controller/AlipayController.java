@@ -1,8 +1,8 @@
 package com.youngtao.opc.controller;
 
 import com.youngtao.opc.common.util.AlipayUtils;
-import com.youngtao.opc.model.request.AlipayAppCheckRequest;
-import com.youngtao.opc.model.request.AlipayRequest;
+import com.youngtao.opc.model.req.AlipayAppCheckReq;
+import com.youngtao.opc.model.req.AlipayReq;
 import com.youngtao.opc.service.AlipayService;
 import com.youngtao.web.support.NoWrapper;
 import com.youngtao.web.support.ResponseWrapper;
@@ -29,17 +29,17 @@ public class AlipayController {
     private AlipayUtils alipayUtils;
 
     @PostMapping("/app")
-    public String appPay(@RequestBody AlipayRequest request) {
+    public String appPay(@RequestBody AlipayReq request) {
         return alipayService.appPay(request);
     }
 
     @PostMapping("/web")
-    public String webPay(@RequestBody AlipayRequest request) {
+    public String webPay(@RequestBody AlipayReq request) {
         return alipayService.webPay(request);
     }
 
     @PostMapping("/check")
-    public boolean check(@RequestBody AlipayAppCheckRequest request) {
+    public boolean check(@RequestBody AlipayAppCheckReq request) {
         return alipayService.check(request);
     }
 

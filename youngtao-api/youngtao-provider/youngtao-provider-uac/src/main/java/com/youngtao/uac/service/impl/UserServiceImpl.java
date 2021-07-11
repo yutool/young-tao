@@ -7,11 +7,11 @@ import com.youngtao.core.util.BeanUtils;
 import com.youngtao.core.util.IdUtils;
 import com.youngtao.uac.common.constant.RedisKey;
 import com.youngtao.uac.mapper.UserInfoMapper;
-import com.youngtao.uac.model.domain.UserInfo;
-import com.youngtao.uac.model.request.RegisterRequest;
-import com.youngtao.uac.model.request.ResetPasswordRequest;
-import com.youngtao.uac.model.request.UpdatePasswordRequest;
-import com.youngtao.uac.model.request.UpdateUserInfoRequest;
+import com.youngtao.uac.model.domain.UserInfoDO;
+import com.youngtao.uac.model.req.RegisterReq;
+import com.youngtao.uac.model.req.ResetPasswordReq;
+import com.youngtao.uac.model.req.UpdatePasswordReq;
+import com.youngtao.uac.model.req.UpdateUserInfoReq;
 import com.youngtao.uac.service.UserService;
 import com.youngtao.web.cache.RedisManager;
 import com.youngtao.web.support.BaseService;
@@ -26,7 +26,7 @@ import java.util.Objects;
  * @date 2021/04/01
  */
 @Service
-public class UserServiceImpl extends BaseService<UserInfo> implements UserService {
+public class UserServiceImpl extends BaseService<UserInfoDO> implements UserService {
 
     @Resource
     private UserInfoMapper userInfoMapper;
@@ -34,42 +34,42 @@ public class UserServiceImpl extends BaseService<UserInfo> implements UserServic
     private RedisManager<String> redisManager;
 
     @Override
-public void updateUserInfo(UpdateUserInfoRequest request) {
-    UserInfo userInfo = new UserInfo();
-    userInfo.setUsername(request.getUsername());
-    userInfo.setGender(request.getGender());
-    userInfo.setBirthday(request.getBirthday());
-    userInfoMapper.update(userInfo, new QueryWrapper<UserInfo>()
+public void updateUserInfo(UpdateUserInfoReq request) {
+    UserInfoDO userInfoDO = new UserInfoDO();
+    userInfoDO.setUsername(request.getUsername());
+    userInfoDO.setGender(request.getGender());
+    userInfoDO.setBirthday(request.getBirthday());
+    userInfoMapper.update(userInfoDO, new QueryWrapper<UserInfoDO>()
         .eq("user_id", AuthContext.get().getUserId())
     );
 }
 
     @Override
-    public void updatePassword(Long id, UpdatePasswordRequest request) {
-        UserInfo userInfo = BeanUtils.copy(request, UserInfo.class);
-        userInfo.setId(id);
-        userInfoMapper.updateById(userInfo);
+    public void updatePassword(Long id, UpdatePasswordReq request) {
+        UserInfoDO userInfoDO = BeanUtils.copy(request, UserInfoDO.class);
+        userInfoDO.setId(id);
+        userInfoMapper.updateById(userInfoDO);
     }
 
     @Override
-    public void register(RegisterRequest request) {
+    public void register(RegisterReq request) {
         String code = redisManager.get(RedisKey.REGISTER_USER_CODE.format(request.getEmail()));
         if (!Objects.equals(code, request.getVerifyCode())) {
             CastException.cast("验证码错误");
         }
-        UserInfo isExist = userInfoMapper.selectByEmail(request.getEmail());
+        UserInfoDO isExist = userInfoMapper.selectByEmail(request.getEmail());
         if (isExist != null) {
             CastException.cast("邮箱已被注册");
         }
-        UserInfo userInfo = BeanUtils.copy(request, UserInfo.class);
-        userInfo.setUsername(request.getName());
-        userInfo.setUserId(IdUtils.getId("user"));
-        userInfo.setAvatar("https://avatars.githubusercontent.com/u/56569932?v=4");
-        userInfoMapper.insert(userInfo);
+        UserInfoDO userInfoDO = BeanUtils.copy(request, UserInfoDO.class);
+        userInfoDO.setUsername(request.getName());
+        userInfoDO.setUserId(IdUtils.getId("user"));
+        userInfoDO.setAvatar("https://avatars.githubusercontent.com/u/56569932?v=4");
+        userInfoMapper.insert(userInfoDO);
     }
 
     @Override
-    public void resetPassword(ResetPasswordRequest request) {
+    public void resetPassword(ResetPasswordReq request) {
         String code = redisManager.get(RedisKey.FORGET_PWD_USER_CODE.format(request.getEmail()));
         if (!Objects.equals(code, request.getVerifyCode())) {
             CastException.cast("验证码错误");

@@ -1,0 +1,73 @@
+spring:
+  # redis
+  redis:
+    host: localhost
+    password:
+  cloud:
+    # nacos 配置
+    nacos:
+      discovery:
+        server-addr: localhost:10000
+    # 网关配置
+    gateway:
+      discovery:
+        locator:
+          enabled: true # 开启从注册中心动态创建路由的功能，利用微服务名称进行路由
+      routes:
+        # 商品管理中心
+        - id: youngtao_gmc_route
+          uri: lb://youngtao-gmc-service
+          predicates:
+            - Path=/gmc/**
+          filters:
+            - StripPrefix=1
+        # 商品秒杀中心
+        - id: youngtao_gpc_route
+          uri: lb://youngtao-gpc-service
+          predicates:
+            - Path=/gpc/**
+          filters:
+            - StripPrefix=1
+        # 订单管理中心
+        - id: youngtao_omc_route
+          uri: lb://youngtao-omc-service
+          predicates:
+            - Path=/omc/**
+          filters:
+            - StripPrefix=1
+        # 订单支付中心
+        - id: youngtao_opc_route
+          uri: lb://youngtao-opc-service
+          predicates:
+            - Path=/opc/**
+          filters:
+            - StripPrefix=1
+        # 账号认证中心
+        - id: youngtao_uac_route
+          uri: lb://youngtao-uac-service
+          predicates:
+            - Path=/uac/**
+          filters:
+            - StripPrefix=1
+        # 账号管理中心
+        - id: youngtao_umc_route
+          uri: lb://youngtao-umc-service
+          predicates:
+            - Path=/umc/**
+          filters:
+            - StripPrefix=1
+
+# 不需要token的url
+youngtao:
+  skip_path:
+    - /api/oauth/login
+    - /api/**
+    - /**
+
+management:
+  auditevents:
+    enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: gateway,info,health,loggers,mappings

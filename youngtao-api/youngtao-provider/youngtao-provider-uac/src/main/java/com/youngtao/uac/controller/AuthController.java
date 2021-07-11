@@ -3,7 +3,7 @@ package com.youngtao.uac.controller;
 import com.youngtao.core.context.AuthContext;
 import com.youngtao.core.context.AuthInfo;
 import com.youngtao.uac.model.data.AuthToken;
-import com.youngtao.uac.model.request.LoginRequest;
+import com.youngtao.uac.model.req.LoginReq;
 import com.youngtao.uac.service.AuthService;
 import com.youngtao.web.support.ResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class AuthController {
     private AuthService authService;
 
     @RequestMapping("/login")
-    public AuthToken login(@RequestBody LoginRequest request) {
+    public AuthToken login(@RequestBody LoginReq request) {
         return authService.login(request);
     }
 

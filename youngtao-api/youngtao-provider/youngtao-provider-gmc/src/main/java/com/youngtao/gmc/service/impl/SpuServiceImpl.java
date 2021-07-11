@@ -8,7 +8,7 @@ import com.youngtao.gmc.mapper.SkuMapper;
 import com.youngtao.gmc.mapper.SpuMapper;
 import com.youngtao.gmc.model.domain.SkuDO;
 import com.youngtao.gmc.model.domain.SpuDO;
-import com.youngtao.gmc.model.request.UpdateSpuRequest;
+import com.youngtao.gmc.model.req.UpdateSpuReq;
 import com.youngtao.gmc.service.SpuService;
 import com.youngtao.web.support.BaseService;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ public class SpuServiceImpl extends BaseService<SpuDO> implements SpuService {
     private SkuMapper skuMapper;
 
     @Override
-    public void update(UpdateSpuRequest request) {
+    public void update(UpdateSpuReq request) {
         SpuDO spuDO = BeanUtils.copy(request, SpuDO.class);
         spuMapper.update(spuDO, new QueryWrapper<SpuDO>()
                 .eq("spu_id", request.getSpuId())

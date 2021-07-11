@@ -14,9 +14,9 @@ import java.util.List;
  * @author ankoye@qq.com
  * @date 2021/03/15
  */
-@FeignClient(value = "youngtao-gsc-serve", contextId = "gsc-product", fallback = GpcProductFeignFallback.class)
+@FeignClient(value = "youngtao-gpc-service", contextId = "gpc-product", fallback = GpcProductFeignFallback.class)
 public interface GpcProductFeign {
 
-    @GetMapping("/api/gsc/product/listBySpuId")
+    @GetMapping("/api/gpc/product/listBySpuId")
     RpcResult<List<GpcSkuDTO>> listByIds(@RequestParam("skuIds") Collection<String> id);
 }

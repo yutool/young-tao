@@ -23,11 +23,11 @@ import com.youngtao.gmc.model.domain.SkuDO;
 import com.youngtao.gmc.model.domain.SpuDO;
 import com.youngtao.gmc.model.query.UpdateSaleQuery;
 import com.youngtao.gmc.model.query.UpdateStockQuery;
-import com.youngtao.gmc.model.request.AddProductRequest;
-import com.youngtao.gmc.model.request.ConfirmOrderRequest;
-import com.youngtao.gmc.model.request.GetMerchantProductRequest;
-import com.youngtao.gmc.model.request.SearchProductRequest;
-import com.youngtao.gmc.model.response.ConfirmOrderResponse;
+import com.youngtao.gmc.model.req.AddProductReq;
+import com.youngtao.gmc.model.req.ConfirmOrderReq;
+import com.youngtao.gmc.model.req.GetMerchantProductReq;
+import com.youngtao.gmc.model.req.SearchProductReq;
+import com.youngtao.gmc.model.res.ConfirmOrderRes;
 import com.youngtao.gmc.service.ProductService;
 import com.youngtao.gpc.api.model.dto.GpcSkuDTO;
 import com.youngtao.gpc.api.service.GpcProductFeign;
@@ -66,7 +66,7 @@ public class ProductServiceImpl implements ProductService {
     private GpcProductFeign gpcProductFeign;
 
     @Override
-    public PageInfo<SpuSkuData> searchProduct(SearchProductRequest request) {
+    public PageInfo<SpuSkuData> searchProduct(SearchProductReq request) {
         PageHelper.startPage(request.getPage(), request.getSize());
         List<SpuDO> spuList = spuMapper.searchProduct(request.getCategory(), request.getSearchValue());
         List<SpuSkuData> result = Lists.newArrayList();
@@ -84,7 +84,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void addProduct(AddProductRequest request) {
+    public void addProduct(AddProductReq request) {
         AuthInfo authInfo = AuthContext.get();
         String spuId = IdUtils.productId();
         // fill sku
@@ -131,8 +131,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ConfirmOrderResponse> confirmOrder(ConfirmOrderRequest request) {
-        Map<String, Integer> countMap = request.getSkuList().stream().collect(Collectors.toMap(ConfirmOrderRequest.Data::getSkuId, ConfirmOrderRequest.Data::getCount));
+    public List<ConfirmOrderRes> confirmOrder(ConfirmOrderReq request) {
+        Map<String, Integer> countMap = request.getSkuList().stream().collect(Collectors.toMap(ConfirmOrderReq.Data::getSkuId, ConfirmOrderReq.Data::getCount));
         List<SkuDO> skuDOList = skuMapper.listBySkuIds(countMap.keySet());
 
         Map<String, List<SkuDO>> skuDOMap = Maps.newHashMap();
@@ -144,21 +144,21 @@ public class ProductServiceImpl implements ProductService {
         List<SpuDO> spuDOList = spuMapper.listBySpuIds(skuDOMap.keySet());
 
         // Processing return value
-        Map<String, ConfirmOrderResponse> responseMap = Maps.newHashMap();
+        Map<String, ConfirmOrderRes> responseMap = Maps.newHashMap();
         for (SpuDO spuDO : spuDOList) {
-            ConfirmOrderResponse response;
+            ConfirmOrderRes response;
             if (responseMap.containsKey(spuDO.getMerchantId())) {
                 response = responseMap.get(spuDO.getMerchantId());
                 response.setPostage(response.getPostage().min(spuDO.getPostage()));
             } else {
-                response = new ConfirmOrderResponse();
+                response = new ConfirmOrderRes();
                 response.setMerchantId(spuDO.getMerchantId());
                 response.setShopName(spuDO.getShopName());
                 response.setPostage(spuDO.getPostage());
                 response.setSkuList(Lists.newArrayList());
             }
             for (SkuDO skuDO : skuDOMap.get(spuDO.getSpuId())) {
-                ConfirmOrderResponse.Sku sku = new ConfirmOrderResponse.Sku();
+                ConfirmOrderRes.Sku sku = new ConfirmOrderRes.Sku();
                 sku.setSkuId(skuDO.getSkuId());
                 sku.setSpu(spuDO.getSpu());
                 sku.setSku(skuDO.getSku());
@@ -199,7 +199,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public PageInfo<ProductData> getMerchantProduct(GetMerchantProductRequest request) {
+    public PageInfo<ProductData> getMerchantProduct(GetMerchantProductReq request) {
         PageHelper.startPage(request.getPage(), request.getSize());
         List<SpuDO> spuList = spuMapper.getMerchantProduct(AuthContext.get().getMerchantId(), request.isDeleted());
         List<ProductData> productData = Lists.newArrayList();

@@ -10,7 +10,7 @@ public enum RedisKey {
     /**
      * key: menu + spuId
      */
-    SKU_INFO_KEY("youngtao:gsc:sku:info:%s_%s"),
+    SKU_INFO_KEY("youngtao:gpc:sku:info:%s_%s"),
 
     ;
 

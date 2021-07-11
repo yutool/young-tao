@@ -1,7 +1,7 @@
 package com.youngtao.gmc.model.convert;
 
 import com.youngtao.gmc.model.domain.SpuDO;
-import com.youngtao.gmc.model.request.AddProductRequest;
+import com.youngtao.gmc.model.req.AddProductReq;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -23,5 +23,5 @@ public interface SpuConvert {
     @Mapping(target = "deleted", ignore = true)
     @Mapping(target = "createTime", ignore = true)
     @Mapping(target = "updateTime", ignore = true)
-    SpuDO toSpu(AddProductRequest request);
+    SpuDO toSpu(AddProductReq request);
 }

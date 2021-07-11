@@ -10,7 +10,7 @@ import com.youngtao.gmc.api.service.SkuFeign;
 import com.youngtao.gpc.common.util.DateUtils;
 import com.youngtao.gpc.mapper.SkuMapper;
 import com.youngtao.gpc.model.domain.SkuDO;
-import com.youngtao.gpc.model.request.AddOrUpdateSkuRequest;
+import com.youngtao.gpc.model.req.AddOrUpdateSkuReq;
 import com.youngtao.gpc.service.SkuService;
 import com.youngtao.web.support.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class SkuServiceImpl extends BaseService<SkuDO> implements SkuService {
     private SkuFeign skuFeign;
 
     @Override
-    public void addOrUpdate(AddOrUpdateSkuRequest request) {
+    public void addOrUpdate(AddOrUpdateSkuReq request) {
         RpcResult<SpuSkuDTO> spuSkuResult = skuFeign.getSpuSku(request.getSkuId());
         RpcUtils.checkNotNull(spuSkuResult);
         SpuSkuDTO spuSku = spuSkuResult.getData();

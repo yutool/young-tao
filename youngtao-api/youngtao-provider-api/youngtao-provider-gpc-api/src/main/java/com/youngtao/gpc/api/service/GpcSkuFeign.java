@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
  * @author ankoye@qq.com
  * @date 2021/05/05
  */
-@FeignClient(value = "youngtao-gsc-serve", contextId = "gsc-sku", fallback = GpcSkuFeignFallback.class)
+@FeignClient(value = "youngtao-gpc-serve", contextId = "gpc-sku", fallback = GpcSkuFeignFallback.class)
 public interface GpcSkuFeign {
-    @GetMapping("/api/gsc/sku/{menu}/{skuId}")
+    @GetMapping("/api/gpc/sku/{menu}/{skuId}")
     RpcResult<GpcSkuDTO> getBySkuId(@PathVariable("menu") String menu, @PathVariable("skuId") String skuId);
 
 }

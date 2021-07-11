@@ -7,8 +7,8 @@ import com.youngtao.core.util.BeanUtils;
 import com.youngtao.uac.api.service.UserInfoFeign;
 import com.youngtao.uac.mapper.MerchantInfoMapper;
 import com.youngtao.uac.mapper.UserInfoMapper;
-import com.youngtao.uac.model.domain.MerchantInfo;
-import com.youngtao.uac.model.domain.UserInfo;
+import com.youngtao.uac.model.domain.MerchantInfoDO;
+import com.youngtao.uac.model.domain.UserInfoDO;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -31,12 +31,12 @@ public class UserInfoFeignClient implements UserInfoFeign {
 
         AuthInfo authInfo = null;
         if (userId.startsWith("user")) {
-            UserInfo userInfo = userInfoMapper.selectOne(new QueryWrapper<UserInfo>()
+            UserInfoDO userInfoDO = userInfoMapper.selectOne(new QueryWrapper<UserInfoDO>()
                     .eq("user_id", userId)
             );
-            authInfo = BeanUtils.copy(userInfo, AuthInfo.class);
+            authInfo = BeanUtils.copy(userInfoDO, AuthInfo.class);
         } else {
-            MerchantInfo userInfo = merchantInfoMapper.selectOne(new QueryWrapper<MerchantInfo>()
+            MerchantInfoDO userInfo = merchantInfoMapper.selectOne(new QueryWrapper<MerchantInfoDO>()
                     .eq("merchant_id", userId)
             );
             authInfo = BeanUtils.copy(userInfo, AuthInfo.class);

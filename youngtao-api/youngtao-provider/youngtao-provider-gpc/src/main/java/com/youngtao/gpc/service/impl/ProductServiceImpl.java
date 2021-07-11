@@ -22,10 +22,10 @@ import com.youngtao.gpc.model.convert.SkuConvert;
 import com.youngtao.gpc.model.data.ProductData;
 import com.youngtao.gpc.model.data.SkuData;
 import com.youngtao.gpc.model.domain.SkuDO;
-import com.youngtao.gpc.model.request.ConfirmOrderRequest;
-import com.youngtao.gpc.model.request.GetMerchantProductRequest;
-import com.youngtao.gpc.model.response.ConfirmOrderResponse;
-import com.youngtao.gpc.model.response.GetSeckillPageResponse;
+import com.youngtao.gpc.model.req.ConfirmOrderReq;
+import com.youngtao.gpc.model.req.GetMerchantProductReq;
+import com.youngtao.gpc.model.res.ConfirmOrderRes;
+import com.youngtao.gpc.model.res.GetSeckillPageRes;
 import com.youngtao.gpc.service.ProductService;
 import com.youngtao.web.cache.DCacheManager;
 import com.youngtao.web.cache.RedisManager;
@@ -68,8 +68,8 @@ public class ProductServiceImpl implements ProductService {
     private SkuMapper skuMapper;
 
     @Override
-    public GetSeckillPageResponse getSeckillPage() {
-        GetSeckillPageResponse response = new GetSeckillPageResponse();
+    public GetSeckillPageRes getSeckillPage() {
+        GetSeckillPageRes response = new GetSeckillPageRes();
         response.setCurrentTime(new Date());
         Set<SkuData> skuDataSet = listByTime(DateUtils.currentMenu(), 1, 10);
         response.setSkuList(skuDataSet);
@@ -108,7 +108,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ConfirmOrderResponse confirmOrder(ConfirmOrderRequest request) {
+    public ConfirmOrderRes confirmOrder(ConfirmOrderReq request) {
         String menu = DateUtils.currentMenu();
         String skuId = request.getSkuId();
         // 判断是否还有库存
@@ -123,13 +123,13 @@ public class ProductServiceImpl implements ProductService {
             return spuDTOResult.getData();
         }, true);
 
-        ConfirmOrderResponse response = new ConfirmOrderResponse();
+        ConfirmOrderRes response = new ConfirmOrderRes();
         response.setMerchantId(spuDTO.getMerchantId());
         response.setShopName(spuDTO.getShopName());
         response.setPostage(BigDecimal.ZERO);
         // 获取sku
         SkuData skuData = redisManager.get(RedisKey.SKU_INFO_KEY.format(menu, skuId));
-        ConfirmOrderResponse.Sku sku = new ConfirmOrderResponse.Sku();
+        ConfirmOrderRes.Sku sku = new ConfirmOrderRes.Sku();
         sku.setSkuId(skuId);
         sku.setSpu(spuDTO.getSpu());
         sku.setSku(skuData.getSku());
@@ -142,7 +142,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public PageInfo<ProductData> getMerchantProduct(GetMerchantProductRequest request) {
+    public PageInfo<ProductData> getMerchantProduct(GetMerchantProductReq request) {
         // 获取数据
         PageHelper.startPage(request.getPage(), request.getSize());
         List<String> spuIds = skuMapper.getAllSpuIdByMerchant(AuthContext.get().getMerchantId());

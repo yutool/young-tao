@@ -14,9 +14,9 @@ import com.youngtao.omc.mapper.CartMapper;
 import com.youngtao.omc.model.convert.CartConvert;
 import com.youngtao.omc.model.data.CartData;
 import com.youngtao.omc.model.domain.CartDO;
-import com.youngtao.omc.model.request.AddCartRequest;
-import com.youngtao.omc.model.request.UpdateNumRequest;
-import com.youngtao.omc.model.response.CartResponse;
+import com.youngtao.omc.model.req.AddCartReq;
+import com.youngtao.omc.model.req.UpdateNumReq;
+import com.youngtao.omc.model.res.CartRes;
 import com.youngtao.omc.service.CartService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +46,7 @@ public class CartServiceImpl implements CartService {
     private SpuFeign spuFeign;
 
     @Override
-    public void addCart(AddCartRequest request) {
+    public void addCart(AddCartReq request) {
         String userId = AuthContext.get().getUserId();
         CartDO select = cartMapper.selectByUserIdAndSkuId(userId, request.getSkuId());
         if (select != null) {
@@ -68,7 +68,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public List<CartResponse> listByUserId(String userId) {
+    public List<CartRes> listByUserId(String userId) {
         List<CartDO> cartDOList = cartMapper.listByUserId(userId);
         if (cartDOList.isEmpty()) {
             return Lists.newArrayList();
@@ -83,7 +83,7 @@ public class CartServiceImpl implements CartService {
         RpcUtils.checkNotNull(skuResult);
         Map<String, SpuDTO> spuDTOMap = spuResult.getData().stream().collect(Collectors.toMap(SpuDTO::getSpuId, val -> val));
 
-        Map<String, CartResponse> responseMap = Maps.newHashMap();
+        Map<String, CartRes> responseMap = Maps.newHashMap();
         List<CartData> result = cartConvert.toCartData(cartDOList);
         for (CartData cartData : result) {
             // 转换数据
@@ -103,20 +103,20 @@ public class CartServiceImpl implements CartService {
             cartData.setImage(skuDTO.getImages().get(0));
             cartData.setPrice(skuDTO.getPrice());
             // 封装到对应商家下面
-            CartResponse cartResponse = responseMap.get(spuDTO.getMerchantId());
-            if (cartResponse == null) {
-                cartResponse = new CartResponse();
-                cartResponse.setMerchantId(spuDTO.getMerchantId());
-                cartResponse.setShopName(spuDTO.getShopName());
-                responseMap.put(spuDTO.getMerchantId(), cartResponse);
+            CartRes cartRes = responseMap.get(spuDTO.getMerchantId());
+            if (cartRes == null) {
+                cartRes = new CartRes();
+                cartRes.setMerchantId(spuDTO.getMerchantId());
+                cartRes.setShopName(spuDTO.getShopName());
+                responseMap.put(spuDTO.getMerchantId(), cartRes);
             }
-            cartResponse.getSkuList().add(cartData);
+            cartRes.getSkuList().add(cartData);
         }
         return Lists.newArrayList(responseMap.values());
     }
 
     @Override
-    public void updateNum(UpdateNumRequest request) {
+    public void updateNum(UpdateNumReq request) {
         cartMapper.updateNum(request.getId(), request.getNum());
     }
 

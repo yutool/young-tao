@@ -4,7 +4,7 @@ import com.youngtao.core.context.AuthContext;
 import com.youngtao.core.context.AuthInfo;
 import com.youngtao.core.data.IdArg;
 import com.youngtao.uac.model.data.ShippingAddressData;
-import com.youngtao.uac.model.request.AddShippingAddressRequest;
+import com.youngtao.uac.model.req.AddShippingAddressReq;
 import com.youngtao.uac.service.ShippingAddressService;
 import com.youngtao.web.support.ResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class ShippingAddressController {
     }
 
     @PostMapping("/addOrUpdate")
-    public void addOrUpdateAddress(@RequestBody AddShippingAddressRequest request) {
+    public void addOrUpdateAddress(@RequestBody AddShippingAddressReq request) {
         AuthInfo authInfo = AuthContext.get();
         shippingAddressService.addOrUpdateAddress(request, authInfo.getUserId());
     }

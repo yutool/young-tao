@@ -99,8 +99,8 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { Getter } from 'vuex-class'
 import { createOrder, queryStatus } from '@/api/omc/order'
-import { gscCreateOrder } from '@/api/gsc/order'
-import { gscConfirmOrder } from '@/api/gsc/product'
+import { gscCreateOrder } from '@/api/gpc/order'
+import { gscConfirmOrder } from '@/api/gpc/product'
 import { confirmOrder } from '@/api/gmc/product'
 import { getUserAddress } from '@/api/uac/address'
 
@@ -130,7 +130,7 @@ export default class Buy extends Vue {
         this.calculate()
       })
     } else {
-      gscConfirmOrder({skuId: this.currentOrder.skuList[0].skuId}).then((res) => {
+      gscConfirmOrder({skuId: this.currentOrder.skuList[0].skuId}).then((res: any) => {
         const merchant = res.data
         this.orderList = [merchant]
         this.calculate()

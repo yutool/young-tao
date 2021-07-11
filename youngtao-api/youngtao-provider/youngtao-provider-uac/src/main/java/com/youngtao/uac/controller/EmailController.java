@@ -6,9 +6,9 @@ import com.youngtao.core.exception.CastException;
 import com.youngtao.uac.common.constant.RedisKey;
 import com.youngtao.uac.mapper.MerchantInfoMapper;
 import com.youngtao.uac.mapper.UserInfoMapper;
-import com.youngtao.uac.model.domain.MerchantInfo;
-import com.youngtao.uac.model.domain.UserInfo;
-import com.youngtao.uac.model.request.EmailRequest;
+import com.youngtao.uac.model.domain.MerchantInfoDO;
+import com.youngtao.uac.model.domain.UserInfoDO;
+import com.youngtao.uac.model.req.EmailReq;
 import com.youngtao.uac.service.impl.EmailService;
 import com.youngtao.web.cache.RedisManager;
 import com.youngtao.web.support.ResponseWrapper;
@@ -40,22 +40,22 @@ public class EmailController {
     private MerchantInfoMapper merchantInfoMapper;
 
     @PostMapping("/register")
-    public void sendRegisterCode(@RequestBody EmailRequest request) {
+    public void sendRegisterCode(@RequestBody EmailReq request) {
         String key = null;
         if (request.getType() == AuthType.USER) {
             key = RedisKey.REGISTER_USER_CODE.format(request.getToAddr());
-            UserInfo userInfo = userInfoMapper.selectOne(new QueryWrapper<UserInfo>()
+            UserInfoDO userInfoDO = userInfoMapper.selectOne(new QueryWrapper<UserInfoDO>()
                     .eq("email", request.getToAddr())
             );
-            if (userInfo != null) {
+            if (userInfoDO != null) {
                 CastException.cast("该邮箱已被注册");
             }
         } else if (request.getType() == AuthType.MERCHANT) {
             key = RedisKey.REGISTER_MER_CODE.format(request.getToAddr());
-            MerchantInfo merchantInfo = merchantInfoMapper.selectOne(new QueryWrapper<MerchantInfo>()
+            MerchantInfoDO merchantInfoDO = merchantInfoMapper.selectOne(new QueryWrapper<MerchantInfoDO>()
                     .eq("email", request.getToAddr())
             );
-            if (merchantInfo != null) {
+            if (merchantInfoDO != null) {
                 CastException.cast("该邮箱已被注册");
             }
         } else {
@@ -67,22 +67,22 @@ public class EmailController {
     }
 
     @PostMapping("/forgetPassword")
-    public void sendForgetPasswordCode(@RequestBody EmailRequest request) {
+    public void sendForgetPasswordCode(@RequestBody EmailReq request) {
         String key = null;
         if (request.getType() == AuthType.USER) {
             key = RedisKey.FORGET_PWD_USER_CODE.format(request.getToAddr());
-            UserInfo userInfo = userInfoMapper.selectOne(new QueryWrapper<UserInfo>()
+            UserInfoDO userInfoDO = userInfoMapper.selectOne(new QueryWrapper<UserInfoDO>()
                     .eq("email", request.getToAddr())
             );
-            if (userInfo == null) {
+            if (userInfoDO == null) {
                 CastException.cast("该邮箱未注册");
             }
         } else if (request.getType() == AuthType.MERCHANT) {
             key = RedisKey.FORGET_PWD_MER_CODE.format(request.getToAddr());
-            MerchantInfo merchantInfo = merchantInfoMapper.selectOne(new QueryWrapper<MerchantInfo>()
+            MerchantInfoDO merchantInfoDO = merchantInfoMapper.selectOne(new QueryWrapper<MerchantInfoDO>()
                     .eq("email", request.getToAddr())
             );
-            if (merchantInfo == null) {
+            if (merchantInfoDO == null) {
                 CastException.cast("该邮箱未注册");
             }
         } else {

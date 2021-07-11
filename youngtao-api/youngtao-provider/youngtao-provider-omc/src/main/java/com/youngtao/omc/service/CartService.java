@@ -1,8 +1,8 @@
 package com.youngtao.omc.service;
 
-import com.youngtao.omc.model.request.AddCartRequest;
-import com.youngtao.omc.model.request.UpdateNumRequest;
-import com.youngtao.omc.model.response.CartResponse;
+import com.youngtao.omc.model.req.AddCartReq;
+import com.youngtao.omc.model.req.UpdateNumReq;
+import com.youngtao.omc.model.res.CartRes;
 
 import java.util.List;
 
@@ -14,19 +14,19 @@ public interface CartService {
     /**
      * 添加购物车
      */
-    void addCart(AddCartRequest request);
+    void addCart(AddCartReq request);
 
     /**
      * 获取用户购物车
      * @param userId userId
      */
-    List<CartResponse> listByUserId(String userId);
+    List<CartRes> listByUserId(String userId);
 
     /**
      * 更新数量
      * @param request
      */
-    void updateNum(UpdateNumRequest request);
+    void updateNum(UpdateNumReq request);
 
     /**
      * 删除购物车

@@ -7,9 +7,9 @@ import com.youngtao.core.util.TokenUtils;
 import com.youngtao.uac.mapper.MerchantInfoMapper;
 import com.youngtao.uac.mapper.UserInfoMapper;
 import com.youngtao.uac.model.data.AuthToken;
-import com.youngtao.uac.model.domain.MerchantInfo;
-import com.youngtao.uac.model.domain.UserInfo;
-import com.youngtao.uac.model.request.LoginRequest;
+import com.youngtao.uac.model.domain.MerchantInfoDO;
+import com.youngtao.uac.model.domain.UserInfoDO;
+import com.youngtao.uac.model.req.LoginReq;
 import com.youngtao.uac.service.AuthService;
 import org.springframework.stereotype.Service;
 
@@ -29,9 +29,9 @@ public class AuthServiceImpl implements AuthService {
     private MerchantInfoMapper merchantInfoMapper;
 
     @Override
-    public AuthToken login(LoginRequest request) {
+    public AuthToken login(LoginReq request) {
         if (request.getType() == AuthType.USER) {
-            UserInfo user = userInfoMapper.login(request.getAccount(), request.getPassword());
+            UserInfoDO user = userInfoMapper.login(request.getAccount(), request.getPassword());
             if (user == null) {
                 CastException.cast("用户名或密码错误");
             }
@@ -40,7 +40,7 @@ public class AuthServiceImpl implements AuthService {
             authToken.setAccessToken(token);
             return authToken;
         } else if (request.getType() == AuthType.MERCHANT) {
-            MerchantInfo merchant = merchantInfoMapper.login(request.getAccount(), request.getPassword());
+            MerchantInfoDO merchant = merchantInfoMapper.login(request.getAccount(), request.getPassword());
             if (merchant == null) {
                 CastException.cast("用户名或密码错误");
             }
@@ -55,8 +55,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public UserInfo getById(String userId) {
-        return userInfoMapper.selectOne(new QueryWrapper<UserInfo>()
+    public UserInfoDO getById(String userId) {
+        return userInfoMapper.selectOne(new QueryWrapper<UserInfoDO>()
                 .eq("user_id", userId)
         );
     }

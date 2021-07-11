@@ -6,10 +6,10 @@ import com.youngtao.core.exception.CastException;
 import com.youngtao.core.util.IdUtils;
 import com.youngtao.uac.common.constant.RedisKey;
 import com.youngtao.uac.mapper.MerchantInfoMapper;
-import com.youngtao.uac.model.domain.MerchantInfo;
-import com.youngtao.uac.model.request.RegisterRequest;
-import com.youngtao.uac.model.request.UpdateMerchantInfoRequest;
-import com.youngtao.uac.model.request.UpdatePasswordRequest;
+import com.youngtao.uac.model.domain.MerchantInfoDO;
+import com.youngtao.uac.model.req.RegisterReq;
+import com.youngtao.uac.model.req.UpdateMerchantInfoReq;
+import com.youngtao.uac.model.req.UpdatePasswordReq;
 import com.youngtao.uac.service.MerchantService;
 import com.youngtao.web.cache.RedisManager;
 import com.youngtao.web.support.BaseService;
@@ -24,7 +24,7 @@ import java.util.Objects;
  * @date 2021/04/17
  */
 @Service
-public class MerchantServiceImpl extends BaseService<MerchantInfo> implements MerchantService {
+public class MerchantServiceImpl extends BaseService<MerchantInfoDO> implements MerchantService {
 
     @Autowired
     private RedisManager<String> redisManager;
@@ -32,12 +32,12 @@ public class MerchantServiceImpl extends BaseService<MerchantInfo> implements Me
     private MerchantInfoMapper merchantInfoMapper;
 
     @Override
-    public void register(RegisterRequest request) {
+    public void register(RegisterReq request) {
         String code = redisManager.get(RedisKey.REGISTER_MER_CODE.format(request.getEmail()));
         if (!Objects.equals(code, request.getVerifyCode())) {
             CastException.cast("验证码错误");
         }
-        MerchantInfo merchant = new MerchantInfo();
+        MerchantInfoDO merchant = new MerchantInfoDO();
         merchant.setShopName(request.getName());
         merchant.setEmail(request.getEmail());
         merchant.setPassword(request.getPassword());
@@ -47,22 +47,22 @@ public class MerchantServiceImpl extends BaseService<MerchantInfo> implements Me
     }
 
     @Override
-    public void updateInfo(UpdateMerchantInfoRequest request) {
-        MerchantInfo merchantInfo = new MerchantInfo(){{
+    public void updateInfo(UpdateMerchantInfoReq request) {
+        MerchantInfoDO merchantInfoDO = new MerchantInfoDO(){{
            setShopName(request.getShopName());
         }};
-        merchantInfoMapper.update(merchantInfo, new UpdateWrapper<MerchantInfo>()
+        merchantInfoMapper.update(merchantInfoDO, new UpdateWrapper<MerchantInfoDO>()
             .eq("merchant_id", AuthContext.get().getMerchantId())
         );
         // 更新所有被 冗余的表
     }
 
     @Override
-    public void updatePassword(UpdatePasswordRequest request) {
-        MerchantInfo merchantInfo = new MerchantInfo(){{
+    public void updatePassword(UpdatePasswordReq request) {
+        MerchantInfoDO merchantInfoDO = new MerchantInfoDO(){{
             setPassword(request.getPassword());
         }};
-        merchantInfoMapper.update(merchantInfo, new UpdateWrapper<MerchantInfo>()
+        merchantInfoMapper.update(merchantInfoDO, new UpdateWrapper<MerchantInfoDO>()
                 .eq("merchant_id", AuthContext.get().getMerchantId())
         );
     }

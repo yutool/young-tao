@@ -1,7 +1,7 @@
 package com.youngtao.gpc.service;
 
 import com.youngtao.gpc.model.domain.SkuDO;
-import com.youngtao.gpc.model.request.AddOrUpdateSkuRequest;
+import com.youngtao.gpc.model.req.AddOrUpdateSkuReq;
 import com.youngtao.web.support.IService;
 
 /**
@@ -12,7 +12,7 @@ public interface SkuService extends IService<SkuDO> {
     /**
      * 新增或修改
      */
-    void addOrUpdate(AddOrUpdateSkuRequest request);
+    void addOrUpdate(AddOrUpdateSkuReq request);
 
     /**
      * 删除数据

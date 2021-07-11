@@ -3,10 +3,10 @@ package com.youngtao.omc.service;
 import com.github.pagehelper.PageInfo;
 import com.youngtao.omc.model.data.OrderData;
 import com.youngtao.omc.model.domain.OrderDO;
-import com.youngtao.omc.model.request.CreateOrderRequest;
-import com.youngtao.omc.model.request.GetMerchantOrderRequest;
-import com.youngtao.omc.model.request.GetUserOrderRequest;
-import com.youngtao.omc.model.request.OrderRefundRequest;
+import com.youngtao.omc.model.req.CreateOrderReq;
+import com.youngtao.omc.model.req.GetMerchantOrderReq;
+import com.youngtao.omc.model.req.GetUserOrderReq;
+import com.youngtao.omc.model.req.OrderRefundReq;
 import com.youngtao.web.support.IService;
 
 /**
@@ -20,25 +20,25 @@ public interface OrderService extends IService<OrderDO> {
      * @param request request
      * @return boolean
      */
-    String createOrder(CreateOrderRequest request);
+    String createOrder(CreateOrderReq request);
 
     Integer queryStatus(String paymentId);
 
     /**
      * 获取用户订单
      */
-    PageInfo<OrderData> getUserOrder(GetUserOrderRequest request);
+    PageInfo<OrderData> getUserOrder(GetUserOrderReq request);
 
     /**
      * 获取商家订单
      */
-    PageInfo<OrderData> getMerchantOrder(GetMerchantOrderRequest request);
+    PageInfo<OrderData> getMerchantOrder(GetMerchantOrderReq request);
 
     /**
      * 订单退款
      * @param request
      */
-    void orderRefund(OrderRefundRequest request);
+    void orderRefund(OrderRefundReq request);
 
     /**
      * 删除订单

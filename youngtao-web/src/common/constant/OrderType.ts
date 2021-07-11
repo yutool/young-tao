@@ -4,12 +4,12 @@
 const NORMAL = 1;
 
 /**
- * 待付款
+ * 促销
  */
-const SECKILL = 2;
+const PROMO = 2;
 
 
 export default {
 	NORMAL,
-	SECKILL
+	PROMO
 }

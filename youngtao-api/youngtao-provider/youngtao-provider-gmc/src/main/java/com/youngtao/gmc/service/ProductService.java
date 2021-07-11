@@ -4,11 +4,11 @@ import com.github.pagehelper.PageInfo;
 import com.youngtao.gmc.model.data.ProductData;
 import com.youngtao.gmc.model.data.SpuSkuData;
 import com.youngtao.gmc.model.query.UpdateStockQuery;
-import com.youngtao.gmc.model.request.AddProductRequest;
-import com.youngtao.gmc.model.request.ConfirmOrderRequest;
-import com.youngtao.gmc.model.request.GetMerchantProductRequest;
-import com.youngtao.gmc.model.request.SearchProductRequest;
-import com.youngtao.gmc.model.response.ConfirmOrderResponse;
+import com.youngtao.gmc.model.req.AddProductReq;
+import com.youngtao.gmc.model.req.ConfirmOrderReq;
+import com.youngtao.gmc.model.req.GetMerchantProductReq;
+import com.youngtao.gmc.model.req.SearchProductReq;
+import com.youngtao.gmc.model.res.ConfirmOrderRes;
 
 import java.util.List;
 
@@ -21,14 +21,14 @@ public interface ProductService {
     /**
      * 搜索商品，暂时这样吧
      */
-    PageInfo<SpuSkuData> searchProduct(SearchProductRequest request);
+    PageInfo<SpuSkuData> searchProduct(SearchProductReq request);
 
     /**
      * 添加商品
      * @param request product
      * @return bool
      */
-    void addProduct(AddProductRequest request);
+    void addProduct(AddProductReq request);
 
     /**
      * 根据SpuId获取商品
@@ -42,7 +42,7 @@ public interface ProductService {
      * @param request skuIds
      * @return list
      */
-    List<ConfirmOrderResponse> confirmOrder(ConfirmOrderRequest request);
+    List<ConfirmOrderRes> confirmOrder(ConfirmOrderReq request);
 
     /**
      * 支付成功
@@ -53,7 +53,7 @@ public interface ProductService {
     /**
      * 获取商家订单
      */
-    PageInfo<ProductData> getMerchantProduct(GetMerchantProductRequest request);
+    PageInfo<ProductData> getMerchantProduct(GetMerchantProductReq request);
 
     /**
      * 获取SkuSpu

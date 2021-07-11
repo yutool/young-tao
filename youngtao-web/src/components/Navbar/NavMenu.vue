@@ -4,7 +4,7 @@
       <router-link class="nav-link" to="/market">主商城</router-link>
     </li>
     <li class="nav-item">
-      <router-link class="nav-link" to="/seckill">限时快抢</router-link>
+      <router-link class="nav-link" to="/promo">限时快抢</router-link>
     </li>
     <li class="nav-item">
       <router-link class="nav-link disable" to="/brand">品牌抢购</router-link>

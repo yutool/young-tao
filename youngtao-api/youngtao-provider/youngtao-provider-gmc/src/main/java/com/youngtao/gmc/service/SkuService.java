@@ -1,7 +1,7 @@
 package com.youngtao.gmc.service;
 
 import com.youngtao.gmc.model.domain.SkuDO;
-import com.youngtao.gmc.model.request.UpdateSkuRequest;
+import com.youngtao.gmc.model.req.UpdateSkuReq;
 import com.youngtao.web.support.IService;
 
 /**
@@ -13,7 +13,7 @@ public interface SkuService extends IService<SkuDO> {
     /**
      * 更新sku
      */
-    void update(UpdateSkuRequest request);
+    void update(UpdateSkuReq request);
 
     /**
      * 删除sku

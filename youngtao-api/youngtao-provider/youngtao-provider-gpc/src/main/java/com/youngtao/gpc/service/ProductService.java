@@ -3,10 +3,10 @@ package com.youngtao.gpc.service;
 import com.github.pagehelper.PageInfo;
 import com.youngtao.gpc.model.data.ProductData;
 import com.youngtao.gpc.model.data.SkuData;
-import com.youngtao.gpc.model.request.ConfirmOrderRequest;
-import com.youngtao.gpc.model.request.GetMerchantProductRequest;
-import com.youngtao.gpc.model.response.ConfirmOrderResponse;
-import com.youngtao.gpc.model.response.GetSeckillPageResponse;
+import com.youngtao.gpc.model.req.ConfirmOrderReq;
+import com.youngtao.gpc.model.req.GetMerchantProductReq;
+import com.youngtao.gpc.model.res.ConfirmOrderRes;
+import com.youngtao.gpc.model.res.GetSeckillPageRes;
 
 import java.util.Set;
 
@@ -34,16 +34,16 @@ public interface ProductService {
      */
     ProductData detail(String time, String skuId);
 
-    GetSeckillPageResponse getSeckillPage();
+    GetSeckillPageRes getSeckillPage();
 
     /**
      * 确认订单
      * @param request
      */
-    ConfirmOrderResponse confirmOrder(ConfirmOrderRequest request);
+    ConfirmOrderRes confirmOrder(ConfirmOrderReq request);
 
     /**
      * 获取商家活动的商品
      */
-    PageInfo<ProductData> getMerchantProduct(GetMerchantProductRequest request);
+    PageInfo<ProductData> getMerchantProduct(GetMerchantProductReq request);
 }

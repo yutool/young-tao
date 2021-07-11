@@ -8,5 +8,5 @@ public class OmcMQTagConsts {
     /**
      * 创建秒杀订单
      */
-    public static final String CREATE_GSC_ORDER = "createGscOrder";
+    public static final String CREATE_GPC_ORDER = "createGpcOrder";
 }

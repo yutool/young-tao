@@ -1,9 +1,9 @@
 package com.youngtao.opc.service;
 
-import com.youngtao.opc.model.request.AlipayAppCheckRequest;
-import com.youngtao.opc.model.request.AlipayRequest;
-import com.youngtao.opc.model.request.TradeRefundRequest;
-import com.youngtao.opc.model.response.TradeRefundResponse;
+import com.youngtao.opc.model.req.AlipayAppCheckReq;
+import com.youngtao.opc.model.req.AlipayReq;
+import com.youngtao.opc.model.req.TradeRefundReq;
+import com.youngtao.opc.model.response.TradeRefundRes;
 
 import java.util.Map;
 
@@ -12,23 +12,23 @@ import java.util.Map;
  * @date 2021/01/30
  */
 public interface AlipayService {
-    String appPay(AlipayRequest request);
+    String appPay(AlipayReq request);
 
     String payNotify(Map<String, String> resultMap);
 
-    boolean check(AlipayAppCheckRequest request);
+    boolean check(AlipayAppCheckReq request);
 
     /**
      * 网页支付
      * @param request
      * @return
      */
-    String webPay(AlipayRequest request);
+    String webPay(AlipayReq request);
 
     /**
      * 退款
      * @param request
      * @return
      */
-    TradeRefundResponse tradeRefund(TradeRefundRequest request);
+    TradeRefundRes tradeRefund(TradeRefundReq request);
 }

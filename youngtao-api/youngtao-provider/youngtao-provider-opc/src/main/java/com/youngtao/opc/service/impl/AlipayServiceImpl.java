@@ -24,10 +24,10 @@ import com.youngtao.opc.config.AlipayConfig;
 import com.youngtao.opc.mapper.OrderPayRecordMapper;
 import com.youngtao.opc.model.domain.OrderPayRecordDO;
 import com.youngtao.opc.model.msg.OrderPayMsg;
-import com.youngtao.opc.model.request.AlipayAppCheckRequest;
-import com.youngtao.opc.model.request.AlipayRequest;
-import com.youngtao.opc.model.request.TradeRefundRequest;
-import com.youngtao.opc.model.response.TradeRefundResponse;
+import com.youngtao.opc.model.req.AlipayAppCheckReq;
+import com.youngtao.opc.model.req.AlipayReq;
+import com.youngtao.opc.model.req.TradeRefundReq;
+import com.youngtao.opc.model.response.TradeRefundRes;
 import com.youngtao.opc.service.AlipayService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
@@ -60,7 +60,7 @@ public class AlipayServiceImpl implements AlipayService {
     private static final String SUCCESS_CODE = "10000";
 
     @Override
-    public String appPay(AlipayRequest request) {
+    public String appPay(AlipayReq request) {
         OrderPayRecordDO record = recordMapper.selectByPaymentId(request.getPaymentId());
         if (record == null) {
             CastException.cast("订单不存在");
@@ -88,7 +88,7 @@ public class AlipayServiceImpl implements AlipayService {
     }
 
     @Override
-    public String webPay(AlipayRequest request) {
+    public String webPay(AlipayReq request) {
         OrderPayRecordDO record = recordMapper.selectByPaymentId(request.getPaymentId());
         if (record == null) {
             CastException.cast("订单不存在");
@@ -118,7 +118,7 @@ public class AlipayServiceImpl implements AlipayService {
     }
 
     @Override
-    public boolean check(AlipayAppCheckRequest request) {
+    public boolean check(AlipayAppCheckReq request) {
         AlipayTradeQueryRequest query = new AlipayTradeQueryRequest();
         AlipayTradeQueryModel model = new AlipayTradeQueryModel();
         model.setOutTradeNo(request.getPaymentId());
@@ -145,7 +145,7 @@ public class AlipayServiceImpl implements AlipayService {
     }
 
     @Override
-    public TradeRefundResponse tradeRefund(TradeRefundRequest refundRequest) {
+    public TradeRefundRes tradeRefund(TradeRefundReq refundRequest) {
         AlipayTradeRefundModel mode = new AlipayTradeRefundModel();
         mode.setOutTradeNo(refundRequest.getOutTradeNo());
         mode.setTradeNo(refundRequest.getTradeNo());
@@ -158,7 +158,7 @@ public class AlipayServiceImpl implements AlipayService {
         try {
             AlipayTradeRefundResponse response = alipay.execute(request);
             if (SUCCESS_CODE.equals(response.getCode())) {
-                TradeRefundResponse result = new TradeRefundResponse();
+                TradeRefundRes result = new TradeRefundRes();
                 result.setOutTradeNo(response.getOutTradeNo());
                 result.setTradeNo(response.getTradeNo());
                 result.setRefundFee(new BigDecimal(response.getRefundFee()));

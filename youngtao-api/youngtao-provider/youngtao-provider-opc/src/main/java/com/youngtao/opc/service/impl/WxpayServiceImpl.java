@@ -4,8 +4,8 @@ import com.github.wxpay.sdk.WXPay;
 import com.google.common.collect.Maps;
 import com.youngtao.opc.common.constant.WxpayEnum;
 import com.youngtao.opc.config.WxpayConfig;
-import com.youngtao.opc.model.request.WxpayAppRequest;
-import com.youngtao.opc.model.response.WxpayResponse;
+import com.youngtao.opc.model.req.WxpayAppReq;
+import com.youngtao.opc.model.response.WxpayRes;
 import com.youngtao.opc.service.WxpayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class WxpayServiceImpl implements WxpayService {
     private WxpayConfig config;
 
     @Override
-    public WxpayResponse appPay(WxpayAppRequest request) {
+    public WxpayRes appPay(WxpayAppReq request) {
         Map<String, String> data = Maps.newHashMap();
         data.put("out_trade_no", request.getPaymentId());
         data.put("body", request.getBody());
@@ -38,7 +38,7 @@ public class WxpayServiceImpl implements WxpayService {
             }
             if (WxpayEnum.SUCCESS.getValue().equals(resultMap.get("xxx"))) {
             }
-            WxpayResponse response = new WxpayResponse();
+            WxpayRes response = new WxpayRes();
             response.setAppId(resultMap.get("appid"));
             response.setPartnerId(resultMap.get("mch_id"));
             response.setPrepayId(resultMap.get("prepay_id"));

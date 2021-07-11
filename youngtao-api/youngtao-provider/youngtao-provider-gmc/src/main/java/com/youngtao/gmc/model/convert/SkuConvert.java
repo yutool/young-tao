@@ -1,7 +1,7 @@
 package com.youngtao.gmc.model.convert;
 
 import com.youngtao.gmc.model.domain.SkuDO;
-import com.youngtao.gmc.model.request.AddProductRequest;
+import com.youngtao.gmc.model.req.AddProductReq;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -17,7 +17,7 @@ import java.util.List;
 public interface SkuConvert {
 
     @IterableMapping(qualifiedByName = "addProductRequestToSku")
-    List<SkuDO> toSku(List<AddProductRequest.Sku> skuList);
+    List<SkuDO> toSku(List<AddProductReq.Sku> skuList);
 
     @Named("addProductRequestToSku")
     @Mapping(target = "id", ignore = true)
@@ -27,6 +27,6 @@ public interface SkuConvert {
     @Mapping(target = "freezeNum", ignore = true)
     @Mapping(target = "createTime", ignore = true)
     @Mapping(target = "updateTime", ignore = true)
-    SkuDO toSku(AddProductRequest.Sku sku);
+    SkuDO toSku(AddProductReq.Sku sku);
 
 }

@@ -13,16 +13,16 @@ public enum RedisKey {
     /**
      * key: menu + skuId
      */
-    SKU_INFO_KEY("youngtao:gsc:sku:info:%s_%s"),
+    SKU_INFO_KEY("youngtao:gpc:sku:info:%s_%s"),
     /**
      * key: menu
      */
-    SKU_SET_KEY("youngtao:gsc:sku:set:%s"),
+    SKU_SET_KEY("youngtao:gpc:sku:set:%s"),
     /**
      * 扣减库存
      * key: menu + skuId
      */
-    SKU_COUNT_KEY("youngtao:gsc:sku:count:%s_%s"),
+    SKU_COUNT_KEY("youngtao:gpc:sku:count:%s_%s"),
     ;
 
     @Getter

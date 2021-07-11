@@ -5,5 +5,5 @@ package com.youngtao.gpc.api.constant;
  * @date 2021/03/20
  */
 public class GpcMQTagConsts {
-    public static final String CREATE_ORDER = "gscCreateOrder";
+    public static final String CREATE_ORDER = "gpcCreateOrder";
 }

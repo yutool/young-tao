@@ -4,10 +4,10 @@ import com.github.pagehelper.PageInfo;
 import com.youngtao.core.data.IdArg;
 import com.youngtao.omc.api.constant.OrderStatus;
 import com.youngtao.omc.model.data.OrderData;
-import com.youngtao.omc.model.request.CreateOrderRequest;
-import com.youngtao.omc.model.request.GetMerchantOrderRequest;
-import com.youngtao.omc.model.request.GetUserOrderRequest;
-import com.youngtao.omc.model.request.OrderRefundRequest;
+import com.youngtao.omc.model.req.CreateOrderReq;
+import com.youngtao.omc.model.req.GetMerchantOrderReq;
+import com.youngtao.omc.model.req.GetUserOrderReq;
+import com.youngtao.omc.model.req.OrderRefundReq;
 import com.youngtao.omc.service.OrderService;
 import com.youngtao.web.support.ResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,22 +31,22 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping("/getUserOrder")
-    public PageInfo<OrderData> getUserOrder(@RequestBody GetUserOrderRequest request) {
+    public PageInfo<OrderData> getUserOrder(@RequestBody GetUserOrderReq request) {
         return orderService.getUserOrder(request);
     }
 
     @PostMapping("/getMerchantOrder")
-    public PageInfo<OrderData> getMerchantOrder(@RequestBody GetMerchantOrderRequest request) {
+    public PageInfo<OrderData> getMerchantOrder(@RequestBody GetMerchantOrderReq request) {
         return orderService.getMerchantOrder(request);
     }
 
     @PostMapping("/create")
-    public String createOrder(@Valid @RequestBody CreateOrderRequest request) {
+    public String createOrder(@Valid @RequestBody CreateOrderReq request) {
         return orderService.createOrder(request);
     }
 
     @PostMapping("/orderRefund")
-    public void orderRefund(@RequestBody OrderRefundRequest request) {
+    public void orderRefund(@RequestBody OrderRefundReq request) {
         orderService.orderRefund(request);
     }
 

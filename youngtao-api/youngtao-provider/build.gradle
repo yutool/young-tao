@@ -14,7 +14,8 @@ subprojects {
         compile libs['pagehelper']
         compile libs['druid']
         compile libs['tlog']
-        compile 'org.springframework.cloud:spring-cloud-starter-zookeeper-discovery'
+        compile 'com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config'
+        compile 'com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery'
 
         runtimeOnly 'mysql:mysql-connector-java'
 

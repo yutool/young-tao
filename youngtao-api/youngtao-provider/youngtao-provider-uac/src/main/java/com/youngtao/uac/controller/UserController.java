@@ -2,10 +2,10 @@ package com.youngtao.uac.controller;
 
 import com.youngtao.core.context.AuthContext;
 import com.youngtao.core.context.AuthInfo;
-import com.youngtao.uac.model.request.RegisterRequest;
-import com.youngtao.uac.model.request.ResetPasswordRequest;
-import com.youngtao.uac.model.request.UpdatePasswordRequest;
-import com.youngtao.uac.model.request.UpdateUserInfoRequest;
+import com.youngtao.uac.model.req.RegisterReq;
+import com.youngtao.uac.model.req.ResetPasswordReq;
+import com.youngtao.uac.model.req.UpdatePasswordReq;
+import com.youngtao.uac.model.req.UpdateUserInfoReq;
 import com.youngtao.uac.service.UserService;
 import com.youngtao.web.support.ResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,23 +26,23 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping("/register")
-    public void register(@RequestBody RegisterRequest request) {
+    public void register(@RequestBody RegisterReq request) {
         userService.register(request);
     }
 
     @RequestMapping("/update")
-    public void updateUserInfo(@RequestBody UpdateUserInfoRequest request) {
+    public void updateUserInfo(@RequestBody UpdateUserInfoReq request) {
         userService.updateUserInfo(request);
     }
 
     @RequestMapping("/updatePassword")
-    public void updatePassword(@RequestBody UpdatePasswordRequest request) {
+    public void updatePassword(@RequestBody UpdatePasswordReq request) {
         AuthInfo authInfo = AuthContext.get();
         userService.updatePassword(authInfo.getId(), request);
     }
 
     @RequestMapping("/resetPassword")
-    public void resetPassword(@RequestBody ResetPasswordRequest request) {
+    public void resetPassword(@RequestBody ResetPasswordReq request) {
         userService.resetPassword(request);
     }
 

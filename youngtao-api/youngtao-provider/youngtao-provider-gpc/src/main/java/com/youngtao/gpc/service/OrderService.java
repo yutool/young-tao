@@ -1,6 +1,6 @@
 package com.youngtao.gpc.service;
 
-import com.youngtao.gpc.model.request.CreateOrderRequest;
+import com.youngtao.gpc.model.req.CreateOrderReq;
 
 /**
  * @author ankoye@qq.com
@@ -11,5 +11,5 @@ public interface OrderService {
      * 验证信息
      * @param request request
      */
-    String createOrder(CreateOrderRequest request);
+    String createOrder(CreateOrderReq request);
 }

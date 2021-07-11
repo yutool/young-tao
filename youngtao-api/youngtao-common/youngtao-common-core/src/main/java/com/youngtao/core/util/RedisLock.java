@@ -24,8 +24,8 @@ public class RedisLock {
     private static final Jedis JEDIS;
 
     static  {
-        JEDIS = new Jedis("jelly.com", 6379);
-        JEDIS.auth("redis.160123");
+        JEDIS = new Jedis("youngtao.com", 6379);
+        JEDIS.auth("redis.com");
     }
 
     public static String tryLock(String key, Integer expireTime) {

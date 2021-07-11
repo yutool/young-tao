@@ -2,8 +2,8 @@ package com.youngtao.opc.controller;
 
 import com.github.wxpay.sdk.WXPayUtil;
 import com.youngtao.opc.config.WxpayConfig;
-import com.youngtao.opc.model.request.WxpayAppRequest;
-import com.youngtao.opc.model.response.WxpayResponse;
+import com.youngtao.opc.model.req.WxpayAppReq;
+import com.youngtao.opc.model.response.WxpayRes;
 import com.youngtao.opc.service.WxpayService;
 import com.youngtao.web.support.NoWrapper;
 import com.youngtao.web.support.ResponseWrapper;
@@ -30,7 +30,7 @@ public class WxpayController {
     private WxpayConfig config;
 
     @PostMapping("/app")
-    public WxpayResponse appPay(@RequestBody WxpayAppRequest request) {
+    public WxpayRes appPay(@RequestBody WxpayAppReq request) {
         return wxpayService.appPay(request);
     }
 

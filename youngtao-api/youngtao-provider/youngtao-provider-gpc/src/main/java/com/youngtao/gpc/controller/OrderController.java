@@ -1,6 +1,6 @@
 package com.youngtao.gpc.controller;
 
-import com.youngtao.gpc.model.request.CreateOrderRequest;
+import com.youngtao.gpc.model.req.CreateOrderReq;
 import com.youngtao.gpc.service.OrderService;
 import com.youngtao.web.support.ResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class OrderController {
     private OrderService orderService;
 
     @RequestMapping("/create")
-    public String createOrder(@RequestBody CreateOrderRequest request) {
+    public String createOrder(@RequestBody CreateOrderReq request) {
         return orderService.createOrder(request);
     }
 }

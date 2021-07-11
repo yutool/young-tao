@@ -5,8 +5,8 @@ import com.youngtao.core.util.BeanUtils;
 import com.youngtao.opc.api.model.arg.TradeRefundArg;
 import com.youngtao.opc.api.model.dto.AlipayTradeRefundDTO;
 import com.youngtao.opc.api.service.AlipayFeign;
-import com.youngtao.opc.model.request.TradeRefundRequest;
-import com.youngtao.opc.model.response.TradeRefundResponse;
+import com.youngtao.opc.model.req.TradeRefundReq;
+import com.youngtao.opc.model.response.TradeRefundRes;
 import com.youngtao.opc.service.AlipayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,8 +23,8 @@ public class AlipayFeignClient implements AlipayFeign {
 
     @Override
     public RpcResult<AlipayTradeRefundDTO> tradeRefund(@RequestBody TradeRefundArg arg) {
-        TradeRefundRequest request = BeanUtils.copy(arg, TradeRefundRequest.class);
-        TradeRefundResponse response = alipayService.tradeRefund(request);
+        TradeRefundReq request = BeanUtils.copy(arg, TradeRefundReq.class);
+        TradeRefundRes response = alipayService.tradeRefund(request);
         if (response == null) {
             return RpcResult.error();
         }

@@ -1,7 +1,7 @@
 package com.youngtao.gpc.controller;
 
 import com.youngtao.core.data.IdArg;
-import com.youngtao.gpc.model.request.AddOrUpdateSkuRequest;
+import com.youngtao.gpc.model.req.AddOrUpdateSkuReq;
 import com.youngtao.gpc.service.SkuService;
 import com.youngtao.web.support.ResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class SkuController {
     private SkuService skuService;
 
     @PostMapping("/addOrUpdate")
-    public void addOrUpdate(@RequestBody AddOrUpdateSkuRequest request) {
+    public void addOrUpdate(@RequestBody AddOrUpdateSkuReq request) {
         skuService.addOrUpdate(request);
     }
 

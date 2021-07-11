@@ -2,7 +2,7 @@ package com.youngtao.gmc.controller;
 
 import com.youngtao.core.data.DeleteArg;
 import com.youngtao.core.data.IdArg;
-import com.youngtao.gmc.model.request.UpdateSpuRequest;
+import com.youngtao.gmc.model.req.UpdateSpuReq;
 import com.youngtao.gmc.service.SpuService;
 import com.youngtao.web.support.ResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class SpuController {
     private SpuService spuService;
 
     @PostMapping("/update")
-    public void update(@RequestBody UpdateSpuRequest request) {
+    public void update(@RequestBody UpdateSpuReq request) {
         spuService.update(request);
     }
 

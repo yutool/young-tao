@@ -4,9 +4,9 @@ import com.youngtao.core.context.AuthContext;
 import com.youngtao.core.context.AuthInfo;
 import com.youngtao.core.data.IdArg;
 import com.youngtao.core.data.IdsArg;
-import com.youngtao.omc.model.request.AddCartRequest;
-import com.youngtao.omc.model.request.UpdateNumRequest;
-import com.youngtao.omc.model.response.CartResponse;
+import com.youngtao.omc.model.req.AddCartReq;
+import com.youngtao.omc.model.req.UpdateNumReq;
+import com.youngtao.omc.model.res.CartRes;
 import com.youngtao.omc.service.CartService;
 import com.youngtao.web.support.ResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,18 +28,18 @@ public class CartController {
     private CartService cartService;
 
     @GetMapping("/getUserCart")
-    public List<CartResponse> getUserCart() {
+    public List<CartRes> getUserCart() {
         AuthInfo authInfo = AuthContext.get();
         return cartService.listByUserId(authInfo.getUserId());
     }
 
     @PostMapping("/add")
-    public void addCart(@RequestBody AddCartRequest request) {
+    public void addCart(@RequestBody AddCartReq request) {
         cartService.addCart(request);
     }
 
     @PostMapping("/updateNum")
-    public void updateNum(@RequestBody @Valid UpdateNumRequest request) {
+    public void updateNum(@RequestBody @Valid UpdateNumReq request) {
         cartService.updateNum(request);
     }
 

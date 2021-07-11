@@ -10,12 +10,12 @@ public enum  CacheKey {
     /**
      * key: menu + skuId
      */
-    PRODUCT_KEY("youngtao:gsc:cache:product:%s_%s"),
+    PRODUCT_KEY("youngtao:gpc:cache:product:%s_%s"),
 
     /**
      * key: menu + skuId
      */
-    SPU_KEY("youngtao:gsc:cache:product:%s_%s")
+    SPU_KEY("youngtao:gpc:cache:product:%s_%s")
     ;
 
     @Getter

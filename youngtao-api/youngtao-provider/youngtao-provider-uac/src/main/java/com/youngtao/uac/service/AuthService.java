@@ -1,8 +1,8 @@
 package com.youngtao.uac.service;
 
 import com.youngtao.uac.model.data.AuthToken;
-import com.youngtao.uac.model.domain.UserInfo;
-import com.youngtao.uac.model.request.LoginRequest;
+import com.youngtao.uac.model.domain.UserInfoDO;
+import com.youngtao.uac.model.req.LoginReq;
 
 /**
  * @author ankoye@qq.com
@@ -13,12 +13,12 @@ public interface AuthService {
     /**
      * 登录
      */
-    AuthToken login(LoginRequest request);
+    AuthToken login(LoginReq request);
 
     /**
      *
      * @param userId
      */
-    UserInfo getById(String userId);
+    UserInfoDO getById(String userId);
 
 }

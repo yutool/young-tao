@@ -8,8 +8,8 @@ import com.youngtao.core.util.BeanUtils;
 import com.youngtao.core.util.IdUtils;
 import com.youngtao.uac.mapper.ShippingAddressMapper;
 import com.youngtao.uac.model.data.ShippingAddressData;
-import com.youngtao.uac.model.domain.ShippingAddress;
-import com.youngtao.uac.model.request.AddShippingAddressRequest;
+import com.youngtao.uac.model.domain.ShippingAddressDO;
+import com.youngtao.uac.model.req.AddShippingAddressReq;
 import com.youngtao.uac.service.ShippingAddressService;
 import com.youngtao.web.support.BaseService;
 import org.apache.commons.lang3.StringUtils;
@@ -24,21 +24,21 @@ import java.util.List;
  * @date 2021/04/02
  */
 @Service
-public class ShippingAddressServiceImpl extends BaseService<ShippingAddress> implements ShippingAddressService {
+public class ShippingAddressServiceImpl extends BaseService<ShippingAddressDO> implements ShippingAddressService {
 
     @Resource
     private ShippingAddressMapper shippingAddressMapper;
 
     @Override
     public List<ShippingAddressData> getByUserId(String userId) {
-        List<ShippingAddress> addressList = shippingAddressMapper.selectByUserId(userId);
+        List<ShippingAddressDO> addressList = shippingAddressMapper.selectByUserId(userId);
         return BeanUtils.copyList(addressList, ShippingAddressData.class);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void addOrUpdateAddress(AddShippingAddressRequest request, String userId) {
-        ShippingAddress address = BeanUtils.copy(request, ShippingAddress.class);
+    public void addOrUpdateAddress(AddShippingAddressReq request, String userId) {
+        ShippingAddressDO address = BeanUtils.copy(request, ShippingAddressDO.class);
         if (address.getIsDefault()) {
             // 设置其他为false
             shippingAddressMapper.cancelDefault(userId);
@@ -49,7 +49,7 @@ public class ShippingAddressServiceImpl extends BaseService<ShippingAddress> imp
             address.setShippingAddrId(IdUtils.getId("s_a"));
             // 如果不是默认，判断是否有默认的，没有设置当前为默认
             if (!address.getIsDefault()) {
-                int count = shippingAddressMapper.selectCount(new QueryWrapper<ShippingAddress>()
+                int count = shippingAddressMapper.selectCount(new QueryWrapper<ShippingAddressDO>()
                         .eq("user_id", userId)
                         .eq("is_default", true)
                 );
@@ -58,12 +58,12 @@ public class ShippingAddressServiceImpl extends BaseService<ShippingAddress> imp
             shippingAddressMapper.insert(address);
         } else {
             // 更新
-            shippingAddressMapper.update(address, new UpdateWrapper<ShippingAddress>()
+            shippingAddressMapper.update(address, new UpdateWrapper<ShippingAddressDO>()
                     .eq("shipping_addr_id", request.getShippingAddrId())
             );
             // 如果不是默认，判断是否有默认的，没有设置一个
             if (!address.getIsDefault()) {
-                int count = shippingAddressMapper.selectCount(new QueryWrapper<ShippingAddress>()
+                int count = shippingAddressMapper.selectCount(new QueryWrapper<ShippingAddressDO>()
                         .eq("user_id", userId)
                         .eq("is_default", true)
                 );
@@ -87,12 +87,12 @@ public class ShippingAddressServiceImpl extends BaseService<ShippingAddress> imp
     @Transactional(rollbackFor = Exception.class)
     public void deleteByAddrId(String id) {
         // 删除
-        shippingAddressMapper.delete(new UpdateWrapper<ShippingAddress>()
+        shippingAddressMapper.delete(new UpdateWrapper<ShippingAddressDO>()
                 .eq("shipping_addr_id", id)
         );
         // 如果默认的被删除，重新设置一个默认的
         AuthInfo authInfo = AuthContext.get();
-        int count = shippingAddressMapper.selectCount(new QueryWrapper<ShippingAddress>()
+        int count = shippingAddressMapper.selectCount(new QueryWrapper<ShippingAddressDO>()
                 .eq("user_id", authInfo.getUserId())
                 .eq("is_default", true)
         );

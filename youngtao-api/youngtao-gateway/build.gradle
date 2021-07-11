@@ -9,7 +9,8 @@ subprojects {
 
     dependencies {
         compile 'org.springframework.cloud:spring-cloud-starter-gateway'
-        compile 'org.springframework.cloud:spring-cloud-starter-zookeeper-discovery'
+        compile 'com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config'
+        compile 'com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery'
         compile 'org.springframework.boot:spring-boot-starter-actuator'
         compile 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
         compile 'org.hibernate:hibernate-validator:6.1.0.Final'

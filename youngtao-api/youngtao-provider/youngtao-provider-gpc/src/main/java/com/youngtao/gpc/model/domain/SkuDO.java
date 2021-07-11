@@ -19,7 +19,7 @@ import java.util.Date;
  * @date 2020/12/20
  */
 @Data
-@TableName("gsc_sku")
+@TableName("gpc_sku")
 public class SkuDO implements Serializable {
     private static final long serialVersionUID = 612145136697446022L;
 
